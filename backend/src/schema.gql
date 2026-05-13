@@ -1,0 +1,91 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Arbitro {
+  ativo: Boolean!
+  estado: String
+  fotoUrl: String
+  id: Int!
+  nacionalidade: String
+  nomeCompleto: String!
+  nomePopular: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Estadio {
+  capacidade: Int
+  cidade: String!
+  estado: String
+  fotoUrl: String
+  grama: String
+  id: Int!
+  nome: String!
+  nomePopular: String
+  pais: String!
+  proprietario: String
+}
+
+type Jogador {
+  alturaCm: Int
+  ativo: Boolean!
+  fotoUrl: String
+  id: Int!
+  nacionalidade: String
+  nomeCompleto: String!
+  nomePopular: String!
+  numeroCamisa: Int
+  peDominante: String
+  pesoKg: Float
+  posicao: String
+  posicaoSecundaria: String
+}
+
+type MediaArbitro {
+  mediaAmarelos: Float!
+  mediaBola: Float!
+  mediaFaltas: Float!
+  mediaVermelhos: Float!
+  partidasApitadas: Int!
+}
+
+type Mutation {
+  dispararScraping: String!
+  dispararScrapingPartidas: String!
+}
+
+type Partida {
+  arbitroId: Int
+  competicaoId: Int!
+  dataHora: DateTime!
+  equipeCasaId: Int!
+  equipeVisitanteId: Int!
+  estadioId: Int
+  fase: String
+  golsCasa: Int
+  golsVisitante: Int
+  id: Int!
+  publico: Int
+  rodada: Int
+  status: String!
+}
+
+type Query {
+  arbitro(id: Int!): Arbitro
+  arbitros: [Arbitro!]!
+  arbitrosAtivos: [Arbitro!]!
+  estadio(id: Int!): Estadio
+  estadios: [Estadio!]!
+  hello: String!
+  jogador(id: Int!): Jogador
+  jogadores: [Jogador!]!
+  jogadoresAtivos: [Jogador!]!
+  mediaArbitro(id: Int!): MediaArbitro
+  partida(id: Int!): Partida
+  partidas: [Partida!]!
+  partidasPorEquipe(equipeId: Int!): [Partida!]!
+}
