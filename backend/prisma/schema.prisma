@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+  moduleFormat = "commonjs"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Equipe {
+  id                Int       @id @default(autoincrement())
+  nome              String    @unique
+  nomeCurto         String
+  sigla             String?
+  cidade            String?
+  estado            String?
+  pais              String    @default("Brasil")
+  fundacao          DateTime?
+  escudoUrl         String?
+  criadoEm          DateTime  @default(now())
+
+  jogadores         Jogador[]
+  partidasCasa      Partida[] @relation("EquipeCasa")
+  partidasVisitante Partida[] @relation("EquipeVisitante")
+  estatisticas      EstatisticaEquipe[]
+  eventos           EventoPartida[]
+  estatisticasJogadores EstatisticaJogador[]
+}
+
+model Competicao {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  nomeCurto String?
+  tipo      String?
+  temporada String
+  pais      String    @default("Brasil")
+  criadoEm  DateTime  @default(now())
+
+  partidas  Partida[]
+  @@unique([nome, temporada])
+}
+
+model Estadio {
+  id           Int       @id @default(autoincrement())
+  nome         String
+  nomePopular  String?
+  cidade       String
+  estado       String?
+  pais         String    @default("Brasil")
+  capacidade   Int?
+  inauguracao  DateTime?
+  proprietario String?
+  grama        String?
+  fotoUrl      String?
+  criadoEm     DateTime  @default(now())
+
+  partidas     Partida[]
+}
+
+model Arbitro {
+  id              Int       @id @default(autoincrement())
+  nomeCompleto    String
+  nomePopular     String
+  dataNascimento  DateTime?
+  nacionalidade   String    @default("Brasileiro")
+  estado          String?
+  fotoUrl         String?
+  ativo           Boolean   @default(true)
+  criadoEm        DateTime  @default(now())
+
+  partidas        Partida[]
+  estatisticas    EstatisticaArbitro[]
+}
+
+model Jogador {
+  id                Int       @id @default(autoincrement())
+  equipeId          Int
+  equipe            Equipe    @relation(fields: [equipeId], references: [id])
+  nomeCompleto      String
+  nomePopular       String
+  dataNascimento    DateTime?
+  nacionalidade     String?
+  posicao           String?
+  posicaoSecundaria String?
+  numeroCamisa      Int?
+  peDominante       String?
+  alturaCm          Int?
+  pesoKg            Float?
+  fotoUrl           String?
+  ativo             Boolean   @default(true)
+  criadoEm          DateTime  @default(now())
+  atualizadoEm      DateTime  @updatedAt
+
+  estatisticas        EstatisticaJogador[]
+  eventos             EventoPartida[] @relation("JogadorPrincipal")
+  eventosSecundario   EventoPartida[] @relation("JogadorSecundario")
+  @@unique([nomePopular, equipeId])
+}
+
+model Partida {
+  id                 Int       @id @default(autoincrement())
+  competicaoId       Int
+  equipeCasaId       Int
+  equipeVisitanteId  Int
+  estadioId          Int?
+  arbitroId          Int?
+  dataHora           DateTime
+  rodada             Int?
+  fase               String?
+  golsCasa           Int?
+  golsVisitante      Int?
+  status             String    @default("agendada")
+  publico            Int?
+  criadoEm           DateTime  @default(now())
+
+  competicao            Competicao          @relation(fields: [competicaoId], references: [id])
+  equipeCasa            Equipe              @relation("EquipeCasa", fields: [equipeCasaId], references: [id])
+  equipeVisitante       Equipe              @relation("EquipeVisitante", fields: [equipeVisitanteId], references: [id])
+  estadio               Estadio?            @relation(fields: [estadioId], references: [id])
+  arbitro               Arbitro?            @relation(fields: [arbitroId], references: [id])
+  estatisticasJogadores EstatisticaJogador[]
+  estatisticasEquipes   EstatisticaEquipe[]
+  estatisticaArbitro    EstatisticaArbitro?
+  eventos               EventoPartida[]
+  @@unique([equipeCasaId, equipeVisitanteId, dataHora])
+}
+
+model EstatisticaJogador {
+  id               Int      @id @default(autoincrement())
+  partidaId        Int
+  jogadorId        Int
+  equipeId         Int
+  titular          Boolean  @default(false)
+  minutosJogados   Int      @default(0)
+  gols             Int      @default(0)
+  assistencias     Int      @default(0)
+  chutes           Int      @default(0)
+  chutesGol        Int      @default(0)
+  passesTentados   Int      @default(0)
+  passesCompletos  Int      @default(0)
+  driblesTentados  Int      @default(0)
+  driblesCompletos Int      @default(0)
+  desarmes         Int      @default(0)
+  interceptacoes   Int      @default(0)
+  faltasCometidas  Int      @default(0)
+  faltasSofridas   Int      @default(0)
+  cartoesAmarelos  Int      @default(0)
+  cartoesVermelhos Int      @default(0)
+  notaDesempenho   Float?
+  criadoEm         DateTime @default(now())
+
+  partida  Partida @relation(fields: [partidaId], references: [id])
+  jogador  Jogador @relation(fields: [jogadorId], references: [id])
+  equipe   Equipe  @relation(fields: [equipeId], references: [id])
+
+  @@unique([partidaId, jogadorId])
+}
+
+model EstatisticaEquipe {
+  id               Int      @id @default(autoincrement())
+  partidaId        Int
+  equipeId         Int
+  posseBola        Float?
+  chutes           Int      @default(0)
+  chutesGol        Int      @default(0)
+  escanteios       Int      @default(0)
+  faltas           Int      @default(0)
+  impedimentos     Int      @default(0)
+  passesTentados   Int      @default(0)
+  passesCompletos  Int      @default(0)
+  cartoesAmarelos  Int      @default(0)
+  cartoesVermelhos Int      @default(0)
+  criadoEm         DateTime @default(now())
+
+  partida  Partida @relation(fields: [partidaId], references: [id])
+  equipe   Equipe  @relation(fields: [equipeId], references: [id])
+
+  @@unique([partidaId, equipeId])
+}
+
+model EstatisticaArbitro {
+  id                      Int      @id @default(autoincrement())
+  arbitroId               Int
+  partidaId               Int      @unique
+  faltasMarcadas          Int      @default(0)
+  cartoesAmarelos         Int      @default(0)
+  cartoesVermelhos        Int      @default(0)
+  penaltisMarcados        Int      @default(0)
+  impedimentosAssinalados Int      @default(0)
+  tempoBola               Int?
+  acrescimos1t            Int      @default(0)
+  acrescimos2t            Int      @default(0)
+  criadoEm                DateTime @default(now())
+
+  arbitro  Arbitro @relation(fields: [arbitroId], references: [id])
+  partida  Partida @relation(fields: [partidaId], references: [id])
+
+  @@unique([arbitroId, partidaId])
+}
+
+model EventoPartida {
+  id                  Int      @id @default(autoincrement())
+  partidaId           Int
+  equipeId            Int
+  jogadorId           Int?
+  jogadorSecundarioId Int?
+  tipoEvento          String
+  minuto              Int
+  minutoAcrescimo     Int      @default(0)
+  descricao           String?
+  criadoEm            DateTime @default(now())
+
+  partida           Partida  @relation(fields: [partidaId], references: [id])
+  equipe            Equipe   @relation(fields: [equipeId], references: [id])
+  jogador           Jogador? @relation("JogadorPrincipal", fields: [jogadorId], references: [id])
+  jogadorSecundario Jogador? @relation("JogadorSecundario", fields: [jogadorSecundarioId], references: [id])
+}
