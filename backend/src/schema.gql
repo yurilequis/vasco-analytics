@@ -12,15 +12,13 @@ type Arbitro {
   nomePopular: String!
 }
 
-type CompeticaoSimples {
-  id: Int!
-  nome: String!
+type ArbitroSimples {
+  nomePopular: String!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+type CompeticaoSimples {
+  nome: String!
+}
 
 type EquipeSimples {
   id: Int!
@@ -40,6 +38,45 @@ type Estadio {
   proprietario: String
 }
 
+type EstadioSimples {
+  nome: String!
+}
+
+type EstatisticaEquipe {
+  chutes: Int
+  equipeId: Int!
+  passesCompletos: Int
+  posseBola: Float
+}
+
+type EstatisticaJogador {
+  assistencias: Int!
+  desarmes: Int!
+  equipeId: Int!
+  gols: Int!
+  heatmapUrl: String
+  id: Int!
+  jogador: JogadorSimples!
+  minutosJogados: Int!
+  notaDesempenho: Float
+  numeroCamisa: Int
+  passesCompletos: Int!
+  posicaoMediaX: Float
+  posicaoMediaY: Float
+  posicaoPartida: String
+  titular: Boolean!
+}
+
+type EventoPartida {
+  descricao: String
+  equipeId: Int!
+  id: Int!
+  jogador: JogadorSimples
+  minuto: Int!
+  minutoAcrescimo: Int!
+  tipoEvento: String!
+}
+
 type Jogador {
   alturaCm: Int
   ativo: Boolean!
@@ -55,6 +92,11 @@ type Jogador {
   posicaoSecundaria: String
 }
 
+type JogadorSimples {
+  nomePopular: String!
+  posicao: String
+}
+
 type MediaArbitro {
   mediaAmarelos: Float!
   mediaBola: Float!
@@ -65,26 +107,30 @@ type MediaArbitro {
 
 type Mutation {
   dispararScraping: String!
-  dispararScrapingPartidas: String!
+  dispararScrapingDetalhes: Boolean!
+  dispararScrapingElenco: Boolean!
+  dispararScrapingEstatisticas: Boolean!
+  dispararScrapingPartidas: Boolean!
 }
 
 type Partida {
-  arbitroId: Int
+  arbitro: ArbitroSimples
   competicao: CompeticaoSimples!
-  competicaoId: Int!
-  dataHora: DateTime!
+  dataHora: String!
   equipeCasa: EquipeSimples!
-  equipeCasaId: Int!
   equipeVisitante: EquipeSimples!
-  equipeVisitanteId: Int!
-  estadioId: Int
-  fase: String
+  estadio: EstadioSimples
+  estatisticasEquipes: [EstatisticaEquipe!]
+  estatisticasJogadores: [EstatisticaJogador!]
+  eventos: [EventoPartida!]
   golsCasa: Int
+  golsPenaltisCasa: Int
+  golsPenaltisVisitante: Int
   golsVisitante: Int
   id: Int!
-  publico: Int
-  rodada: Int
   status: String!
+  treinadorCasa: TreinadorSimples
+  treinadorVisitante: TreinadorSimples
 }
 
 type Query {
@@ -98,7 +144,9 @@ type Query {
   jogadores: [Jogador!]!
   jogadoresAtivos: [Jogador!]!
   mediaArbitro(id: Int!): MediaArbitro
-  partida(id: Int!): Partida
   partidas: [Partida!]!
-  partidasPorEquipe(equipeId: Int!): [Partida!]!
+}
+
+type TreinadorSimples {
+  nome: String!
 }

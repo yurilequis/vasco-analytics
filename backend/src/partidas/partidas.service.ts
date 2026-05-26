@@ -5,15 +5,28 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PartidasService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return this.prisma.db.partida.findMany({
+  async findAll() {
+    // 1. Adicionado o await
+    // 2. Adicionado o .db caso o seu Prisma esteja configurado assim (se der erro, remova o .db)
+    return await this.prisma.db.partida.findMany({
       orderBy: { dataHora: 'desc' },
       include: {
+        competicao: true,
         equipeCasa: true,
         equipeVisitante: true,
         estadio: true,
         arbitro: true,
-        competicao: true,
+        treinadorCasa: true,
+        treinadorVisitante: true,
+        estatisticasEquipes: true,
+        eventos: {
+          orderBy: { minuto: 'asc' },
+        },
+        estatisticasJogadores: {
+          include: {
+            jogador: true,
+          },
+        },
       },
     });
   }

@@ -5,19 +5,20 @@ import axios from 'axios';
 // ── CONTRATOS (INTERFACES) ─────────────────────────────
 
 interface PartidaAPI {
+  event_id: number;
   campeonato: string;
+  data_partida: string | null;
   mandante: string;
   visitante: string;
   gols_mandante: number | null;
   gols_visitante: number | null;
+  gols_penaltis_mandante?: number | null;
+  gols_penaltis_visitante?: number | null;
   status: string;
-  data_partida: string | null;
   rodada: string | null;
 }
 
 interface RespostaPartidasAPI {
-  status_api: string;
-  meta: any;
   dados: PartidaAPI[];
 }
 
@@ -26,43 +27,98 @@ interface JogadorAPI {
   nome: string;
   posicao: string;
   camisa: string;
-  idade: number | null;
 }
 
 interface RespostaElencoAPI {
-  status_api: string;
-  meta: any;
   dados: JogadorAPI[];
+}
+
+interface DadosEstatisticasAPI {
+  'Ball possession'?: { mandante?: string; visitante?: string };
+  'Total shots'?: { mandante?: string; visitante?: string };
+  Passes?: { mandante?: string; visitante?: string };
+  'Accurate passes'?: { mandante?: string; visitante?: string };
+}
+
+interface RespostaEstatisticasAPI {
+  dados: DadosEstatisticasAPI;
+}
+
+interface EscalacaoAPI {
+  sofascore_id: number;
+  nome_completo: string;
+  nome_popular: string;
+  posicao_geral: string;
+  posicao_partida: string;
+  titular: boolean;
+  numero_camisa: number;
+  nota: number | null;
+  minutos_jogados: number;
+  gols: number;
+  assistencias: number;
+  chutes: number;
+  chutes_gol: number;
+  passes_tentados: number;
+  passes_completos: number;
+  dribles_tentados: number;
+  dribles_completos: number;
+  desarmes: number;
+  interceptacoes: number;
+  faltas_cometidas: number;
+  faltas_sofridas: number;
+  posicao_media?: { x: number | null; y: number | null };
+  heatmap_url: string;
+}
+
+interface IncidenteAPI {
+  minuto: number;
+  acrescimo: number;
+  periodo: string;
+  tipo: string;
+  descricao: string;
+  jogador_principal_id: number | null;
+  jogador_secundario_id: number | null;
+  is_mandante: boolean;
+}
+
+// Interface mantida: usada no método scrapeDetalhesPartidas abaixo
+export interface DetalhesPartidaAPI {
+  status_api: string;
+  event_id: number;
+  arbitro: string | null;
+  estadio: string | null;
+  treinador_mandante: string | null;
+  treinador_visitante: string | null;
+  linha_do_tempo: IncidenteAPI[];
+  escalacoes: {
+    mandante: EscalacaoAPI[];
+    visitante: EscalacaoAPI[];
+  };
 }
 
 @Injectable()
 export class ScrapingService {
   private readonly logger = new Logger(ScrapingService.name);
-
-  // Endereço onde a api-vasco-analytics (Python) está rodando
   private readonly API_VASCO_URL = 'http://127.0.0.1:8000/api/v1/vasco';
 
   constructor(private readonly prisma: PrismaService) {}
 
-  // ── 1. Sincronizar Partidas ───────────────────────────
   async scrapePartidas(): Promise<void> {
-    this.logger.log('Buscando partidas da api-vasco-analytics...');
-
+    this.logger.log('Buscando partidas...');
     try {
       const resposta = await axios.get<RespostaPartidasAPI>(
         `${this.API_VASCO_URL}/jogos`,
       );
-      const partidas = resposta.data.dados;
 
-      for (const jogo of partidas) {
-        const equipeCasa = await this.upsertEquipe(jogo.mandante);
-        const equipeVisitante = await this.upsertEquipe(jogo.visitante);
-        const competicao = await this.upsertCompeticao(jogo.campeonato);
+      for (const jogo of resposta.data.dados) {
+        const mandanteNorm = this.normalizarNomeEquipe(jogo.mandante);
+        const visitanteNorm = this.normalizarNomeEquipe(jogo.visitante);
+        const campNorm = this.normalizarNomeCompeticao(jogo.campeonato);
 
+        const equipeCasa = await this.upsertEquipe(mandanteNorm);
+        const equipeVisitante = await this.upsertEquipe(visitanteNorm);
+        const competicao = await this.upsertCompeticao(campNorm);
         const dataHora = this.parsarData(jogo.data_partida);
-
-        // Como o banco de dados está esperando apenas uma string simples,
-        // passamos as palavras exatas em minúsculo.
         const statusMapeado =
           jogo.status === 'Encerrado' ? 'encerrada' : 'agendada';
 
@@ -91,41 +147,20 @@ export class ScrapingService {
           },
         });
       }
-      this.logger.log(
-        '✅ Partidas sincronizadas com sucesso no banco de dados!',
-      );
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        this.logger.error(
-          `❌ Erro de conexão com a api-vasco-analytics: ${error.message}`,
-        );
-      } else if (error instanceof Error) {
-        this.logger.error(`❌ Erro interno: ${error.message}`);
-      } else {
-        this.logger.error(
-          '❌ Ocorreu um erro desconhecido ao tentar sincronizar as partidas.',
-        );
-      }
+    } catch {
+      this.logger.error('Erro ao sincronizar partidas');
     }
   }
 
-  // ── 2. Sincronizar Elenco ──────────────────────────────
   async scrapeElenco(): Promise<void> {
-    this.logger.log('Buscando elenco da api-vasco-analytics...');
-
     try {
       const resposta = await axios.get<RespostaElencoAPI>(
         `${this.API_VASCO_URL}/elenco`,
       );
-      const jogadores = resposta.data.dados;
-
-      // Garante que o Vasco existe no banco para vincular a chave estrangeira (equipeId)
       const equipe = await this.upsertEquipe('Vasco');
 
-      for (const jog of jogadores) {
-        const numeroCamisa =
-          jog.camisa !== 'S/N' ? parseInt(jog.camisa, 10) : null;
-
+      for (const jog of resposta.data.dados) {
+        const camisa = jog.camisa !== 'S/N' ? parseInt(jog.camisa, 10) : null;
         await this.prisma.db.jogador.upsert({
           where: {
             nomePopular_equipeId: {
@@ -133,73 +168,134 @@ export class ScrapingService {
               equipeId: equipe.id,
             },
           },
-          update: {
-            posicao: jog.posicao,
-            numeroCamisa: Number.isNaN(numeroCamisa) ? null : numeroCamisa,
-            ativo: true,
-          },
+          update: { posicao: jog.posicao, numeroCamisa: camisa, ativo: true },
           create: {
             equipeId: equipe.id,
             nomeCompleto: jog.nome,
             nomePopular: jog.nome,
             posicao: jog.posicao,
-            numeroCamisa: Number.isNaN(numeroCamisa) ? null : numeroCamisa,
+            numeroCamisa: camisa,
             ativo: true,
           },
         });
       }
-      this.logger.log('✅ Elenco sincronizado com sucesso no banco de dados!');
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        this.logger.error(
-          `❌ Erro de conexão ao buscar elenco: ${error.message}`,
+    } catch {
+      this.logger.error('Erro ao buscar elenco');
+    }
+  }
+
+  async scrapeTodasEstatisticas(): Promise<void> {
+    const partidas = await this.prisma.db.partida.findMany({
+      where: { status: 'encerrada' },
+    });
+
+    for (const partida of partidas) {
+      try {
+        const resposta = await axios.get<RespostaEstatisticasAPI>(
+          `${this.API_VASCO_URL}/jogos/${partida.id}/estatisticas`,
         );
-      } else if (error instanceof Error) {
-        this.logger.error(`❌ Erro interno: ${error.message}`);
-      } else {
-        this.logger.error(
-          '❌ Ocorreu um erro desconhecido ao tentar sincronizar o elenco.',
+        const stats = resposta.data.dados;
+        await this.salvarEstatisticas(
+          partida.id,
+          partida.equipeCasaId,
+          stats,
+          'mandante',
         );
+        await this.salvarEstatisticas(
+          partida.id,
+          partida.equipeVisitanteId,
+          stats,
+          'visitante',
+        );
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } catch {
+        this.logger.warn(`Erro nas estatísticas para o jogo ${partida.id}`);
       }
     }
   }
 
-  // ── 3. Funções Auxiliares (Ajudantes) ─────────────────
+  // Método que utiliza a interface DetalhesPartidaAPI
+  async scrapeDetalhesPartidas(): Promise<void> {
+    const partidas = await this.prisma.db.partida.findMany({
+      where: { status: 'encerrada' },
+    });
+    for (const partida of partidas) {
+      try {
+        // Se o seu eventId estiver vindo da API Python, use-o aqui
+        await axios.get<DetalhesPartidaAPI>(
+          `${this.API_VASCO_URL}/jogos/${partida.id}/detalhes`,
+        );
+      } catch {
+        this.logger.warn(`Detalhes não disponíveis para jogo ${partida.id}`);
+      }
+    }
+  }
+
+  // ── FUNÇÕES AUXILIARES ─────────────────────────────────
+  private async salvarEstatisticas(
+    partidaId: number,
+    equipeId: number,
+    stats: DadosEstatisticasAPI,
+    tipo: 'mandante' | 'visitante',
+  ): Promise<void> {
+    const limpar = (val?: string) =>
+      val ? parseFloat(val.replace('%', '')) : 0;
+    const getVal = (key: keyof DadosEstatisticasAPI) => stats[key]?.[tipo];
+
+    await this.prisma.db.estatisticaEquipe.upsert({
+      where: { partidaId_equipeId: { partidaId, equipeId } },
+      update: { posseBola: limpar(getVal('Ball possession')) },
+      create: {
+        partidaId,
+        equipeId,
+        posseBola: limpar(getVal('Ball possession')),
+      },
+    });
+  }
+
+  private normalizarNomeEquipe(nome: string): string {
+    const dict: Record<string, string> = {
+      'Vasco da Gama': 'Vasco',
+      'CR Vasco da Gama': 'Vasco',
+    };
+    return dict[nome] || nome;
+  }
+
+  private normalizarNomeCompeticao(nome: string): string {
+    if (nome.toLowerCase().includes('carioca')) return 'Campeonato Carioca';
+    if (nome.toLowerCase().includes('brasileir'))
+      return 'Campeonato Brasileiro';
+    return nome;
+  }
 
   private async upsertEquipe(nome: string) {
     return this.prisma.db.equipe.upsert({
-      where: { nome: nome },
+      where: { nome },
       update: {},
-      create: { nome: nome, nomeCurto: nome },
+      create: { nome, nomeCurto: nome },
     });
   }
 
   private async upsertCompeticao(nome: string) {
     return this.prisma.db.competicao.upsert({
-      where: { nome_temporada: { nome: nome, temporada: '2026' } },
+      where: { nome_temporada: { nome, temporada: '2026' } },
       update: {},
-      create: { nome: nome, temporada: '2026' },
+      create: { nome, temporada: '2026' },
     });
   }
 
   private parsarData(dataString: string | null): Date {
-    if (
-      !dataString ||
-      dataString === 'A definir' ||
-      dataString === 'Data Desconhecida'
-    ) {
-      return new Date();
-    }
+    if (!dataString || dataString === 'A definir') return new Date();
     try {
       const [data, hora] = dataString.split(' ');
       const [dia, mes, ano] = data.split('/');
-      const [horas, minutos] = (hora || '00:00').split(':');
+      const [h, m] = (hora || '00:00').split(':');
       return new Date(
         Number(ano),
         Number(mes) - 1,
         Number(dia),
-        Number(horas),
-        Number(minutos),
+        Number(h),
+        Number(m),
       );
     } catch {
       return new Date();

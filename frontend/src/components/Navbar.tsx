@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -25,11 +26,10 @@ export default function Navbar() {
         </Link>
 
         {/* Links de Navegação */}
-        <div className="flex items-center gap-1 sm:gap-4">
+        {/* Links de Navegação e Botão de Tema */}
+        <div className="flex items-center gap-2 sm:gap-4">
           {links.map((link) => {
-            // Verifica se a página atual é a rota do link para acender o botão
             const isActive = pathname === link.rota;
-
             return (
               <Link
                 key={link.nome}
@@ -44,6 +44,11 @@ export default function Navbar() {
               </Link>
             );
           })}
+          
+          {/* Divisor Visual */}
+          <div className="hidden h-6 w-px bg-zinc-300 dark:bg-zinc-700 sm:block"></div>
+          
+          <ThemeToggle />
         </div>
       </div>
     </nav>

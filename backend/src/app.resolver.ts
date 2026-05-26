@@ -21,4 +21,11 @@ export class AppResolver {
     await this.scrapingService.scrapePartidas();
     return 'Partidas atualizadas com sucesso!';
   }
+
+  // NOVA MUTATION ADICIONADA AQUI, DENTRO DA CLASSE
+  @Mutation(() => String)
+  async dispararScrapingEstatisticas(): Promise<string> {
+    await this.scrapingService.scrapeTodasEstatisticas();
+    return 'Estatísticas das partidas atualizadas com sucesso!';
+  }
 }
