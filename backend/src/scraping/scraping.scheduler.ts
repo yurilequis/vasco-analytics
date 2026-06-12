@@ -13,4 +13,10 @@ export class ScrapingScheduler {
     this.logger.log('Scheduler: atualizando elenco...');
     await this.scrapingService.scrapeElenco();
   }
+
+  @Cron(CronExpression.EVERY_DAY_AT_3AM)
+  async atualizarPartidas(): Promise<void> {
+    this.logger.log('Scheduler: atualizando partidas...');
+    await this.scrapingService.scrapePartidas();
+  }
 }

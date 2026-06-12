@@ -1,43 +1,43 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "../generated/prisma"
+  provider     = "prisma-client-js"
   moduleFormat = "commonjs"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Equipe {
-  id        Int       @id @default(autoincrement())
-  nome      String    @unique
-  nomeCurto String
-  sigla     String?
-  cidade    String?
-  estado    String?
-  pais      String    @default("Brasil")
-  fundacao  DateTime?
-  escudoUrl String?
-  criadoEm  DateTime  @default(now())
-
+  id                    Int                  @id @default(autoincrement())
+  nome                  String               @unique
+  nomeCurto             String
+  sigla                 String?
+  cidade                String?
+  estado                String?
+  pais                  String               @default("Brasil")
+  fundacao              DateTime?
+  escudoUrl             String?
+  criadoEm              DateTime             @default(now())
+  estatisticas          EstatisticaEquipe[]
+  estatisticasJogadores EstatisticaJogador[]
+  eventos               EventoPartida[]
   jogadores             Jogador[]
   partidasCasa          Partida[]            @relation("EquipeCasa")
   partidasVisitante     Partida[]            @relation("EquipeVisitante")
-  estatisticas          EstatisticaEquipe[]
-  eventos               EventoPartida[]
-  estatisticasJogadores EstatisticaJogador[]
+  classificacoes        ClassificacaoEquipe[]
 }
 
 model Competicao {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   nome      String
   nomeCurto String?
   tipo      String?
   temporada String
-  pais      String   @default("Brasil")
-  criadoEm  DateTime @default(now())
-
-  partidas Partida[]
+  pais      String    @default("Brasil")
+  criadoEm  DateTime  @default(now())
+  partidas  Partida[]
+  classificacao ClassificacaoEquipe[]
 
   @@unique([nome, temporada])
 }
@@ -55,54 +55,59 @@ model Estadio {
   grama        String?
   fotoUrl      String?
   criadoEm     DateTime  @default(now())
-
-  partidas Partida[]
+  partidas     Partida[]
 }
 
 model Arbitro {
-  id             Int       @id @default(autoincrement())
+  id             Int                  @id @default(autoincrement())
   nomeCompleto   String
   nomePopular    String
   dataNascimento DateTime?
-  nacionalidade  String    @default("Brasileiro")
+  nacionalidade  String               @default("Brasileiro")
   estado         String?
   fotoUrl        String?
-  ativo          Boolean   @default(true)
-  criadoEm       DateTime  @default(now())
-
-  partidas     Partida[]
-  estatisticas EstatisticaArbitro[]
+  ativo          Boolean              @default(true)
+  criadoEm       DateTime             @default(now())
+  estatisticas   EstatisticaArbitro[]
+  partidas       Partida[]
 }
 
 model Jogador {
-  id                Int       @id @default(autoincrement())
-  equipeId          Int
-  equipe            Equipe    @relation(fields: [equipeId], references: [id])
+  id                Int                  @id @default(autoincrement())
+  equipeId          Int?
   nomeCompleto      String
   nomePopular       String
+  nomeOriginal      String?
   dataNascimento    DateTime?
   nacionalidade     String?
+  categoria         String               @default("Profissional")
   posicao           String?
   posicaoSecundaria String?
   numeroCamisa      Int?
   peDominante       String?
   alturaCm          Int?
+  biografia         String?
   pesoKg            Float?
   fotoUrl           String?
-  ativo             Boolean   @default(true)
-  criadoEm          DateTime  @default(now())
-  atualizadoEm      DateTime  @updatedAt
-  perfilFM          PerfilFM?
-
+  emprestado        Boolean              @default(false)
+  tipoContrato      String               @default("DEFINITIVO")
+  ativo             Boolean              @default(true)
+  criadoEm          DateTime             @default(now())
+  atualizadoEm      DateTime             @updatedAt
+  origem            String               @default("Desconhecida")
+  funcoes           String?
+  clubeEmprestimo   String?
   estatisticas      EstatisticaJogador[]
   eventos           EventoPartida[]      @relation("JogadorPrincipal")
   eventosSecundario EventoPartida[]      @relation("JogadorSecundario")
+  equipe            Equipe?              @relation(fields: [equipeId], references: [id])
+  perfilFM          PerfilFM?
 
   @@unique([nomePopular, equipeId])
 }
 
 model Partida {
-  id                    Int      @id @default(autoincrement())
+  id                    Int                  @id @default(autoincrement())
   competicaoId          Int
   equipeCasaId          Int
   equipeVisitanteId     Int
@@ -117,22 +122,21 @@ model Partida {
   golsVisitante         Int?
   golsPenaltisCasa      Int?
   golsPenaltisVisitante Int?
-  status                String   @default("agendada")
+  status                String               @default("agendada")
   publico               Int?
-  criadoEm              DateTime @default(now())
+  criadoEm              DateTime             @default(now())
   eventId               Int?
-
+  estatisticaArbitro    EstatisticaArbitro?
+  estatisticasEquipes   EstatisticaEquipe[]
+  estatisticasJogadores EstatisticaJogador[]
+  eventos               EventoPartida[]
+  arbitro               Arbitro?             @relation(fields: [arbitroId], references: [id])
   competicao            Competicao           @relation(fields: [competicaoId], references: [id])
   equipeCasa            Equipe               @relation("EquipeCasa", fields: [equipeCasaId], references: [id])
   equipeVisitante       Equipe               @relation("EquipeVisitante", fields: [equipeVisitanteId], references: [id])
   estadio               Estadio?             @relation(fields: [estadioId], references: [id])
-  arbitro               Arbitro?             @relation(fields: [arbitroId], references: [id])
   treinadorCasa         Treinador?           @relation("TreinadorCasa", fields: [treinadorCasaId], references: [id])
   treinadorVisitante    Treinador?           @relation("TreinadorVisitante", fields: [treinadorVisitanteId], references: [id])
-  estatisticasJogadores EstatisticaJogador[]
-  estatisticasEquipes   EstatisticaEquipe[]
-  estatisticaArbitro    EstatisticaArbitro?
-  eventos               EventoPartida[]
 
   @@unique([equipeCasaId, equipeVisitanteId, dataHora])
 }
@@ -143,11 +147,11 @@ model EstatisticaJogador {
   jogadorId        Int
   equipeId         Int
   titular          Boolean  @default(false)
-  posicaoPartida   String? // Posição específica jogada neste jogo (ex: "G", "D", "M", "F")
-  numeroCamisa     Int? // Número usado no jogo
-  posicaoMediaX    Float? // Coordenada X no campo (Sofascore)
-  posicaoMediaY    Float? // Coordenada Y no campo (Sofascore)
-  heatmapUrl       String? // URL da imagem do mapa de calor
+  posicaoPartida   String?
+  numeroCamisa     Int?
+  posicaoMediaX    Float?
+  posicaoMediaY    Float?
+  heatmapUrl       String?
   minutosJogados   Int      @default(0)
   gols             Int      @default(0)
   assistencias     Int      @default(0)
@@ -165,10 +169,9 @@ model EstatisticaJogador {
   cartoesVermelhos Int      @default(0)
   notaDesempenho   Float?
   criadoEm         DateTime @default(now())
-
-  partida Partida @relation(fields: [partidaId], references: [id])
-  jogador Jogador @relation(fields: [jogadorId], references: [id])
-  equipe  Equipe  @relation(fields: [equipeId], references: [id])
+  equipe           Equipe   @relation(fields: [equipeId], references: [id], onDelete: Cascade)
+  jogador          Jogador  @relation(fields: [jogadorId], references: [id], onDelete: Cascade)
+  partida          Partida  @relation(fields: [partidaId], references: [id])
 
   @@unique([partidaId, jogadorId])
 }
@@ -188,9 +191,14 @@ model EstatisticaEquipe {
   cartoesAmarelos  Int      @default(0)
   cartoesVermelhos Int      @default(0)
   criadoEm         DateTime @default(now())
-
-  partida Partida @relation(fields: [partidaId], references: [id])
-  equipe  Equipe  @relation(fields: [equipeId], references: [id])
+  formacao         String?
+  chutesFora       Int      @default(0)
+  chutesNaTrave    Int      @default(0)
+  defesasGoleiro   Int      @default(0)
+  grandesChances   Int      @default(0)
+  xG               Float?   @default(0)
+  equipe           Equipe   @relation(fields: [equipeId], references: [id])
+  partida          Partida  @relation(fields: [partidaId], references: [id])
 
   @@unique([partidaId, equipeId])
 }
@@ -208,9 +216,8 @@ model EstatisticaArbitro {
   acrescimos1t            Int      @default(0)
   acrescimos2t            Int      @default(0)
   criadoEm                DateTime @default(now())
-
-  arbitro Arbitro @relation(fields: [arbitroId], references: [id])
-  partida Partida @relation(fields: [partidaId], references: [id])
+  arbitro                 Arbitro  @relation(fields: [arbitroId], references: [id])
+  partida                 Partida  @relation(fields: [partidaId], references: [id])
 
   @@unique([arbitroId, partidaId])
 }
@@ -226,48 +233,38 @@ model EventoPartida {
   minutoAcrescimo     Int      @default(0)
   descricao           String?
   criadoEm            DateTime @default(now())
-
-  partida           Partida  @relation(fields: [partidaId], references: [id])
-  equipe            Equipe   @relation(fields: [equipeId], references: [id])
-  jogador           Jogador? @relation("JogadorPrincipal", fields: [jogadorId], references: [id])
-  jogadorSecundario Jogador? @relation("JogadorSecundario", fields: [jogadorSecundarioId], references: [id])
+  equipe              Equipe   @relation(fields: [equipeId], references: [id])
+  jogador             Jogador? @relation("JogadorPrincipal", fields: [jogadorId], references: [id])
+  jogadorSecundario   Jogador? @relation("JogadorSecundario", fields: [jogadorSecundarioId], references: [id])
+  partida             Partida  @relation(fields: [partidaId], references: [id])
 }
 
 model Treinador {
-  id            Int      @id @default(autoincrement())
-  nome          String   @unique
-  nacionalidade String   @default("Brasileiro")
-  criadoEm      DateTime @default(now())
-
+  id                Int       @id @default(autoincrement())
+  nome              String    @unique
+  nacionalidade     String    @default("Brasileiro")
+  criadoEm          DateTime  @default(now())
   partidasCasa      Partida[] @relation("TreinadorCasa")
   partidasVisitante Partida[] @relation("TreinadorVisitante")
 }
 
-// --- NOVO MODELO: PERFIL FOOTBALL MANAGER ---
 model PerfilFM {
-  id Int @id @default(autoincrement())
-
-  // Relação 1 para 1 com o Jogador existente
-  jogadorId Int     @unique
-  jogador   Jogador @relation(fields: [jogadorId], references: [id], onDelete: Cascade)
-
-  // 1. ATRIBUTOS TÉCNICOS (Outfield)
-  cabeceamento  Int?
-  chutesLonge   Int?
-  cobrancaFalta Int?
-  cruzamento    Int?
-  desarme       Int?
-  drible        Int?
-  escanteios    Int?
-  finalizacao   Int?
-  laterais      Int?
-  marcacao      Int?
-  passe         Int?
-  penaltis      Int?
-  primeiroToque Int?
-  tecnica       Int?
-
-  // 2. ATRIBUTOS MENTAIS
+  id                Int      @id @default(autoincrement())
+  jogadorId         Int      @unique
+  cabeceamento      Int?
+  chutesLonge       Int?
+  cobrancaFalta     Int?
+  cruzamento        Int?
+  desarme           Int?
+  drible            Int?
+  escanteios        Int?
+  finalizacao       Int?
+  laterais          Int?
+  marcacao          Int?
+  passe             Int?
+  penaltis          Int?
+  primeiroToque     Int?
+  tecnica           Int?
   agressividade     Int?
   antecipacao       Int?
   bravura           Int?
@@ -275,37 +272,67 @@ model PerfilFM {
   concentracao      Int?
   decisoes          Int?
   determinacao      Int?
-  imprevisibilidade Int? // Flair
-  indiceTrabalho    Int? // Work Rate
+  imprevisibilidade Int?
+  indiceTrabalho    Int?
   lideranca         Int?
-  posicionamento    Int? // Positioning (Defensivo)
-  semBola           Int? // Off the Ball (Ofensivo)
+  posicionamento    Int?
+  semBola           Int?
   trabalhoEquipe    Int?
   visaoJogo         Int?
+  aceleracao        Int?
+  agilidade         Int?
+  aptidaoNatural    Int?
+  equilibrio        Int?
+  forca             Int?
+  impulsao          Int?
+  resistencia       Int?
+  velocidade        Int?
+  alcanceAereo      Int?
+  comandoArea       Int?
+  comunicacao       Int?
+  excentricidade    Int?
+  jogoMaos          Int?
+  lancamentos       Int?
+  reflexos          Int?
+  reposicao         Int?
+  saidaGol          Int?
+  socos             Int?
+  umContraUm        Int?
+  atualizadoEm      DateTime @default(now()) @updatedAt
+  jogador           Jogador  @relation(fields: [jogadorId], references: [id], onDelete: Cascade)
+}
 
-  // 3. ATRIBUTOS FÍSICOS
-  aceleracao     Int?
-  agilidade      Int?
-  aptidaoNatural Int? // Natural Fitness
-  equilibrio     Int?
-  forca          Int?
-  impulsao       Int? // Jumping Reach
-  resistencia    Int? // Stamina
-  velocidade     Int? // Pace
+model ClassificacaoEquipe {
+  id               Int        @id @default(autoincrement())
+  competicaoId     Int
+  equipeId         Int
+  posicao          Int
+  pontos           Int
+  jogos            Int
+  vitorias         Int
+  empates          Int
+  derrotas         Int
+  golsPro          Int
+  golsContra       Int
+  saldoGols        Int
+  atualizadoEm     DateTime   @default(now()) @updatedAt
+  competicao       Competicao @relation(fields: [competicaoId], references: [id], onDelete: Cascade)
+  equipe           Equipe     @relation(fields: [equipeId], references: [id], onDelete: Cascade)
 
-  // 4. ATRIBUTOS DE GOLEIRO (Ficarão nulos para jogadores de linha)
-  alcanceAereo   Int?
-  comandoArea    Int?
-  comunicacao    Int?
-  excentricidade Int?
-  jogoMaos       Int? // Handling
-  lancamentos    Int? // Throwing
-  reflexos       Int?
-  reposicao      Int? // Kicking
-  saidaGol       Int? // Rushing Out
-  socos          Int? // Punching
-  umContraUm     Int? // One on Ones
+  @@unique([competicaoId, equipeId])
+}
 
-  // Meta-dados da atualização
-  atualizadoEm DateTime @default(now()) @updatedAt
+model Usuario {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  nome     String
+  senha    String?
+  role     Role     @default(USER)
+  criadoEm DateTime @default(now())
+  googleId String?  @unique
+}
+
+enum Role {
+  USER
+  ADMIN
 }

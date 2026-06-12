@@ -4,5 +4,6 @@ import { PartidasResolver } from './partidas.resolver';
 
 @Module({
   providers: [PartidasService, PartidasResolver],
+  exports: [PartidasService],
 })
 export class PartidasModule {}

@@ -6,7 +6,7 @@ async function bootstrap() {
 
   // 1. Habilita o CORS para permitir que o frontend (porta 3000) pegue os dados
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: '*', // Permite todas as origens, mas em produção deve-se para o domínio do frontend
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
@@ -15,4 +15,6 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3001);
   console.log(`🚀 backend rodando na porta 3001`);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Erro ao iniciar o servidor:', err);
+});

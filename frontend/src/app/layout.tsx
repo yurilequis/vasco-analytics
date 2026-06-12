@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/components/AuthProvider"; // <-- 1. Importação nova
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -14,13 +15,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // suppressHydrationWarning é necessário para o next-themes funcionar perfeitamente
     <html lang="pt-BR" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-black transition-colors duration-300">
-        <ThemeProvider>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-        </ThemeProvider>
+      <body className="h-full bg-background text-foreground font-sans dark">
+        <AuthProvider>
+          <div className="app-container">
+            {children}
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

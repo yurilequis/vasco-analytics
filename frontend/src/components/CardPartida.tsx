@@ -1,5 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { getLogoPath } from '@/utils/logoHelper';
 
 // 1. Tipagem exata do que o card vai receber
 export interface PartidaResumo {
@@ -33,10 +35,19 @@ export default function CardPartida({ partida }: { partida: PartidaResumo }) {
         </div>
 
         <div className="flex items-center justify-between px-6 py-8">
-          <div className="flex flex-1 flex-col items-end">
-            <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">{partida.equipeCasa.nome}</span>
+          {/* Time Casa */}
+          <div className="flex flex-1 flex-col items-center gap-3">
+            <Image 
+              src={getLogoPath(partida.equipeCasa.nome)} 
+              alt={partida.equipeCasa.nome}
+              width={64}
+              height={64}
+              className="h-16 w-16 object-contain"
+            />
+            <span className="text-center text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">{partida.equipeCasa.nome}</span>
           </div>
 
+          {/* Placar */}
           <div className="mx-4 flex w-32 flex-col items-center justify-center sm:mx-8">
             {isEncerrada ? (
               <div className="flex items-center gap-3 text-3xl font-black text-zinc-900 dark:text-zinc-50">
@@ -45,15 +56,27 @@ export default function CardPartida({ partida }: { partida: PartidaResumo }) {
                 <span>{partida.golsVisitante ?? 0}</span>
               </div>
             ) : (
-              <div className="flex items-center gap-3 text-2xl font-bold text-zinc-400 dark:text-zinc-600"><span>-</span><span className="text-zinc-300 dark:text-zinc-700">x</span><span>-</span></div>
+              <div className="flex items-center gap-3 text-2xl font-bold text-zinc-400 dark:text-zinc-600">
+                <span>-</span>
+                <span className="text-zinc-300 dark:text-zinc-700">x</span>
+                <span>-</span>
+              </div>
             )}
             <span className={`mt-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${isEncerrada ? 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'}`}>
               {partida.status}
             </span>
           </div>
 
-          <div className="flex flex-1 flex-col items-start">
-            <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">{partida.equipeVisitante.nome}</span>
+          {/* Time Visitante */}
+          <div className="flex flex-1 flex-col items-center gap-3">
+            <Image 
+              src={getLogoPath(partida.equipeVisitante.nome)} 
+              alt={partida.equipeVisitante.nome}
+              width={64}
+              height={64}
+              className="h-16 w-16 object-contain"
+            />
+            <span className="text-center text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">{partida.equipeVisitante.nome}</span>
           </div>
         </div>
       </div>

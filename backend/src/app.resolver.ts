@@ -24,8 +24,8 @@ export class AppResolver {
 
   // NOVA MUTATION ADICIONADA AQUI, DENTRO DA CLASSE
   @Mutation(() => String)
-  async dispararScrapingEstatisticas(): Promise<string> {
-    await this.scrapingService.scrapeTodasEstatisticas();
+  dispararScrapingEstatisticas(): string {
+    this.scrapingService.scrapeTodasEstatisticas();
     return 'Estatísticas das partidas atualizadas com sucesso!';
   }
 }

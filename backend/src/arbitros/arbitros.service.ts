@@ -6,26 +6,26 @@ export class ArbitrosService {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll() {
-    return this.prisma.db.arbitro.findMany({
+    return this.prisma.arbitro.findMany({
       orderBy: { nomePopular: 'asc' },
     });
   }
 
   findAtivos() {
-    return this.prisma.db.arbitro.findMany({
+    return this.prisma.arbitro.findMany({
       where: { ativo: true },
       orderBy: { nomePopular: 'asc' },
     });
   }
 
   findOne(id: number) {
-    return this.prisma.db.arbitro.findUnique({
+    return this.prisma.arbitro.findUnique({
       where: { id },
     });
   }
 
   async mediaEstatisticas(id: number) {
-    const media = await this.prisma.db.estatisticaArbitro.aggregate({
+    const media = await this.prisma.estatisticaArbitro.aggregate({
       where: { arbitroId: id },
       _avg: {
         faltasMarcadas: true,

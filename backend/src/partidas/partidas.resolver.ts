@@ -1,7 +1,16 @@
-import { Resolver, Query, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  ResolveField,
+  Parent,
+  Int,
+  Args,
+} from '@nestjs/graphql';
 import { Partida } from './entities/partida.entity';
 import { PartidasService } from './partidas.service';
-import { PrismaService } from '../prisma/prisma.service'; // Verifique se este caminho está correto no seu projeto
+import { PrismaService } from '../prisma/prisma.service';
+import { AtualizarEscalacaoInput } from './dto/atualizar-escalacao.input';
 
 @Resolver(() => Partida)
 export class PartidasResolver {
@@ -19,8 +28,20 @@ export class PartidasResolver {
   @ResolveField('estatisticasEquipes', () => [Object], { nullable: true })
   async estatisticasEquipes(@Parent() partida: Partida) {
     const { id } = partida;
-    return this.prisma.db.estatisticaEquipe.findMany({
+    return this.prisma.estatisticaEquipe.findMany({
       where: { partidaId: id },
     });
+  }
+  @Query(() => Partida, { name: 'partida', nullable: true })
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.partidasService.findOne(id);
+  }
+
+  @Mutation(() => Boolean)
+  async atualizarEscalacaoPartida(
+    @Args('input', { type: () => AtualizarEscalacaoInput }) input: AtualizarEscalacaoInput,
+  ): Promise<boolean> {
+    await this.partidasService.atualizarEscalacao(input);
+    return true;
   }
 }

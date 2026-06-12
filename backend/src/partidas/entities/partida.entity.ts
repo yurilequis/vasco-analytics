@@ -1,12 +1,6 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
 
-// ── Entidades Auxiliares (Simplificadas para não precisarmos de outros arquivos) ──
-
-@ObjectType()
-export class CompeticaoSimples {
-  @Field(() => String)
-  nome!: string;
-}
+// ── Entidades Auxiliares ──────────────────────────────────────────────────
 
 @ObjectType()
 export class EquipeSimples {
@@ -15,6 +9,54 @@ export class EquipeSimples {
 
   @Field(() => String)
   nome!: string;
+
+  @Field({ nullable: true })
+  escudoUrl?: string;
+}
+
+@ObjectType()
+export class ClassificacaoEquipe {
+  @Field(() => Int)
+  posicao!: number;
+
+  @Field(() => Int)
+  pontos!: number;
+
+  @Field(() => Int)
+  jogos!: number;
+
+  @Field(() => Int)
+  vitorias!: number;
+
+  @Field(() => Int)
+  empates!: number;
+
+  @Field(() => Int)
+  derrotas!: number;
+
+  @Field(() => Int)
+  golsPro!: number;
+
+  @Field(() => Int)
+  golsContra!: number;
+
+  @Field(() => Int)
+  saldoGols!: number;
+
+  @Field(() => EquipeSimples)
+  equipe!: EquipeSimples;
+}
+
+@ObjectType()
+export class CompeticaoSimples {
+  @Field(() => Int)
+  id!: number;
+
+  @Field(() => String)
+  nome!: string;
+
+  @Field(() => [ClassificacaoEquipe], { nullable: true })
+  classificacao?: ClassificacaoEquipe[];
 }
 
 @ObjectType()
@@ -37,110 +79,41 @@ export class TreinadorSimples {
 
 @ObjectType()
 export class JogadorSimples {
+  @Field(() => Int)
+  id!: number;
+
   @Field(() => String)
   nomePopular!: string;
 
   @Field(() => String, { nullable: true })
   posicao?: string;
-}
-
-// 👇 ATUALIZADO: Agora suporta quem fez o gol e para qual time
-@ObjectType()
-export class EventoPartida {
-  @Field(() => Int)
-  id!: number;
-
-  @Field(() => Int)
-  minuto!: number;
-
-  @Field(() => Int)
-  minutoAcrescimo!: number;
-
-  @Field(() => String)
-  tipoEvento!: string;
 
   @Field(() => String, { nullable: true })
-  descricao?: string;
-
-  @Field(() => Int)
-  equipeId!: number;
-
-  @Field(() => JogadorSimples, { nullable: true })
-  jogador?: JogadorSimples;
-}
-
-@ObjectType()
-export class EstatisticaJogador {
-  @Field(() => Int)
-  id!: number;
-
-  @Field(() => Int)
-  equipeId!: number;
-
-  @Field(() => Boolean)
-  titular!: boolean;
+  posicaoSecundaria?: string;
 
   @Field(() => String, { nullable: true })
-  posicaoPartida?: string;
+  funcoes?: string;
+
+  @Field(() => String, { nullable: true })
+  fotoUrl?: string;
+
+  @Field(() => String, { nullable: true })
+  peDominante?: string;
 
   @Field(() => Int, { nullable: true })
   numeroCamisa?: number;
-
-  @Field(() => Number, { nullable: true })
-  notaDesempenho?: number;
-
-  @Field(() => Int)
-  minutosJogados!: number;
-
-  @Field(() => Int)
-  gols!: number;
-
-  @Field(() => Int)
-  assistencias!: number;
-
-  @Field(() => Int)
-  passesCompletos!: number;
-
-  @Field(() => Int)
-  desarmes!: number;
-
-  @Field(() => Number, { nullable: true })
-  posicaoMediaX?: number;
-
-  @Field(() => Number, { nullable: true })
-  posicaoMediaY?: number;
-
-  @Field(() => String, { nullable: true })
-  heatmapUrl?: string;
-
-  @Field(() => JogadorSimples)
-  jogador!: JogadorSimples;
 }
 
-@ObjectType()
-export class EstatisticaEquipe {
-  @Field(() => Int)
-  equipeId!: number;
-
-  @Field(() => Number, { nullable: true })
-  posseBola?: number;
-
-  @Field(() => Int, { nullable: true })
-  chutes?: number;
-
-  @Field(() => Int, { nullable: true })
-  passesCompletos?: number;
-}
-
-// ── Entidade Principal ──
+// ── Entidade Principal ────────────────────────────────────────────────────
 
 @ObjectType()
 export class Partida {
   @Field(() => Int)
   id!: number;
 
-  @Field(() => String)
-  dataHora!: string;
+  // 🎯 CORRIGIDO: Retornado para Date para bater com o DateTime do Prisma
+  @Field(() => Date)
+  dataHora!: Date;
 
   @Field(() => String)
   status!: string;
@@ -186,4 +159,142 @@ export class Partida {
 
   @Field(() => [EstatisticaJogador], { nullable: true })
   estatisticasJogadores?: EstatisticaJogador[];
+}
+
+@ObjectType()
+export class EventoPartida {
+  @Field(() => Int)
+  id!: number;
+
+  @Field(() => Int)
+  minuto!: number;
+
+  @Field(() => Int)
+  minutoAcrescimo!: number;
+
+  @Field(() => String)
+  tipoEvento!: string;
+
+  @Field(() => String, { nullable: true })
+  descricao?: string;
+
+  @Field(() => Int)
+  equipeId!: number;
+
+  @Field(() => JogadorSimples, { nullable: true })
+  jogador?: JogadorSimples;
+}
+
+@ObjectType()
+export class EstatisticaJogador {
+  @Field(() => Int)
+  id!: number;
+
+  @Field(() => Int)
+  equipeId!: number;
+
+  @Field(() => Boolean)
+  titular!: boolean;
+
+  @Field(() => String, { nullable: true })
+  posicaoPartida?: string;
+
+  @Field(() => Int, { nullable: true })
+  numeroCamisa?: number;
+
+  // 🎯 CORRIGIDO: Modificado de Number para Float
+  @Field(() => Float, { nullable: true })
+  notaDesempenho?: number;
+
+  @Field(() => Int)
+  minutosJogados!: number;
+
+  @Field(() => Int)
+  gols!: number;
+
+  @Field(() => Int)
+  assistencias!: number;
+
+  @Field(() => Int)
+  passesCompletos!: number;
+
+  @Field(() => Int)
+  desarmes!: number;
+
+  // 🎯 CORRIGIDO: Modificado de Number para Float
+  @Field(() => Float, { nullable: true })
+  posicaoMediaX?: number;
+
+  @Field(() => Float, { nullable: true })
+  posicaoMediaY?: number;
+
+  @Field(() => String, { nullable: true })
+  heatmapUrl?: string;
+
+  @Field(() => Int)
+  cartoesAmarelos!: number;
+
+  @Field(() => Int)
+  cartoesVermelhos!: number;
+
+  @Field(() => JogadorSimples)
+  jogador!: JogadorSimples;
+
+  @Field(() => Partida, { nullable: true })
+  partida?: Partida;
+}
+
+@ObjectType()
+export class EstatisticaEquipe {
+  @Field(() => Int)
+  equipeId!: number;
+
+  // 🎯 CORRIGIDO: Modificado de Number para Float
+  @Field(() => Float, { nullable: true })
+  posseBola?: number;
+
+  @Field(() => Float, { nullable: true })
+  xG?: number;
+
+  @Field(() => Int, { nullable: true })
+  grandesChances?: number;
+
+  @Field(() => Int, { nullable: true })
+  chutes?: number;
+
+  @Field(() => Int, { nullable: true })
+  chutesGol?: number;
+
+  @Field(() => Int, { nullable: true })
+  chutesFora?: number;
+
+  @Field(() => Int, { nullable: true })
+  chutesNaTrave?: number;
+
+  @Field(() => Int, { nullable: true })
+  defesasGoleiro?: number;
+
+  @Field(() => Int, { nullable: true })
+  escanteios?: number;
+
+  @Field(() => Int, { nullable: true })
+  faltas?: number;
+
+  @Field(() => Int, { nullable: true })
+  impedimentos?: number;
+
+  @Field(() => Int, { nullable: true })
+  passesTentados?: number;
+
+  @Field(() => Int, { nullable: true })
+  passesCompletos?: number;
+
+  @Field(() => Int, { nullable: true })
+  cartoesAmarelos?: number;
+
+  @Field(() => Int, { nullable: true })
+  cartoesVermelhos?: number;
+
+  @Field(() => String, { nullable: true })
+  formacao?: string;
 }

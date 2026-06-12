@@ -6,13 +6,13 @@ export class EstadiosService {
   constructor(private readonly prisma: PrismaService) {}
 
   findAll() {
-    return this.prisma.db.estadio.findMany({
+    return this.prisma.estadio.findMany({
       orderBy: { nome: 'asc' },
     });
   }
 
   findOne(id: number) {
-    return this.prisma.db.estadio.findUnique({
+    return this.prisma.estadio.findUnique({
       where: { id },
     });
   }
