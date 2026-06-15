@@ -10,6 +10,9 @@ interface Estatistica {
   gols: number;
   assistencias: number;
   minutosJogados: number;
+  partida?: {
+    dataHora: string;
+  };
 }
 
 interface JogadorDash {

@@ -53,6 +53,7 @@ interface EstatisticaJogador {
   id: number;
   jogadorId: number;
   equipeId: number;
+  titular: boolean;
   minutosJogados: number;
   posicao?: string;
   numeroCamisa?: number;
@@ -63,14 +64,21 @@ interface EstatisticaJogador {
   passesTentados: number;
   desarmes: number;
   faltasCometidas: number;
-  cartaoAmarelo: number;
-  cartaoVermelho: number;
-  notaSofascore?: number;
+  cartoesAmarelos: number;
+  cartoesVermelhos: number;
+  notaDesempenho?: number | null;
+  posicaoPartida?: string;
+  posicaoMediaX?: number;
+  posicaoMediaY?: number;
   jogador: {
     id: number;
     nomePopular: string;
     fotoUrl?: string;
     peDominante?: string;
+    posicao: string;
+    posicaoSecundaria?: string;
+    funcoes?: string;
+    numeroCamisa?: number;
   };
 }
 
@@ -389,8 +397,8 @@ export default async function PartidaDetalhesPage({ params, searchParams }: { pa
                       idVisitante={partida.equipeVisitante.id}
                       nomeCasa={partida.equipeCasa.nome}
                       nomeVisitante={partida.equipeVisitante.nome}
-                      escudoCasa={partida.equipeCasa.escudoUrl}
-                      escudoVisitante={partida.equipeVisitante.escudoUrl}
+                      escudoCasa={partida.equipeCasa.escudoUrl || null}
+                      escudoVisitante={partida.equipeVisitante.escudoUrl || null}
                       treinadorCasa={partida.treinadorCasa?.nome}
                       treinadorVisitante={partida.treinadorVisitante?.nome}
                       formacaoCasa={estEquipeCasa?.formacao || undefined}
