@@ -18,7 +18,7 @@ export default function AutomacaoClient() {
     
     try {
       const query = `mutation { ${mutation} }`;
-      const res = await fetch('http://localhost:3001/graphql', {
+      const res = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL || (process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query }),

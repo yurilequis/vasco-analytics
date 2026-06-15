@@ -29,7 +29,7 @@ export default function AdminClubesClient({
   const handleSyncLogos = async () => {
     setIsSyncing(true);
     try {
-      const response = await fetch('http://localhost:3001/graphql', {
+      const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL || (process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...(tokenJwt ? { Authorization: `Bearer ${tokenJwt}` } : {}) },
         body: JSON.stringify({

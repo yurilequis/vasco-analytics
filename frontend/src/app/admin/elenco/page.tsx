@@ -40,14 +40,14 @@ const GET_EQUIPES = `
 
 async function fetchDados() {
   const [resElenco, resEquipes] = await Promise.all([
-    fetch('http://localhost:3001/graphql', {
+    fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL || (process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       // 2. CORREÇÃO CRÍTICA: Trocamos 'Vasco da Gama' por 'Vasco'
       body: JSON.stringify({ query: GET_ELENCO_ADMIN, variables: { clube: 'Vasco' } }),
       cache: 'no-store', 
     }),
-    fetch('http://localhost:3001/graphql', {
+    fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL || (process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: GET_EQUIPES }),

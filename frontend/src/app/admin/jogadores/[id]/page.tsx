@@ -119,7 +119,7 @@ export default function PerfilJogadorAdminPage() {
           }
         `;
 
-        const resposta = await fetch('http://localhost:3001/graphql', {
+        const resposta = await fetch((process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ query, variables: { id: jogadorId } }),
@@ -230,7 +230,7 @@ export default function PerfilJogadorAdminPage() {
     };
 
     try {
-      const resposta = await fetch('http://localhost:3001/graphql', {
+      const resposta = await fetch((process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
