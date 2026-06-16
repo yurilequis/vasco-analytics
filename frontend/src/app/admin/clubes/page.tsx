@@ -17,10 +17,13 @@ const GET_EQUIPES = `
   }
 `;
 
-async function fetchEquipes() {
+async function fetchEquipes(token?: string) {
   const resposta = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL || (process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
     body: JSON.stringify({ query: GET_EQUIPES }),
     cache: 'no-store',
   });
@@ -38,9 +41,9 @@ async function fetchEquipes() {
 export default async function AdminClubesPage() {
   // Verificação rigorosa de segurança da sessão
   const session = await getServerSession(authOptions);
-  if (!session) redirect("/admin/login");
+  if (!session) redirect("/login");
 
-  const equipes = await fetchEquipes();
+  const equipes = await fetchEquipes(session?.access_token);
 
-  return <AdminClubesClient equipesIniciais={equipes} tokenJwt={session?.accessToken} />;
+  return <AdminClubesClient equipesIniciais={equipes} tokenJwt={session?.access_token} />;
 }

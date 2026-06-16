@@ -59,4 +59,23 @@ export class AuthResolver {
 
     return true;
   }
+  @Mutation(() => AuthPayload)
+  async registrar(
+    @Args('nome') nome: string,
+    @Args('email') email: string,
+    @Args('senha') senhaLimpa: string
+  ) {
+    const usuario = await this.authService.registrar(nome, email, senhaLimpa);
+    return this.authService.gerarTokenLogin(usuario);
+  }
+
+  @Mutation(() => AuthPayload)
+  async loginComGoogle(
+    @Args('email') email: string,
+    @Args('nome') nome: string,
+    @Args('googleId') googleId: string
+  ) {
+    const usuario = await this.authService.loginComGoogle(email, nome, googleId);
+    return this.authService.gerarTokenLogin(usuario);
+  }
 }

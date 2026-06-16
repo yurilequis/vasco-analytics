@@ -163,7 +163,7 @@ export default async function PartidaDetalhesPage({ params, searchParams }: { pa
   const { tab = 'facts' } = await searchParams;
   const partidaId = parseInt(id, 10);
   const session = await getServerSession(authOptions);
-  const isAdmin = !!session;
+  const isAdmin = !!session && session.user?.role === 'ADMIN';
 
   let json;
   try {

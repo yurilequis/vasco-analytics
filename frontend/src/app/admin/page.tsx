@@ -16,7 +16,7 @@ import {
 
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
-  if (!session) redirect("/admin/login");
+  if (!session) redirect("/login");
 
   const metrics = [
     { label: 'Plantel Ativo', val: '28', icone: Users, color: 'text-blue-500' },

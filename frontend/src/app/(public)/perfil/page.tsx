@@ -13,7 +13,7 @@ export default function PerfilPage() {
   }
 
   if (!session) {
-    redirect("/admin/login");
+    redirect("/login");
   }
 
   return (

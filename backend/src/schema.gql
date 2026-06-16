@@ -257,6 +257,8 @@ type Mutation {
   dispararScrapingPartidas: Boolean!
   importarMassaFM(alturaCm: Int, clube: String!, dadosFM: AtualizarPerfilFMInput!, dataNascimento: String, fotoUrl: String, nome: String!, peDominante: String, posicao: String!): Boolean!
   login(email: String!, senha: String!): AuthPayload!
+  loginComGoogle(email: String!, googleId: String!, nome: String!): AuthPayload!
+  registrar(email: String!, nome: String!, senha: String!): AuthPayload!
   sincronizarEscudosLocais: Int!
 }
 

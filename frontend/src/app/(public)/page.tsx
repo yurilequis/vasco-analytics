@@ -92,7 +92,7 @@ function getFormBadge(p: Partida) {
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  const isAdmin = !!session;
+  const isAdmin = !!session && session.user?.role === 'ADMIN';
   
   const partidas = await fetchDashboardData();
   const encerradas = partidas.filter(p => p.status.toLowerCase() === 'encerrada').sort((a,b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime());

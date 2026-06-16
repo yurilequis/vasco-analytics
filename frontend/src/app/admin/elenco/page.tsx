@@ -74,7 +74,7 @@ async function fetchDados() {
 export default async function AdminElencoPage() {
   const session = await getServerSession(authOptions);
   
-  if (!session) redirect("/admin/login");
+  if (!session) redirect("/login");
 
   const { jogadores, equipes } = await fetchDados();
 
@@ -82,7 +82,7 @@ export default async function AdminElencoPage() {
     <AdminElencoClient 
       jogadoresIniciais={jogadores} 
       equipesDisponiveis={equipes} 
-      tokenJwt={session?.accessToken} 
+      tokenJwt={session?.access_token} 
     />
   );
 }

@@ -76,4 +76,69 @@ export class AuthService {
       },
     };
   }
+
+  async registrar(nome: string, email: string, senhaLimpa: string): Promise<UsuarioAutenticado> {
+    const emailNormalizado = email.toLowerCase().trim();
+    
+    const existe = await this.prisma.usuario.findUnique({
+      where: { email: emailNormalizado }
+    });
+
+    if (existe) {
+      throw new UnauthorizedException('E-mail já está em uso.');
+    }
+
+    const senhaHash = await this.hashSenha(senhaLimpa);
+    
+    const usuario = await this.prisma.usuario.create({
+      data: {
+        nome,
+        email: emailNormalizado,
+        senha: senhaHash,
+        role: 'USER'
+      }
+    });
+
+    return {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      role: usuario.role,
+    };
+  }
+
+  async loginComGoogle(email: string, nome: string, googleId: string): Promise<UsuarioAutenticado> {
+    const emailNormalizado = email.toLowerCase().trim();
+
+    let usuario = await this.prisma.usuario.findUnique({
+      where: { email: emailNormalizado }
+    });
+
+    if (usuario) {
+      // Se o usuário já existe mas não tem googleId vinculado, atualiza
+      if (!usuario.googleId) {
+        usuario = await this.prisma.usuario.update({
+          where: { id: usuario.id },
+          data: { googleId }
+        });
+      }
+    } else {
+      // Se não existe, cria um novo
+      usuario = await this.prisma.usuario.create({
+        data: {
+          nome,
+          email: emailNormalizado,
+          googleId,
+          role: 'USER'
+        }
+      });
+    }
+
+    return {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      role: usuario.role,
+    };
+  }
 }
