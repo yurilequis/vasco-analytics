@@ -2,7 +2,7 @@ import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
   pages: {
-    signIn: "/admin/login", // Ensina ao middleware onde é a porta de entrada
+    signIn: "/login", // Ensina ao middleware onde é a porta de entrada
   },
 });
 
