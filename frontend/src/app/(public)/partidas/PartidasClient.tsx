@@ -85,7 +85,7 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
       <div className="flex-1 flex items-center justify-between w-full max-w-2xl px-2 md:px-12 md:border-x border-border">
         <div className="flex flex-col-reverse md:flex-row items-center gap-2 md:gap-5 w-5/12 justify-center md:justify-end text-center md:text-right">
            <span className="text-xs font-black text-muted uppercase tracking-tight group-hover:text-foreground transition-colors hidden sm:block">{partida.equipeCasa.nome}</span>
-           <div className="w-12 h-12 p-2 bg-background border border-border rounded-xl group-hover:border-accent transition-colors shadow-md">
+           <div className="w-12 h-12 shrink-0 p-2 bg-background border border-border rounded-xl group-hover:border-accent transition-colors shadow-md">
               <img src={resolverEscudo(partida.equipeCasa.escudoUrl, partida.equipeCasa.nome)} className="max-h-full max-w-full object-contain mx-auto" alt="" />
            </div>
         </div>
@@ -105,7 +105,7 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
         </div>
 
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-5 w-5/12 justify-center md:justify-start text-center md:text-left">
-           <div className="w-12 h-12 p-2 bg-background border border-border rounded-xl group-hover:border-accent transition-colors shadow-md">
+           <div className="w-12 h-12 shrink-0 p-2 bg-background border border-border rounded-xl group-hover:border-accent transition-colors shadow-md">
               <img src={resolverEscudo(partida.equipeVisitante.escudoUrl, partida.equipeVisitante.nome)} className="max-h-full max-w-full object-contain mx-auto" alt="" />
            </div>
            <span className="text-xs font-black text-muted uppercase tracking-tight group-hover:text-foreground transition-colors hidden sm:block">{partida.equipeVisitante.nome}</span>
