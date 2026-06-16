@@ -266,40 +266,34 @@ export default async function Home() {
               </div>
               
               <div className="flex-1 bg-transparent relative overflow-hidden flex flex-col">
-                 {ultima && ultima.estatisticasJogadores && ultima.estatisticasJogadores.length > 0 ? (
-                    (() => {
-                       const isCasa = ultima.equipeCasa.nome.toUpperCase().includes('VASCO');
-                       const idVasco = isCasa ? ultima.equipeCasa.id : ultima.equipeVisitante.id;
-                       const treinadorVasco = isCasa ? ultima.treinadorCasa?.nome : ultima.treinadorVisitante?.nome;
-                       const escalacaoVasco = ultima.estatisticasJogadores.filter(j => j.equipeId === idVasco && j.titular).sort((a,b) => {
-                          if(a.posicaoPartida === 'G') return -1;
-                          if(b.posicaoPartida === 'G') return 1;
-                          return 0;
-                       });
-                       
-                       return (
-                          <div className="flex flex-col gap-4">
-                             <div className="flex items-center gap-4 mb-4">
+                 {(() => {
+                    const p = encerradas.find(x => x.estatisticasJogadores && x.estatisticasJogadores.length > 0);
+                    if (!p) return <div className="m-auto text-muted text-sm">Escalação indisponível</div>;
+                    const isCasa = p.equipeCasa.nome.toUpperCase().includes('VASCO');
+                    const idVasco = isCasa ? p.equipeCasa.id : p.equipeVisitante.id;
+                    const escalacaoVasco = p.estatisticasJogadores.filter(j => j.equipeId === idVasco && j.titular).sort((a,b) => {
+                       if(a.posicaoPartida === 'G' || a.jogador.posicao === 'G') return -1;
+                       if(b.posicaoPartida === 'G' || b.jogador.posicao === 'G') return 1;
+                       return 0;
+                    });
+                    const textoEsc = escalacaoVasco.map(e => e.jogador.nomePopular || e.jogador.nome).join(', ');
+                    return (
+                       <div className="flex flex-col gap-4">
+                          <div className="flex items-center justify-between mb-4">
+                             <div className="flex items-center gap-4">
                                 <img src={getLogoPath('Vasco da Gama')} className="w-10 h-10 object-contain" alt="Vasco da Gama" />
                                 <div>
                                    <h3 className="font-bold text-foreground text-sm">Vasco da Gama</h3>
+                                   <p className="text-xs text-muted">vs {isCasa ? p.equipeVisitante.nome : p.equipeCasa.nome}</p>
                                 </div>
                              </div>
-                             
-                             <div className="flex flex-col space-y-3 mt-2">
-                                {escalacaoVasco.map(est => (
-                                   <div key={est.id} className="flex items-center gap-4 text-sm font-medium">
-                                      <span className="font-bold w-6 text-right text-foreground">{est.numeroCamisa || est.jogador.numeroCamisa || '-'}</span>
-                                      <span className="text-foreground/90">{est.jogador.nomePopular || est.jogador.nome}</span>
-                                   </div>
-                                ))}
-                             </div>
                           </div>
-                       )
-                    })()
-                 ) : (
-                    <div className="m-auto text-muted text-sm">Escalação indisponível</div>
-                 )}
+                          <div className="bg-white/[0.02] p-4 rounded-xl border border-white/[0.05] text-sm text-foreground/90 leading-relaxed">
+                             {textoEsc}
+                          </div>
+                       </div>
+                    );
+                 })()}
               </div>
            </div>
         </div>
