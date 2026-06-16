@@ -510,6 +510,8 @@ export class PartidasService {
         });
         mapaSofascoreDb.set(j.sofascore_id, novoJogador.id);
         jogadorIdFinal = novoJogador.id;
+        jogadoresExistentes.push(novoJogador);
+        todosJogadores.push(novoJogador);
       } else {
         this.logger.log(
           `✅ Match Inteligente: ${j.nome_popular} -> ${jogadorLocal.nomePopular}`,
