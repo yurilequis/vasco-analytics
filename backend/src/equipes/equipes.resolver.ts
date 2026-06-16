@@ -19,14 +19,14 @@ export class EquipesResolver {
   @Mutation(() => Equipe, { name: 'atualizarEquipe' })
   async atualizarEquipe(
     @Args('id', { type: () => Int }) id: number,
-    @Args('nome', { nullable: true }) nome?: string,
-    @Args('nomeCurto', { nullable: true }) nomeCurto?: string,
-    @Args('sigla', { nullable: true }) sigla?: string,
-    @Args('cidade', { nullable: true }) cidade?: string,
-    @Args('estado', { nullable: true }) estado?: string,
-    @Args('pais', { nullable: true }) pais?: string,
-    @Args('fundacao', { nullable: true }) fundacao?: string,
-    @Args('escudoUrl', { nullable: true }) escudoUrl?: string,
+    @Args('nome', { type: () => String, nullable: true }) nome?: string,
+    @Args('nomeCurto', { type: () => String, nullable: true }) nomeCurto?: string,
+    @Args('sigla', { type: () => String, nullable: true }) sigla?: string,
+    @Args('cidade', { type: () => String, nullable: true }) cidade?: string,
+    @Args('estado', { type: () => String, nullable: true }) estado?: string,
+    @Args('pais', { type: () => String, nullable: true }) pais?: string,
+    @Args('fundacao', { type: () => String, nullable: true }) fundacao?: string,
+    @Args('escudoUrl', { type: () => String, nullable: true }) escudoUrl?: string,
   ) {
     // Construímos o objeto respeitando rigorosamente a interface AtualizarEquipeDados
     const dadosAtualizados: AtualizarEquipeDados = {

@@ -17,11 +17,12 @@ exec(execCmd, async (error, stdout, stderr) => {
     await prisma.classificacaoEquipe.deleteMany({ where: { competicaoId: 2 } });
 
     for (const linha of res.dados) {
-      const equipe = await prisma.equipe.upsert({
-        where: { nome: linha.equipe_nome },
-        update: {},
-        create: { nome: linha.equipe_nome, nomeCurto: linha.equipe_nome.substring(0, 3).toUpperCase() }
-      });
+      let equipe = await prisma.equipe.findUnique({ where: { nome: linha.equipe_nome } });
+      if (!equipe) {
+        equipe = await prisma.equipe.create({
+          data: { nome: linha.equipe_nome, nomeCurto: linha.equipe_nome.substring(0, 3).toUpperCase() }
+        });
+      }
       await prisma.classificacaoEquipe.create({
         data: {
           competicaoId: 2, equipeId: equipe.id,

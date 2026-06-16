@@ -79,10 +79,10 @@ export class JogadoresResolver {
 
   @Mutation(() => Boolean)
   async importarMassaFM(
-    @Args('nome') nome: string,
-    @Args('clube') clube: string,
-    @Args('posicao') posicao: string,
-    @Args('dadosFM') dadosFM: AtualizarPerfilFMInput,
+    @Args('nome', { type: () => String }) nome: string,
+    @Args('clube', { type: () => String }) clube: string,
+    @Args('posicao', { type: () => String }) posicao: string,
+    @Args('dadosFM', { type: () => AtualizarPerfilFMInput }) dadosFM: AtualizarPerfilFMInput,
     @Args('alturaCm', { type: () => Int, nullable: true }) alturaCm?: number,
     @Args('dataNascimento', { type: () => String, nullable: true })
     dataNascimento?: string,

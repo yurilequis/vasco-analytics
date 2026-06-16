@@ -474,7 +474,8 @@ export default function CardFormacoes({
                 if (timeSelecionado === 'casa') setDraftFormacaoCasa(e.target.value);
                 else setDraftFormacaoVisitante(e.target.value);
               }}
-              className="bg-black border border-slate-800 text-white text-[9px] font-black uppercase rounded-lg px-2 py-1 outline-none"
+              disabled={!isAdmin}
+              className="bg-black border border-slate-800 text-white text-[9px] font-black uppercase rounded-lg px-2 py-1 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {Object.keys(FORMATIONS).map(f => <option key={f} value={f}>{f}</option>)}
             </select>

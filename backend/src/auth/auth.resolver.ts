@@ -13,14 +13,14 @@ import { PrismaService } from '../prisma/prisma.service';
 @ObjectType()
 export class UsuarioSessao {
   @Field(() => Int) id!: number;
-  @Field() nome!: string;
-  @Field() email!: string;
-  @Field() role!: string;
+  @Field(() => String) nome!: string;
+  @Field(() => String) email!: string;
+  @Field(() => String) role!: string;
 }
 
 @ObjectType()
 export class AuthPayload {
-  @Field() access_token!: string;
+  @Field(() => String) access_token!: string;
   @Field(() => UsuarioSessao) usuario!: UsuarioSessao;
 }
 
@@ -33,7 +33,10 @@ export class AuthResolver {
   ) {}
 
   @Mutation(() => AuthPayload)
-  async login(@Args('email') email: string, @Args('senha') senhaLimpa: string) {
+  async login(
+    @Args('email', { type: () => String }) email: string, 
+    @Args('senha', { type: () => String }) senhaLimpa: string
+  ) {
     // Valida as credenciais e devolve o token JWT
     const usuario = await this.authService.validarUsuario(email, senhaLimpa);
     return this.authService.gerarTokenLogin(usuario);
@@ -41,7 +44,7 @@ export class AuthResolver {
 
   // Mutação de Setup Inicial (Gatilho único)
   @Mutation(() => Boolean)
-  async criarPrimeiroAdmin(@Args('senha') senhaLimpa: string) {
+  async criarPrimeiroAdmin(@Args('senha', { type: () => String }) senhaLimpa: string) {
     // Trava de segurança rigorosa: se já existir 1 usuário, a função aborta.
     const count = await this.prisma.usuario.count();
     if (count > 0) return false;
@@ -61,9 +64,9 @@ export class AuthResolver {
   }
   @Mutation(() => AuthPayload)
   async registrar(
-    @Args('nome') nome: string,
-    @Args('email') email: string,
-    @Args('senha') senhaLimpa: string
+    @Args('nome', { type: () => String }) nome: string,
+    @Args('email', { type: () => String }) email: string,
+    @Args('senha', { type: () => String }) senhaLimpa: string
   ) {
     const usuario = await this.authService.registrar(nome, email, senhaLimpa);
     return this.authService.gerarTokenLogin(usuario);
@@ -71,9 +74,9 @@ export class AuthResolver {
 
   @Mutation(() => AuthPayload)
   async loginComGoogle(
-    @Args('email') email: string,
-    @Args('nome') nome: string,
-    @Args('googleId') googleId: string
+    @Args('email', { type: () => String }) email: string,
+    @Args('nome', { type: () => String }) nome: string,
+    @Args('googleId', { type: () => String }) googleId: string
   ) {
     const usuario = await this.authService.loginComGoogle(email, nome, googleId);
     return this.authService.gerarTokenLogin(usuario);
