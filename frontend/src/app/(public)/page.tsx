@@ -257,7 +257,7 @@ export default async function Home() {
 
          {/* RIGHT COLUMN */}
         <div className="lg:col-span-5 xl:col-span-4">
-           <div className="bg-card rounded-2xl border border-border p-6 flex flex-col h-full">
+           <div className="bg-card rounded-2xl border border-border p-6 flex flex-col h-fit">
               <div className="flex justify-between items-center mb-6">
                  <div className="flex flex-col">
                     <span className="text-accent text-xs font-bold uppercase mb-1">Última escalação</span>
@@ -306,7 +306,7 @@ export default async function Home() {
                                 </div>
                              </div>
                           </div>
-                          <div className="bg-white/[0.02] p-4 rounded-xl border border-white/[0.05] text-sm text-foreground/90 leading-relaxed overflow-y-auto max-h-[220px] custom-scrollbar">
+                          <div className="bg-white/[0.02] p-4 rounded-xl border border-white/[0.05] text-sm text-foreground/90 leading-relaxed">
                              <div className="flex flex-col gap-2">
                                {escalacaoVasco.map(j => (
                                  <div key={j.id} className="flex items-center gap-3">
