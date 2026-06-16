@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { UploadCloud, Search, ShieldCheck, ChevronRight, Hash, Globe, LayoutGrid, List as ListIcon, ArrowUp, ArrowDown, Filter, RefreshCw } from 'lucide-react';
+import { getLogoPath } from '@/utils/logoHelper';
 
 export interface EquipeAdmin {
   id: number;
@@ -10,6 +11,11 @@ export interface EquipeAdmin {
   estado: string | null;
   pais: string | null;
   escudoUrl: string | null;
+}
+
+function resolverEscudo(url: string | null, nome: string) {
+  if (url && url !== '/logos/default.png' && !url.includes('default.png')) return url;
+  return getLogoPath(nome);
 }
 
 export default function AdminClubesClient({ 
@@ -231,7 +237,7 @@ export default function AdminClubesClient({
                         <td className="px-8 py-6">
                            <div className="flex items-center gap-4">
                               <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center p-1.5 overflow-hidden transition-all group-hover:border-accent">
-                                 {e.escudoUrl ? <img src={e.escudoUrl} className="max-h-full max-w-full object-contain" /> : <ShieldCheck className="w-4 h-4 text-slate-700" />}
+                                 {resolverEscudo(e.escudoUrl, e.nome) ? <img src={resolverEscudo(e.escudoUrl, e.nome)} className="max-h-full max-w-full object-contain" /> : <ShieldCheck className="w-4 h-4 text-slate-700" />}
                               </div>
                               <div>
                                  <p className="text-sm font-black text-white uppercase tracking-tight">{e.nome}</p>

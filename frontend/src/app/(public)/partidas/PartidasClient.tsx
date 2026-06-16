@@ -24,7 +24,7 @@ interface Partida {
 }
 
 function resolverEscudo(url: string | null, nome: string) {
-  if (url) return url;
+  if (url && url !== '/logos/default.png' && !url.includes('default.png')) return url;
   return getLogoPath(nome);
 }
 

@@ -495,23 +495,9 @@ export class PartidasService {
 
       if (!jogadorLocal) {
         this.logger.log(
-          `Jogador ${j.nome_popular} não encontrado. Criando registro (Equipe ID: ${equipeId}).`,
+          `Jogador ${j.nome_popular} não encontrado no banco. Ignorando criação (Equipe ID: ${equipeId}).`,
         );
-        const novoJogador = await tx.jogador.create({
-          data: {
-            nomePopular: j.nome_popular,
-            nomeCompleto: j.nome_completo,
-            equipeId: equipeId,
-            posicao: j.posicao_geral,
-            numeroCamisa: j.numero_camisa,
-            origem: 'Scraping',
-            ativo: false, // Prevents past players from polluting the active roster
-          },
-        });
-        mapaSofascoreDb.set(j.sofascore_id, novoJogador.id);
-        jogadorIdFinal = novoJogador.id;
-        jogadoresExistentes.push(novoJogador);
-        todosJogadores.push(novoJogador);
+        continue;
       } else {
         this.logger.log(
           `✅ Match Inteligente: ${j.nome_popular} -> ${jogadorLocal.nomePopular}`,

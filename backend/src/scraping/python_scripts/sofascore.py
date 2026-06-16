@@ -230,6 +230,52 @@ def comando_classificacao(tournament_id, season_id):
 
     print(json.dumps({"dados": tabela_limpa}))
 
+import base64
+
+def comando_elenco(team_id):
+    scraper = SofascoreScraper()
+    endpoint = f"/team/{team_id}/players"
+    resposta = scraper._fazer_requisicao(endpoint)
+    
+    if not resposta or "players" not in resposta:
+        print(json.dumps({"erro": "Falha ao buscar elenco"}))
+        return
+
+    jogadores = []
+    for p in resposta.get("players", []):
+        player_obj = p.get("player", {})
+        player_id = player_obj.get("id")
+        
+        foto_b64 = None
+        if player_id:
+            try:
+                img_url = f"https://api.sofascore.app/api/v1/player/{player_id}/image"
+                img_resp = requests.get(img_url, headers=scraper.headers, impersonate="chrome120", timeout=5)
+                if img_resp.status_code == 200 and len(img_resp.content) > 0:
+                    b64 = base64.b64encode(img_resp.content).decode("utf-8")
+                    mime_type = "image/png"
+                    if img_resp.content.startswith(b"RIFF"):
+                        mime_type = "image/webp"
+                    elif img_resp.content.startswith(b"\xff\xd8"):
+                        mime_type = "image/jpeg"
+                    foto_b64 = f"data:{mime_type};base64,{b64}"
+            except Exception:
+                pass
+
+        jogadores.append({
+            "sofascore_id": player_id,
+            "nome_completo": player_obj.get("name"),
+            "nome_popular": player_obj.get("shortName"),
+            "posicao": player_obj.get("position"),
+            "numero_camisa": player_obj.get("shirtNumber"),
+            "nacionalidade": player_obj.get("country", {}).get("name"),
+            "altura_cm": player_obj.get("height"),
+            "pe_dominante": player_obj.get("preferredFoot"),
+            "foto_url": foto_b64
+        })
+
+    print(json.dumps({"dados": jogadores}))
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(json.dumps({"erro": "Nenhum comando fornecido"}))
@@ -248,5 +294,10 @@ if __name__ == "__main__":
             print(json.dumps({"erro": "IDs de torneio e temporada nao fornecidos"}))
             sys.exit(1)
         comando_classificacao(sys.argv[2], sys.argv[3])
+    elif cmd == "elenco":
+        if len(sys.argv) < 3:
+            print(json.dumps({"erro": "ID da equipe nao fornecido"}))
+            sys.exit(1)
+        comando_elenco(sys.argv[2])
     else:
         print(json.dumps({"erro": "Comando desconhecido"}))

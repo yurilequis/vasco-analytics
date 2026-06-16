@@ -112,7 +112,7 @@ export class ScrapingService {
 
   async scrapeElenco(): Promise<void> {
     try {
-      this.logger.warn('scrapeElenco via Python ainda não migrado. Precisa do script para Elenco.');
+      this.logger.warn('scrapeElenco ignorado. O elenco é gerenciado pelo CSV e as fotos vêm da pasta /fotos-jogadores.');
       const equipe = await this.upsertEquipe('Vasco');
     } catch (error) {
       this.logger.error('Erro ao buscar elenco', error);

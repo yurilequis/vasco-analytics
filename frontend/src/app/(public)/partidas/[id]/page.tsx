@@ -148,13 +148,10 @@ const GET_DETALHES_PARTIDA = `
   }
 `;
 
-function getLogoPath(nome: string) {
-  const norm = nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
-  return `/logos/${norm}.png`;
-}
+import { getLogoPath } from '@/utils/logoHelper';
 
 function resolverEscudo(urlDB: string | null | undefined, nome: string) {
-  if (urlDB && urlDB.trim() !== '') return urlDB;
+  if (urlDB && urlDB !== '/logos/default.png' && !urlDB.includes('default.png')) return urlDB;
   return getLogoPath(nome);
 }
 
