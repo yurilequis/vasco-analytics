@@ -271,7 +271,7 @@ export default async function Home() {
                     if (!p) return <div className="m-auto text-muted text-sm">Escalação indisponível</div>;
                     const isCasa = p.equipeCasa.nome.toUpperCase().includes('VASCO');
                     const idVasco = isCasa ? p.equipeCasa.id : p.equipeVisitante.id;
-                    const escalacaoVasco = p.estatisticasJogadores.filter(j => j.equipeId === idVasco && j.titular).sort((a,b) => {
+                    const escalacaoVasco = (p.estatisticasJogadores || []).filter(j => j.equipeId === idVasco && j.titular).sort((a,b) => {
                        if(a.posicaoPartida === 'G' || a.jogador.posicao === 'G') return -1;
                        if(b.posicaoPartida === 'G' || b.jogador.posicao === 'G') return 1;
                        return 0;
