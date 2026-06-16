@@ -271,15 +271,33 @@ export default async function Home() {
                     if (!p) return <div className="m-auto text-muted text-sm">Escalação indisponível</div>;
                     const isCasa = p.equipeCasa.nome.toUpperCase().includes('VASCO');
                     const idVasco = isCasa ? p.equipeCasa.id : p.equipeVisitante.id;
+                    const POS_ORDER: Record<string, number> = {
+                      "goleiro": 1, "zagueiro": 2, "lateral direito": 3, "lateral esquerdo": 4,
+                      "volante": 5, "meio-campista": 6, "meia atacante": 7, "ponta direita": 8,
+                      "ponta esquerda": 9, "centroavante": 10, "atacante": 11,
+                    };
+                    const getPosOrder = (pos: string) => {
+                      if (!pos) return 99;
+                      const p = pos.toLowerCase();
+                      for (const [key, val] of Object.entries(POS_ORDER)) {
+                        if (p.includes(key)) return val;
+                      }
+                      if (p === 'g' || p === 'gk') return 1;
+                      if (p === 'd' || p.includes('zagueiro')) return 2;
+                      if (p === 'm' || p.includes('meio')) return 6;
+                      if (p === 'a' || p === 'f' || p.includes('atacante')) return 11;
+                      return 99;
+                    };
+
                     const escalacaoVasco = (p.estatisticasJogadores || []).filter(j => j.equipeId === idVasco && j.titular).sort((a,b) => {
-                       if(a.posicaoPartida === 'G' || a.jogador.posicao === 'G') return -1;
-                       if(b.posicaoPartida === 'G' || b.jogador.posicao === 'G') return 1;
-                       return 0;
+                       const posA = a.jogador.posicao || '';
+                       const posB = b.jogador.posicao || '';
+                       return getPosOrder(posA) - getPosOrder(posB);
                     });
-                    const textoEsc = escalacaoVasco.map(e => e.jogador.nomePopular || e.jogador.nome).join(', ');
+                    
                     return (
                        <div className="flex flex-col gap-4">
-                          <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center justify-between mb-2">
                              <div className="flex items-center gap-4">
                                 <img src={getLogoPath('Vasco da Gama')} className="w-10 h-10 object-contain" alt="Vasco da Gama" />
                                 <div>
@@ -288,8 +306,16 @@ export default async function Home() {
                                 </div>
                              </div>
                           </div>
-                          <div className="bg-white/[0.02] p-4 rounded-xl border border-white/[0.05] text-sm text-foreground/90 leading-relaxed">
-                             {textoEsc}
+                          <div className="bg-white/[0.02] p-4 rounded-xl border border-white/[0.05] text-sm text-foreground/90 leading-relaxed overflow-y-auto max-h-[220px] custom-scrollbar">
+                             <div className="flex flex-col gap-2">
+                               {escalacaoVasco.map(j => (
+                                 <div key={j.id} className="flex items-center gap-3">
+                                   <span className="w-5 text-right font-mono font-bold text-accent text-xs">{j.numeroCamisa || j.jogador.numeroCamisa || '-'}</span>
+                                   <span className="font-medium">{j.jogador.nomePopular || j.jogador.nome}</span>
+                                   <span className="text-[10px] text-muted uppercase tracking-wider ml-auto bg-white/5 px-2 py-0.5 rounded">{j.jogador.posicao}</span>
+                                 </div>
+                               ))}
+                             </div>
                           </div>
                        </div>
                     );

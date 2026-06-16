@@ -221,6 +221,7 @@ export class JogadoresService {
       jogador = await this.prisma.jogador.update({
         where: { id: jogadorExistente.id },
         data: {
+          ativo: true,
           posicao: posicaoNormalizada,
           nomeOriginal: nome,
           alturaCm,
@@ -232,6 +233,7 @@ export class JogadoresService {
     } else {
       jogador = await this.prisma.jogador.create({
         data: {
+          ativo: true,
           nomeCompleto: nome,
           nomePopular: nome,
           nomeOriginal: nome,
