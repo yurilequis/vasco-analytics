@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { getLogoPath } from '@/utils/logoHelper';
-import Image from 'next/image';
 import { 
   Trophy, 
   MapPin, 
@@ -51,7 +50,7 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
         <div className="flex items-center justify-between w-full">
           <div className="flex flex-col items-center gap-2 w-[40%] text-center">
              <div className="relative w-10 h-10 p-1.5 bg-background border border-border rounded-lg shadow-sm">
-                <Image src={resolverEscudo(partida.equipeCasa.escudoUrl, partida.equipeCasa.nome)} fill sizes="40px" className="object-contain p-1.5" alt="" />
+                <img src={resolverEscudo(partida.equipeCasa.escudoUrl, partida.equipeCasa.nome)} className="w-full h-full object-contain p-1.5" alt="" />
              </div>
              <span className="text-[10px] font-black text-muted uppercase tracking-tight truncate w-full">{partida.equipeCasa.nome}</span>
           </div>
@@ -60,7 +59,7 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
 
           <div className="flex flex-col items-center gap-2 w-[40%] text-center">
              <div className="relative w-10 h-10 p-1.5 bg-background border border-border rounded-lg shadow-sm">
-                <Image src={resolverEscudo(partida.equipeVisitante.escudoUrl, partida.equipeVisitante.nome)} fill sizes="40px" className="object-contain p-1.5" alt="" />
+                <img src={resolverEscudo(partida.equipeVisitante.escudoUrl, partida.equipeVisitante.nome)} className="w-full h-full object-contain p-1.5" alt="" />
              </div>
              <span className="text-[10px] font-black text-muted uppercase tracking-tight truncate w-full">{partida.equipeVisitante.nome}</span>
           </div>
@@ -87,7 +86,7 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
         <div className="flex flex-col-reverse md:flex-row items-center gap-2 md:gap-5 w-5/12 justify-center md:justify-end text-center md:text-right">
            <span className="text-xs font-black text-muted uppercase tracking-tight group-hover:text-foreground transition-colors hidden sm:block">{partida.equipeCasa.nome}</span>
            <div className="relative w-12 h-12 shrink-0 p-2 bg-background border border-border rounded-xl group-hover:border-accent transition-colors shadow-md">
-              <Image src={resolverEscudo(partida.equipeCasa.escudoUrl, partida.equipeCasa.nome)} fill sizes="48px" className="object-contain p-2" alt="" />
+              <img src={resolverEscudo(partida.equipeCasa.escudoUrl, partida.equipeCasa.nome)} className="w-full h-full object-contain p-2" alt="" />
            </div>
         </div>
 
@@ -107,7 +106,7 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
 
         <div className="flex flex-col md:flex-row items-center gap-2 md:gap-5 w-5/12 justify-center md:justify-start text-center md:text-left">
            <div className="relative w-12 h-12 shrink-0 p-2 bg-background border border-border rounded-xl group-hover:border-accent transition-colors shadow-md">
-              <Image src={resolverEscudo(partida.equipeVisitante.escudoUrl, partida.equipeVisitante.nome)} fill sizes="48px" className="object-contain p-2" alt="" />
+              <img src={resolverEscudo(partida.equipeVisitante.escudoUrl, partida.equipeVisitante.nome)} className="w-full h-full object-contain p-2" alt="" />
            </div>
            <span className="text-xs font-black text-muted uppercase tracking-tight group-hover:text-foreground transition-colors hidden sm:block">{partida.equipeVisitante.nome}</span>
         </div>
