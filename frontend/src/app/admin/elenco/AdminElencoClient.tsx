@@ -43,6 +43,8 @@ export default function AdminElencoClient({
   const [filtroCategoria, setFiltroCategoria] = useState('Profissional');
   const [filtroStatus, setFiltroStatus] = useState<'plantel' | 'emprestados' | 'inativos'>('plantel');
   const [termoBusca, setTermoBusca] = useState('');
+  const [filtroPosicao, setFiltroPosicao] = useState('todas');
+  const [ordenacao, setOrdenacao] = useState<'nome_asc' | 'nome_desc' | 'idade_asc' | 'idade_desc'>('nome_asc');
 
   // Quick Edit State
   const [quickEditData, setQuickEditData] = useState<JogadorAdmin | null>(null);
@@ -170,14 +172,28 @@ export default function AdminElencoClient({
 
     // Filtro por Status
     if (filtroStatus === 'plantel') {
-      return j.ativo === true && j.tipoContrato !== 'EMPRESTADO';
+      if (!(j.ativo === true && j.tipoContrato !== 'EMPRESTADO')) return false;
     } else if (filtroStatus === 'emprestados') {
-      return j.tipoContrato === 'EMPRESTADO';
+      if (j.tipoContrato !== 'EMPRESTADO') return false;
     } else if (filtroStatus === 'inativos') {
-      return j.ativo === false;
+      if (j.ativo !== false) return false;
     }
     
+    // Filtro por Posição
+    if (filtroPosicao !== 'todas' && j.posicao !== filtroPosicao) return false;
+    
     return true;
+  }).sort((a, b) => {
+    if (ordenacao === 'nome_asc') return a.nomePopular.localeCompare(b.nomePopular);
+    if (ordenacao === 'nome_desc') return b.nomePopular.localeCompare(a.nomePopular);
+    if (ordenacao === 'idade_asc' || ordenacao === 'idade_desc') {
+       const timeA = a.dataNascimento ? new Date(a.dataNascimento).getTime() : 0;
+       const timeB = b.dataNascimento ? new Date(b.dataNascimento).getTime() : 0;
+       // Maior timestamp = nasceu depois = mais novo
+       if (ordenacao === 'idade_asc') return timeB - timeA;
+       return timeA - timeB;
+    }
+    return 0;
   });
 
   return (
@@ -239,9 +255,25 @@ export default function AdminElencoClient({
                </button>
             </div>
 
-            <button className="flex items-center gap-2 px-6 py-3 bg-slate-900 border border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-300 hover:bg-slate-800 transition-all">
-               <Filter className="w-4 h-4" /> Filtros
-            </button>
+            <select 
+               value={filtroPosicao} 
+               onChange={e => setFiltroPosicao(e.target.value)}
+               className="bg-black border border-slate-800 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-300 focus:border-accent focus:outline-none"
+             >
+               <option value="todas">Qualquer Posição</option>
+               {POSICOES_DISPONIVEIS.map(p => <option key={p} value={p}>{traduzirPosicao(p)}</option>)}
+            </select>
+
+            <select 
+               value={ordenacao} 
+               onChange={e => setOrdenacao(e.target.value as any)}
+               className="bg-black border border-slate-800 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-300 focus:border-accent focus:outline-none"
+             >
+               <option value="nome_asc">A-Z</option>
+               <option value="nome_desc">Z-A</option>
+               <option value="idade_asc">Mais Novos</option>
+               <option value="idade_desc">Mais Velhos</option>
+            </select>
             <button 
                onClick={() => setIsMassEdit(!isMassEdit)}
                className={`flex items-center gap-2 px-6 py-3 border rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl ${isMassEdit ? 'bg-amber-500 text-black border-amber-400' : 'bg-slate-900 border-slate-800 text-amber-500 hover:bg-slate-800'}`}>
