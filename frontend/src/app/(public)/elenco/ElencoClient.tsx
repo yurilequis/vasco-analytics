@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LayoutGrid, List, Search, UserPlus, Shield, Activity, ChevronRight } from 'lucide-react';
 import { traduzirPosicao } from '@/utils/posicaoHelper';
+import Image from 'next/image';
 
 export interface Jogador {
   id: number;
@@ -61,8 +62,8 @@ const BaseTableRow = ({ jogador, onClick }: { jogador: Jogador, onClick: () => v
       </td>
       <td className="px-8 py-6">
         <div className="flex items-center gap-6">
-          <div className="w-12 h-12 rounded-xl bg-card border border-border overflow-hidden shrink-0 shadow-xl transition-all group-hover:border-accent">
-             {jogador.fotoUrl ? <img src={jogador.fotoUrl} className="w-full h-full object-cover" /> : <Shield className="w-5 h-5 m-auto mt-3 text-muted" />}
+          <div className="relative w-12 h-12 rounded-xl bg-card border border-border overflow-hidden shrink-0 shadow-xl transition-all group-hover:border-accent">
+             {jogador.fotoUrl ? <Image src={jogador.fotoUrl} alt={jogador.nomePopular} fill sizes="48px" className="object-cover" /> : <Shield className="w-5 h-5 m-auto mt-3 text-muted relative z-10" />}
           </div>
           <span className="text-base font-black text-foreground uppercase tracking-tight group-hover:text-accent transition-colors italic">{jogador.nomePopular}</span>
         </div>
@@ -237,7 +238,7 @@ export default function ElencoClient({ jogadoresIniciais }: { jogadoresIniciais:
                   
                   <div className="w-32 h-32 rounded-xl overflow-hidden bg-background border border-border shadow-md mb-6 group-hover:scale-105 transition-transform relative">
                     <div className="absolute inset-0 border-4 border-background/50 rounded-xl z-10" />
-                    {j.fotoUrl ? <img src={j.fotoUrl} className="w-full h-full object-cover transition-all duration-700" /> : <UserPlus className="w-10 h-10 m-auto mt-10 text-muted" />}
+                    {j.fotoUrl ? <Image src={j.fotoUrl} alt={j.nomePopular} fill sizes="128px" className="object-cover transition-all duration-700" /> : <UserPlus className="w-10 h-10 m-auto mt-10 text-muted relative z-10" />}
                   </div>
 
                   {j.emprestado && (

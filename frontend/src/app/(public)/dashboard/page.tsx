@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { TrendingUp, AlertTriangle, Users, Target } from 'lucide-react';
 import { getLogoPath } from '@/utils/logoHelper';
+import Image from 'next/image';
 
 interface Estatistica {
   notaDesempenho: number | null;
@@ -163,7 +164,7 @@ export default function Dashboard() {
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8 md:space-y-12">
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-slate-100 pb-8">
          <div className="flex items-center gap-6">
-            <img src={getLogoPath('Vasco')} alt="Vasco" className="w-16 h-16 object-contain drop-shadow-xl" />
+            <Image src={getLogoPath('Vasco')} alt="Vasco" width={64} height={64} className="object-contain drop-shadow-xl" />
             <div>
                <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase">Inteligência de Elenco</h1>
                <p className="text-muted font-bold text-sm mt-1 uppercase tracking-widest">Dashboard de Scouting e Performance</p>

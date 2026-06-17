@@ -104,6 +104,8 @@ model Jogador {
   perfilFM          PerfilFM?
 
   @@unique([nomePopular, equipeId])
+  @@index([equipeId])
+  @@index([ativo])
 }
 
 model Partida {
@@ -139,6 +141,10 @@ model Partida {
   treinadorVisitante    Treinador?           @relation("TreinadorVisitante", fields: [treinadorVisitanteId], references: [id])
 
   @@unique([equipeCasaId, equipeVisitanteId, dataHora])
+  @@index([competicaoId])
+  @@index([equipeCasaId])
+  @@index([equipeVisitanteId])
+  @@index([dataHora])
 }
 
 model EstatisticaJogador {
@@ -174,6 +180,9 @@ model EstatisticaJogador {
   partida          Partida  @relation(fields: [partidaId], references: [id])
 
   @@unique([partidaId, jogadorId])
+  @@index([jogadorId])
+  @@index([equipeId])
+  @@index([partidaId])
 }
 
 model EstatisticaEquipe {
@@ -201,6 +210,8 @@ model EstatisticaEquipe {
   partida          Partida  @relation(fields: [partidaId], references: [id])
 
   @@unique([partidaId, equipeId])
+  @@index([partidaId])
+  @@index([equipeId])
 }
 
 model EstatisticaArbitro {
@@ -237,6 +248,10 @@ model EventoPartida {
   jogador             Jogador? @relation("JogadorPrincipal", fields: [jogadorId], references: [id])
   jogadorSecundario   Jogador? @relation("JogadorSecundario", fields: [jogadorSecundarioId], references: [id])
   partida             Partida  @relation(fields: [partidaId], references: [id])
+
+  @@index([partidaId])
+  @@index([equipeId])
+  @@index([jogadorId])
 }
 
 model Treinador {
