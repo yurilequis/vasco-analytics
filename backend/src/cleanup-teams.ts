@@ -81,10 +81,33 @@ async function main() {
       }
 
       // 3. Mover Jogadores
-      await prisma.jogador.updateMany({
-        where: { equipeId: equipe.id },
-        data: { equipeId: idPrincipal },
-      });
+      const jogadores = await prisma.jogador.findMany({ where: { equipeId: equipe.id } });
+      for (const j of jogadores) {
+        try {
+          await prisma.jogador.update({ where: { id: j.id }, data: { equipeId: idPrincipal } });
+        } catch (e) {
+          // Jogador já existe na equipe principal
+          const jogadorPrincipal = await prisma.jogador.findFirst({
+            where: { equipeId: idPrincipal, nomePopular: j.nomePopular }
+          });
+          if (jogadorPrincipal) {
+             // Transfere as estatísticas e eventos
+             await prisma.estatisticaJogador.updateMany({
+               where: { jogadorId: j.id },
+               data: { jogadorId: jogadorPrincipal.id }
+             });
+             await prisma.eventoPartida.updateMany({
+               where: { jogadorId: j.id },
+               data: { jogadorId: jogadorPrincipal.id }
+             });
+             // Deleta o perfil FM e o jogador duplicado
+             await prisma.perfilFM.deleteMany({ where: { jogadorId: j.id } });
+             await prisma.jogador.delete({ where: { id: j.id } });
+          } else {
+             await prisma.jogador.delete({ where: { id: j.id } }); // fallback
+          }
+        }
+      }
 
       // 4. Mover Estatísticas
       await prisma.estatisticaEquipe.updateMany({
