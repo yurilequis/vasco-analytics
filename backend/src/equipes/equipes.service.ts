@@ -74,7 +74,6 @@ export class EquipesService {
         // Tentativas de match seguro:
         if (fSlug === eSlug) return true; // Match exato (sao-paulo === sao-paulo)
         if (f.startsWith(`${eSlug}.`)) return true; // sao-paulo.png
-        if (f.startsWith(`${eSlug}-`)) return true; // america-mg-logo.png
         if (eSlugCurto && fSlug === eSlugCurto) return true; // FLA, FLU, VAS
         
         // Match relaxado seguro para times com "da", "do", "de" (ex: vasco-da-gama -> vasco)
