@@ -65,6 +65,13 @@ interface PartidaSimples {
   equipeVisitante: { nome: string, escudoUrl: string | null };
 }
 
+interface TodasEstatisticas {
+  id: number;
+  gols: number;
+  assistencias: number;
+  partida: { dataHora: string };
+}
+
 interface EstatisticaJogadorPartida {
   id: number;
   titular: boolean;
@@ -91,6 +98,7 @@ interface JogadorDetalhado {
   emprestado: boolean;
   tipoContrato: string;
   perfilFM: PerfilFM | null;
+  todasEstatisticas: TodasEstatisticas[];
   estatisticas: EstatisticaJogadorPartida[];
 }
 
@@ -114,6 +122,12 @@ export default function PlayerProfilePage() {
                 cabeceamento, chutesLonge, cobrancaFalta, cruzamento, desarme, drible, escanteios, finalizacao, laterais, marcacao, passe, penaltis, primeiroToque, tecnica,
                 agressividade, antecipacao, bravura, compostura, concentracao, decisoes, determinacao, imprevisibilidade, indiceTrabalho, lideranca, posicionamento, semBola, trabalhoEquipe, visaoJogo,
                 aceleracao, agilidade, aptidaoNatural, equilibrio, forca, impulsao, resistencia, velocidade
+              }
+              todasEstatisticas: estatisticas {
+                id, gols, assistencias
+                partida {
+                  dataHora
+                }
               }
               estatisticas(take: 10) {
                 id, titular, notaDesempenho, minutosJogados, gols, assistencias, passesCompletos, desarmes
@@ -146,6 +160,16 @@ export default function PlayerProfilePage() {
   if (!jogador) return <div className="p-20 text-center text-slate-500">Atleta não localizado.</div>;
 
   const fm = jogador.perfilFM;
+
+  const statsTotal = jogador.todasEstatisticas || jogador.estatisticas || [];
+  const partidasTotal = statsTotal.length;
+  const golsTotal = statsTotal.reduce((acc, curr) => acc + curr.gols, 0);
+  const assistTotal = statsTotal.reduce((acc, curr) => acc + curr.assistencias, 0);
+
+  const stats2026 = statsTotal.filter(s => s.partida?.dataHora?.startsWith('2026'));
+  const partidas2026 = stats2026.length;
+  const gols2026 = stats2026.reduce((acc, curr) => acc + curr.gols, 0);
+  const assist2026 = stats2026.reduce((acc, curr) => acc + curr.assistencias, 0);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -224,6 +248,34 @@ export default function PlayerProfilePage() {
                   {jogador.biografia || "Nenhuma biografia ou observação técnica registrada."}
               </p>
             </section>
+        </div>
+
+        {/* ESTATÍSTICAS DE CARREIRA E TEMPORADA */}
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+           <div className="bg-card p-6 rounded-xl border border-border text-center flex flex-col justify-center shadow-sm hover:border-muted transition-colors">
+             <p className="text-[9px] font-black uppercase tracking-widest text-muted mb-2">Jogos (Total)</p>
+             <p className="text-3xl font-black font-mono italic text-foreground">{partidasTotal}</p>
+           </div>
+           <div className="bg-card p-6 rounded-xl border border-border text-center flex flex-col justify-center shadow-sm hover:border-muted transition-colors">
+             <p className="text-[9px] font-black uppercase tracking-widest text-muted mb-2">Gols (Total)</p>
+             <p className="text-3xl font-black font-mono italic text-foreground">{golsTotal}</p>
+           </div>
+           <div className="bg-card p-6 rounded-xl border border-border text-center flex flex-col justify-center shadow-sm hover:border-muted transition-colors">
+             <p className="text-[9px] font-black uppercase tracking-widest text-muted mb-2">Assist. (Total)</p>
+             <p className="text-3xl font-black font-mono italic text-foreground">{assistTotal}</p>
+           </div>
+           <div className="bg-card p-6 rounded-xl border border-border text-center flex flex-col justify-center shadow-sm bg-accent/5 border-accent/20 hover:border-accent/40 transition-colors">
+             <p className="text-[9px] font-black uppercase tracking-widest text-accent mb-2">Jogos (2026)</p>
+             <p className="text-3xl font-black font-mono italic text-accent">{partidas2026}</p>
+           </div>
+           <div className="bg-card p-6 rounded-xl border border-border text-center flex flex-col justify-center shadow-sm bg-accent/5 border-accent/20 hover:border-accent/40 transition-colors">
+             <p className="text-[9px] font-black uppercase tracking-widest text-accent mb-2">Gols (2026)</p>
+             <p className="text-3xl font-black font-mono italic text-accent">{gols2026}</p>
+           </div>
+           <div className="bg-card p-6 rounded-xl border border-border text-center flex flex-col justify-center shadow-sm bg-accent/5 border-accent/20 hover:border-accent/40 transition-colors">
+             <p className="text-[9px] font-black uppercase tracking-widest text-accent mb-2">Assist. (2026)</p>
+             <p className="text-3xl font-black font-mono italic text-accent">{assist2026}</p>
+           </div>
         </div>
 
         {/* HISTÓRICO DE PARTIDAS */}
