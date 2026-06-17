@@ -205,20 +205,19 @@ export default function PlayerProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             {/* RADAR & FM STATS */}
-            {fm && (
-              <section className="lg:col-span-5 bg-card rounded-xl border border-border p-8 shadow-sm relative overflow-hidden flex flex-col items-center">
-                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
-                 <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground self-start mb-8 flex items-center gap-4">
-                    <Target className="w-4 h-4 text-accent" /> Perfil Técnico
-                 </h3>
-                <div className="h-[320px]">
-                    <PlayerRadar fm={fm} />
+            {/* RADAR & FM STATS */}
+            <section className="lg:col-span-5 bg-card rounded-xl border border-border p-6 shadow-sm relative overflow-hidden flex flex-col items-center">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
+                <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground self-start mb-6 flex items-center gap-4">
+                  <Target className="w-4 h-4 text-accent" /> Perfil Técnico
+                </h3>
+                <div className="h-[260px] w-full">
+                  <PlayerRadar fm={fm} />
                 </div>
-              </section>
-            )}
+            </section>
 
-            <section className="lg:col-span-7 bg-card p-8 rounded-xl border border-border shadow-sm h-full flex flex-col">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground mb-8 flex items-center gap-4">
+            <section className="lg:col-span-7 bg-card p-6 rounded-xl border border-border shadow-sm h-full flex flex-col">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground mb-6 flex items-center gap-4">
                   <Shield className="w-4 h-4 text-accent" /> Biografia
               </h3>
               <p className="text-sm font-medium text-muted leading-relaxed flex-1">

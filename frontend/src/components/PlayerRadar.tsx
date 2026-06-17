@@ -35,7 +35,7 @@ interface Props {
 export default function PlayerRadar({ fm }: Props) {
   if (!fm) {
     return (
-      <div className="flex items-center justify-center h-full w-full bg-slate-900/20 border border-slate-900 rounded-[40px] text-[10px] font-black uppercase text-slate-500 tracking-widest min-h-[300px]">
+      <div className="flex items-center justify-center h-full w-full bg-slate-900/20 border border-slate-900 rounded-[40px] text-[10px] font-black uppercase text-slate-500 tracking-widest min-h-[260px]">
         Sem dados de Scout
       </div>
     );
@@ -64,8 +64,8 @@ export default function PlayerRadar({ fm }: Props) {
   ];
 
   return (
-    <div className="w-full h-full min-h-[300px] flex items-center justify-center relative">
-      <ResponsiveContainer width="100%" height={300}>
+    <div className="w-full h-full min-h-[260px] flex items-center justify-center relative">
+      <ResponsiveContainer width="100%" height={260}>
         <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
           <PolarGrid stroke="#334155" />
           <PolarAngleAxis 
