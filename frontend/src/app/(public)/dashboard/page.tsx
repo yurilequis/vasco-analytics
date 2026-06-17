@@ -147,8 +147,8 @@ export default function Dashboard() {
   let zona = { texto: '-', cor: 'text-slate-500', bg: 'bg-slate-900' };
   
   const campeonato = partidasFiltradas.find(p => p.competicao?.nome?.includes('Brasileirão'));
-  if (campeonato && campeonato.competicao.classificacao) {
-     const vascoItem = campeonato.competicao.classificacao.find((c: any) => c.equipe.nome.includes('Vasco'));
+  if (campeonato && Array.isArray(campeonato.competicao.classificacao)) {
+     const vascoItem = campeonato.competicao.classificacao.find((c: any) => c?.equipe?.nome?.includes('Vasco'));
      if (vascoItem) {
         classificacaoVasco = vascoItem.posicao;
         if (classificacaoVasco <= 4) zona = { texto: 'G4: Libertadores', cor: 'text-emerald-500', bg: 'bg-emerald-500/10' };
