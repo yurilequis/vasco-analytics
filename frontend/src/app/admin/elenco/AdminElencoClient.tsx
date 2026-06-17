@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Eye, Edit2, Zap, X, Check, Database, ChevronRight, Filter, UserPlus, Search } from 'lucide-react';
-import { traduzirPosicao } from '@/utils/posicaoHelper';
+import { traduzirPosicao, POSICOES_DISPONIVEIS } from '@/utils/posicaoHelper';
 
 export interface JogadorAdmin {
   id: number;
@@ -307,7 +307,12 @@ export default function AdminElencoClient({
                             {isMassEdit ? (
                               <div className="flex flex-col gap-1 w-48">
                                 <input value={current.nomePopular || ''} onChange={e => handleMassEditChange(j.id, 'nomePopular', e.target.value)} className="bg-black border border-slate-800 rounded px-2 py-1 text-xs text-white outline-none focus:border-accent" />
-                                <input value={current.posicao || ''} onChange={e => handleMassEditChange(j.id, 'posicao', e.target.value)} className="bg-black border border-slate-800 rounded px-2 py-1 text-[9px] uppercase font-bold text-slate-400 outline-none focus:border-accent" />
+                                <select value={current.posicao || ''} onChange={e => handleMassEditChange(j.id, 'posicao', e.target.value)} className="bg-black border border-slate-800 rounded px-2 py-1 text-[9px] uppercase font-bold text-slate-400 outline-none focus:border-accent">
+                                  <option value="">Selecione...</option>
+                                  {POSICOES_DISPONIVEIS.map(p => (
+                                    <option key={p} value={p}>{p}</option>
+                                  ))}
+                                </select>
                               </div>
                             ) : (
                               <div>
