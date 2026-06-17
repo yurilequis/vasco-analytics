@@ -261,7 +261,7 @@ export default function AdminElencoClient({
                className="bg-black border border-slate-800 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-300 focus:border-accent focus:outline-none"
              >
                <option value="todas">Qualquer Posição</option>
-               {POSICOES_DISPONIVEIS.map(p => <option key={p} value={p}>{traduzirPosicao(p)}</option>)}
+               {POSICOES_DISPONIVEIS.map(p => <option key={p} value={p}>{traduzirPosicao(p).nome}</option>)}
             </select>
 
             <select 
