@@ -12,9 +12,9 @@ interface CustomSession {
     name?: string | null;
     email?: string | null;
     image?: string | null;
-    accessToken?: string;
+    access_token?: string;
   };
-  accessToken?: string;
+  access_token?: string;
 }
 
 interface EquipeItem {
@@ -87,7 +87,7 @@ export default function PerfilJogadorAdminPage() {
       try {
         // 👇 3. Buscamos a sessão dinamicamente sem precisar do SessionProvider!
         const session = await getSession();
-        const token = (session as CustomSession)?.user?.accessToken || (session as CustomSession)?.accessToken;
+        const token = (session as CustomSession)?.user?.access_token || (session as CustomSession)?.access_token;
         if (token) setTokenJwt(token);
 
         // Busca o jogador
