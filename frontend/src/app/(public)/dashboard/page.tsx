@@ -88,44 +88,47 @@ export default function Dashboard() {
   if (loading) return <div className="p-20 text-center text-slate-300 font-black uppercase tracking-[0.5em] text-xs">Carregando Inteligência...</div>;
 
   // Process data based on season
-  const jogadoresFiltrados = jogadores.map(j => {
-    const stats = j.estatisticas.filter(e => {
+  const jogadoresFiltrados = jogadores.filter(j => j != null).map(j => {
+    const stats = (j.estatisticas || []).filter(e => {
+      if (!e) return false;
       if (temporada === 'geral') return true;
       if (!e.partida?.dataHora) return true; // fallback
       return e.partida.dataHora.startsWith(temporada);
     });
 
-    const totalGols = stats.reduce((sum, e) => sum + e.gols, 0);
-    const totalAssists = stats.reduce((sum, e) => sum + e.assistencias, 0);
-    const totalMinutos = stats.reduce((sum, e) => sum + e.minutosJogados, 0);
-    const notasValidas = stats.filter(e => e.notaDesempenho !== null).map(e => e.notaDesempenho as number);
+    const totalGols = stats.reduce((sum, e) => sum + (e?.gols || 0), 0);
+    const totalAssists = stats.reduce((sum, e) => sum + (e?.assistencias || 0), 0);
+    const totalMinutos = stats.reduce((sum, e) => sum + (e?.minutosJogados || 0), 0);
+    const notasValidas = stats.filter(e => e?.notaDesempenho != null).map(e => e?.notaDesempenho as number);
     const notaMedia = notasValidas.length > 0 ? notasValidas.reduce((a, b) => a + b, 0) / notasValidas.length : null;
 
     return { ...j, totalGols, totalAssists, totalMinutos, notaMedia, partidas: stats.length };
   });
 
   const partidasFiltradas = partidas.filter(p => {
+    if (!p) return false;
     if (temporada === 'geral') return true;
-    return p.dataHora.startsWith(temporada);
+    return p.dataHora?.startsWith(temporada);
   });
 
-  const partidasEncerradas = partidasFiltradas.filter(p => p.status.toLowerCase() === 'encerrada');
-  const ultimas5 = [...partidasEncerradas].sort((a,b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime()).slice(0, 5);
+  const partidasEncerradas = partidasFiltradas.filter(p => p?.status?.toLowerCase() === 'encerrada');
+  const ultimas5 = [...partidasEncerradas].sort((a,b) => new Date(b?.dataHora || 0).getTime() - new Date(a?.dataHora || 0).getTime()).slice(0, 5);
   
   let vitorias = 0, empates = 0, derrotas = 0, golsMarcados = 0, golsSofridos = 0;
   let forma = ultimas5.map(p => {
-    const isVascoCasa = p.equipeCasa.nome.includes('Vasco');
-    const golsV = isVascoCasa ? p.golsCasa : p.golsVisitante;
-    const golsA = isVascoCasa ? p.golsVisitante : p.golsCasa;
+    const isVascoCasa = p?.equipeCasa?.nome?.includes('Vasco');
+    const golsV = isVascoCasa ? p?.golsCasa : p?.golsVisitante;
+    const golsA = isVascoCasa ? p?.golsVisitante : p?.golsCasa;
     if (golsV > golsA) return 'V';
     if (golsV < golsA) return 'D';
     return 'E';
   }).reverse();
 
   partidasEncerradas.forEach(p => {
-    const isVascoCasa = p.equipeCasa.nome.includes('Vasco');
-    const golsV = isVascoCasa ? p.golsCasa : p.golsVisitante;
-    const golsA = isVascoCasa ? p.golsVisitante : p.golsCasa;
+    if (!p) return;
+    const isVascoCasa = p?.equipeCasa?.nome?.includes('Vasco');
+    const golsV = isVascoCasa ? p?.golsCasa : p?.golsVisitante;
+    const golsA = isVascoCasa ? p?.golsVisitante : p?.golsCasa;
     if (golsV !== null && golsV !== undefined) golsMarcados += golsV;
     if (golsA !== null && golsA !== undefined) golsSofridos += golsA;
     if (golsV > golsA) vitorias++;
@@ -138,9 +141,9 @@ export default function Dashboard() {
   const aproveitamento = maxPts > 0 ? ((pts / maxPts) * 100).toFixed(1) : '0.0';
   const saldoGols = golsMarcados - golsSofridos;
 
-  const artilheiros = [...jogadoresFiltrados].sort((a, b) => b.totalGols - a.totalGols).slice(0, 3);
-  const garcons = [...jogadoresFiltrados].sort((a, b) => b.totalAssists - a.totalAssists).slice(0, 3);
-  const melhoresNotas = [...jogadoresFiltrados].filter(p => p.notaMedia !== null && p.partidas >= 3).sort((a, b) => (b.notaMedia || 0) - (a.notaMedia || 0)).slice(0, 3);
+  const artilheiros = [...jogadoresFiltrados].sort((a, b) => (b?.totalGols || 0) - (a?.totalGols || 0)).slice(0, 3);
+  const garcons = [...jogadoresFiltrados].sort((a, b) => (b?.totalAssists || 0) - (a?.totalAssists || 0)).slice(0, 3);
+  const melhoresNotas = [...jogadoresFiltrados].filter(p => p?.notaMedia !== null && (p?.partidas || 0) >= 3).sort((a, b) => (b?.notaMedia || 0) - (a?.notaMedia || 0)).slice(0, 3);
 
   // Classificação atual (do último jogo da competição principal, e.g. Brasileirão)
   let classificacaoVasco = null;
