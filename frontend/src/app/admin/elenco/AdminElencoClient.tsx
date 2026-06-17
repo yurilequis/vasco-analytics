@@ -60,9 +60,9 @@ export default function AdminElencoClient({
     setIsSavingQuick(true);
     try {
       const mut = `
-        mutation AtualizarQuick($id: Int!, $nomePopular: String, $nomeCompleto: String, $numeroCamisa: Int, $ativo: Boolean, $emprestado: Boolean, $tipoContrato: String, $clubeEmprestimo: String) {
-          atualizarJogadorAdmin(id: $id, nomePopular: $nomePopular, nomeCompleto: $nomeCompleto, numeroCamisa: $numeroCamisa, ativo: $ativo, emprestado: $emprestado, tipoContrato: $tipoContrato, clubeEmprestimo: $clubeEmprestimo) {
-            id, nomePopular, nomeCompleto, numeroCamisa, ativo, emprestado, tipoContrato, clubeEmprestimo
+        mutation AtualizarQuick($id: Int!, $nomePopular: String, $nomeCompleto: String, $numeroCamisa: Int, $ativo: Boolean, $emprestado: Boolean, $tipoContrato: String, $clubeEmprestimo: String, $categoria: String) {
+          atualizarJogadorAdmin(id: $id, nomePopular: $nomePopular, nomeCompleto: $nomeCompleto, numeroCamisa: $numeroCamisa, ativo: $ativo, emprestado: $emprestado, tipoContrato: $tipoContrato, clubeEmprestimo: $clubeEmprestimo, categoria: $categoria) {
+            id, nomePopular, nomeCompleto, numeroCamisa, ativo, emprestado, tipoContrato, clubeEmprestimo, categoria
           }
         }
       `;
@@ -79,7 +79,8 @@ export default function AdminElencoClient({
             ativo: quickEditData.ativo,
             emprestado: quickEditData.emprestado,
             tipoContrato: quickEditData.tipoContrato || 'DEFINITIVO',
-            clubeEmprestimo: (quickEditData.tipoContrato === 'EMPRESTADO' || quickEditData.tipoContrato === 'EMPRESTIMO') ? quickEditData.clubeEmprestimo : null
+            clubeEmprestimo: (quickEditData.tipoContrato === 'EMPRESTADO' || quickEditData.tipoContrato === 'EMPRESTIMO') ? quickEditData.clubeEmprestimo : null,
+            categoria: quickEditData.categoria || 'Profissional'
           }
         })
       });
@@ -309,14 +310,27 @@ export default function AdminElencoClient({
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Nome Completo</label>
-                <input 
-                  type="text" 
-                  value={quickEditData.nomeCompleto || ''} 
-                  onChange={e => setQuickEditData({...quickEditData, nomeCompleto: e.target.value})}
-                  className="w-full bg-black border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-accent outline-none"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Nome Completo</label>
+                  <input 
+                    type="text" 
+                    value={quickEditData.nomeCompleto || ''} 
+                    onChange={e => setQuickEditData({...quickEditData, nomeCompleto: e.target.value})}
+                    className="w-full bg-black border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-accent outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Categoria</label>
+                  <select 
+                    value={quickEditData.categoria || 'Profissional'} 
+                    onChange={e => setQuickEditData({...quickEditData, categoria: e.target.value})}
+                    className="w-full bg-black border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-accent outline-none"
+                  >
+                    <option value="Profissional">Profissional</option>
+                    <option value="Base">Base</option>
+                  </select>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-900">
