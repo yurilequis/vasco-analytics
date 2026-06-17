@@ -2,7 +2,7 @@ import React from 'react';
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-// 1. Limpamos a importação para remover o aviso do TypeScript
+
 import AdminElencoClient from './AdminElencoClient';
 
 const GET_ELENCO_ADMIN = `
@@ -43,7 +43,7 @@ async function fetchDados() {
     fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL || (process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      // 2. CORREÇÃO CRÍTICA: Trocamos 'Vasco da Gama' por 'Vasco'
+      
       body: JSON.stringify({ query: GET_ELENCO_ADMIN, variables: { clube: 'Vasco' } }),
       cache: 'no-store', 
     }),

@@ -55,7 +55,7 @@ export default function AutomacaoClient() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         
-        {/* COMANDOS */}
+        {}
         <div className="lg:col-span-7 space-y-6">
           <div className="grid grid-cols-1 gap-4">
             {tarefas.map(t => (
@@ -95,7 +95,7 @@ export default function AutomacaoClient() {
           </div>
         </div>
 
-        {/* TERMINAL LOG */}
+        {}
         <div className="lg:col-span-5">
            <div className="bg-black border border-slate-900 rounded-[40px] overflow-hidden flex flex-col h-[500px]">
               <div className="p-6 border-b border-slate-900 flex items-center justify-between bg-slate-900/20">

@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
-// ── CONTRATOS (INTERFACES) ─────────────────────────────
+
 export interface UsuarioAutenticado {
   id: number;
   nome: string;
@@ -29,7 +29,7 @@ export class AuthService {
   ): Promise<UsuarioAutenticado> {
     const emailNormalizado = email.toLowerCase().trim();
 
-    // 1. Busca o usuário no banco
+    
     const usuario = await this.prisma.usuario.findUnique({
       where: { email: emailNormalizado },
     });
@@ -42,14 +42,14 @@ export class AuthService {
       throw new UnauthorizedException('E-mail ou senha incorretos.');
     }
 
-    // 2. Compara a senha digitada com o hash protegido do banco
+    
     const senhaValida = await bcrypt.compare(senhaLimpa, usuario.senha);
 
     if (!senhaValida) {
       throw new UnauthorizedException('E-mail ou senha incorretos.');
     }
 
-    // 3. Mapeamento explícito (resolve o erro de variáveis nunca utilizadas)
+    
     return {
       id: usuario.id,
       nome: usuario.nome,
@@ -58,7 +58,7 @@ export class AuthService {
     };
   }
 
-  // Gera o token (sem async, pois a operação é instantânea)
+  
   gerarTokenLogin(usuario: UsuarioAutenticado) {
     const payload = {
       sub: usuario.id,
@@ -115,7 +115,7 @@ export class AuthService {
     });
 
     if (usuario) {
-      // Se o usuário já existe mas não tem googleId vinculado, atualiza
+      
       if (!usuario.googleId) {
         usuario = await this.prisma.usuario.update({
           where: { id: usuario.id },
@@ -123,7 +123,7 @@ export class AuthService {
         });
       }
     } else {
-      // Se não existe, cria um novo
+      
       usuario = await this.prisma.usuario.create({
         data: {
           nome,

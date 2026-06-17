@@ -57,7 +57,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
 
   const [imgError, setImgError] = useState(false);
 
-  // Filtrar jogadores por equipe e titularidade
+  
   const idTime = timeSelecionado === 'casa' ? idCasa : idVisitante;
   const nomeTime = timeSelecionado === 'casa' ? nomeCasa : nomeVisitante;
   
@@ -74,7 +74,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
   return (
     <div className="flex flex-col gap-6 w-full">
       
-      {/* HEADER: TEAM SELECTOR & TOGGLES */}
+      {}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6">
         <div className="flex items-center bg-slate-900 rounded-2xl p-1 border border-slate-800 shadow-inner">
           <button
@@ -104,21 +104,21 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
         </div>
       </div>
 
-      {/* TACTICAL CONTENT */}
+      {}
       <div className="flex flex-col lg:flex-row gap-8 w-full items-start">
         
-        {/* PITCH AREA */}
+        {}
         <div className="flex flex-col items-center gap-4 w-full lg:w-1/2">
-          {/* Pitch Container */}
+          {}
           <div className="relative h-[600px] w-full max-w-sm overflow-hidden rounded-[48px] border border-slate-800 bg-gradient-to-b from-[#0c261c] to-[#06140e] shadow-2xl">
-            {/* Pitch Lines */}
+            {}
             <div className="absolute inset-4 border border-white/10 rounded-[32px] pointer-events-none"></div>
             <div className="absolute left-4 right-4 top-1/2 h-0.5 -translate-y-1/2 bg-white/10 pointer-events-none"></div>
             <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 pointer-events-none"></div>
             <div className="absolute left-1/2 top-4 h-20 w-44 -translate-x-1/2 rounded-b-2xl border border-t-0 border-white/10 pointer-events-none"></div>
             <div className="absolute bottom-4 left-1/2 h-20 w-44 -translate-x-1/2 rounded-t-2xl border border-b-0 border-white/10 pointer-events-none"></div>
             
-            {/* Direction Arrow */}
+            {}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-10">
               <svg width="40" height="120" viewBox="0 0 40 120">
                 <line x1="20" y1="10" x2="20" y2="100" stroke="#fff" strokeWidth="4" strokeDasharray="4 4" />
@@ -126,12 +126,12 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
               </svg>
             </div>
 
-            {/* Players */}
+            {}
             {titularesTime.map((j) => {
-              // Note: Top = X coordinate from data, Left = Y coordinate
-              // For visitors, we invert if they are attacking up, but here we show "average positions" usually on a standard 0-100 pitch.
-              // If is visitor, we can flip if we want to show them attacking the other way, 
-              // but typically Heatmaps and Avg Positions are better viewed in standard orientation.
+              
+              
+              
+              
               const topVal = timeSelecionado === 'casa' ? j.posicaoMediaX : 100 - (j.posicaoMediaX || 50);
               const leftVal = timeSelecionado === 'casa' ? j.posicaoMediaY : 100 - (j.posicaoMediaY || 50);
               
@@ -155,10 +155,10 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
                   }`}
                   style={{ top, left }}
                 >
-                   {/* SHOW NUMBER ON NODE */}
+                   {}
                    <span className={`relative z-10 ${isSelected ? 'opacity-0' : 'opacity-100'}`}>{j.numeroCamisa || '-'}</span>
                    
-                   {/* PLAYER IMAGE ON HOVER/SELECT */}
+                   {}
                    {j.jogador.fotoUrl && !imgError && (
                      <img 
                        src={`${j.jogador.fotoUrl}?id=${j.jogador.id || j.id}`} 
@@ -172,7 +172,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
             })}
           </div>
 
-          {/* Substitutions List */}
+          {}
           {mostrarSubs && (
             <div className="w-full flex flex-wrap justify-center gap-2 py-4 border-t border-slate-900/50 mt-4">
               {reservasEntraram.map(j => (
@@ -205,7 +205,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
           )}
         </div>
 
-        {/* DETAILS PANEL */}
+        {}
         <div className="flex-1 w-full flex flex-col gap-6">
           <div className="w-full rounded-[40px] border border-slate-900 bg-slate-950 p-8 shadow-2xl relative overflow-hidden h-full">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
@@ -213,7 +213,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
             {jogadorSelecionado ? (
               <div className="flex flex-col gap-8 h-full">
                 
-                {/* Info Header */}
+                {}
                 <div className="flex items-start justify-between border-b border-slate-900 pb-6">
                   <div className="space-y-2">
                     <h3 className="text-2xl font-black text-white uppercase tracking-tight italic leading-tight">{jogadorSelecionado.jogador.nomePopular}</h3>
@@ -230,7 +230,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
                   </div>
                 </div>
 
-                {/* Grid Stats */}
+                {}
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     { label: 'Minutos', val: `${jogadorSelecionado.minutosJogados}'` },
@@ -245,7 +245,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
                   ))}
                 </div>
 
-                {/* Heatmap Area */}
+                {}
                 <div className="flex-1 flex flex-col gap-4">
                    <div className="flex items-center gap-3">
                       <div className="h-px flex-1 bg-slate-900"></div>
@@ -269,7 +269,7 @@ export default function CampinhoTatico({ jogadores, idCasa, idVisitante, nomeCas
                            <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">No Heatmap Data</span>
                         </div>
                       )}
-                      {/* Grid overlay for aesthetic */}
+                      {}
                       <div className="absolute inset-0 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5"></div>
                    </div>
                 </div>

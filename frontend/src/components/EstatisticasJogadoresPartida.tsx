@@ -18,7 +18,7 @@ export default function EstatisticasJogadoresPartida({ jogadores, idCasa, idVisi
   const equipeAtivaId = abaAtiva === 'casa' ? idCasa : idVisitante;
   const jogadoresExibidos = jogadores.filter(j => j.equipeId === equipeAtivaId)
     .sort((a, b) => {
-      // Titulares primeiro, depois ordem de nota
+      
       if (a.titular && !b.titular) return -1;
       if (!a.titular && b.titular) return 1;
       return (b.notaDesempenho || 0) - (a.notaDesempenho || 0);
@@ -35,7 +35,7 @@ export default function EstatisticasJogadoresPartida({ jogadores, idCasa, idVisi
   return (
     <div className="flex flex-col bg-slate-950 border border-slate-900 rounded-[48px] overflow-hidden shadow-2xl">
       
-      {/* Abas */}
+      {}
       <div className="flex border-b border-slate-900">
         <button 
           className={`flex-1 py-6 text-xs font-black uppercase tracking-[0.3em] transition-all ${abaAtiva === 'casa' ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-900/50 hover:text-slate-300'}`}
@@ -51,7 +51,7 @@ export default function EstatisticasJogadoresPartida({ jogadores, idCasa, idVisi
         </button>
       </div>
 
-      {/* Tabela */}
+      {}
       <div className="overflow-x-auto w-full pb-8">
         <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>

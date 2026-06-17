@@ -8,7 +8,7 @@ export class PerfilFM {
   @Field(() => Int, { nullable: true })
   jogadorId?: number;
 
-  // 1. ATRIBUTOS TÉCNICOS
+  
   @Field(() => Int, { nullable: true })
   cabeceamento?: number;
 
@@ -51,7 +51,7 @@ export class PerfilFM {
   @Field(() => Int, { nullable: true })
   tecnica?: number;
 
-  // 2. ATRIBUTOS MENTAIS
+  
   @Field(() => Int, { nullable: true })
   agressividade?: number;
 
@@ -94,7 +94,7 @@ export class PerfilFM {
   @Field(() => Int, { nullable: true })
   visaoJogo?: number;
 
-  // 3. ATRIBUTOS FÍSICOS
+  
   @Field(() => Int, { nullable: true })
   aceleracao?: number;
 
@@ -119,7 +119,7 @@ export class PerfilFM {
   @Field(() => Int, { nullable: true })
   velocidade?: number;
 
-  // 4. ATRIBUTOS DE GOLEIRO
+  
   @Field(() => Int, { nullable: true })
   alcanceAereo?: number;
 

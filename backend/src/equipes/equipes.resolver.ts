@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { EquipesService, AtualizarEquipeDados } from './equipes.service'; // Importamos a tipagem estrita
+import { EquipesService, AtualizarEquipeDados } from './equipes.service'; 
 import { Equipe } from './entities/equipe.entity';
 
 @Resolver(() => Equipe)
@@ -28,7 +28,7 @@ export class EquipesResolver {
     @Args('fundacao', { type: () => String, nullable: true }) fundacao?: string,
     @Args('escudoUrl', { type: () => String, nullable: true }) escudoUrl?: string,
   ) {
-    // Construímos o objeto respeitando rigorosamente a interface AtualizarEquipeDados
+    
     const dadosAtualizados: AtualizarEquipeDados = {
       nome,
       nomeCurto,
@@ -40,7 +40,7 @@ export class EquipesResolver {
       escudoUrl,
     };
 
-    // O Prisma automaticamente ignora os campos que estiverem como 'undefined' neste objeto
+    
     return this.equipesService.atualizarEquipe(id, dadosAtualizados);
   }
 

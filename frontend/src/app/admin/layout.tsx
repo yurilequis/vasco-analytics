@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { nome: 'Configurações', icone: Settings, rota: '#' },
   ];
 
-  // Se estiver na tela de login, não renderiza o layout administrativo (sidebar)
+  
   if (pathname === '/admin/login') {
     return <div className="dark bg-black min-h-screen">{children}</div>;
   }
@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="dark flex h-[100dvh] w-screen bg-black text-slate-200 overflow-hidden">
       
-      {/* SIDEBAR: DARK PRO */}
+      {}
       <aside className="w-64 border-r border-slate-900 bg-black flex flex-col shrink-0">
         <div className="p-8">
           <Link href="/" className="flex items-center gap-3 group">
@@ -104,7 +104,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* CONTEÚDO PRINCIPAL: DARK WORKSPACE */}
+      {}
       <main className="flex-1 overflow-y-auto bg-[#050505] relative pb-24 md:pb-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none" />
         <div className="relative z-10">

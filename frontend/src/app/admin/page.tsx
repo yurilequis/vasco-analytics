@@ -27,7 +27,7 @@ export default async function AdminDashboard() {
   return (
     <div className="p-12 space-y-12">
       
-      {/* COMMAND HEADER */}
+      {}
       <header className="flex justify-between items-center">
         <div>
            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-600 mb-2">Workspace / Dashboard</p>
@@ -44,7 +44,7 @@ export default async function AdminDashboard() {
         </div>
       </header>
 
-      {/* METRIC GRID (DARK PRO) */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {metrics.map(m => (
           <div key={m.label} className="bg-black border border-slate-900 p-8 rounded-[32px] relative overflow-hidden group hover:border-slate-700 transition-all">
@@ -57,7 +57,7 @@ export default async function AdminDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
          
-         {/* TACTICAL TOOLS */}
+         {}
          <div className="lg:col-span-8 space-y-6">
             <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-700 flex items-center gap-4 px-4">
                Ferramentas de Sistema <div className="flex-1 h-px bg-slate-900" />
@@ -105,7 +105,7 @@ export default async function AdminDashboard() {
             </div>
          </div>
 
-         {/* LOGS FEED (SaaS STYLE) */}
+         {}
          <div className="lg:col-span-4 space-y-6">
             <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-700 flex items-center gap-4 px-4">
                Audit Logs <MessageSquare className="w-3 h-3" />

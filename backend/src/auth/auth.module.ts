@@ -7,18 +7,18 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
-    // Registrando o motor do JWT e definindo as regras do "crachá"
+    
     JwtModule.register({
-      secret: 'CHAVE_SECRETA_VASCO_ANALYTICS_2026', // IMPORTANTE: Em produção, usaremos process.env.JWT_SECRET
-      signOptions: { expiresIn: '7d' }, // O administrador precisará logar novamente a cada 7 dias
+      secret: 'CHAVE_SECRETA_VASCO_ANALYTICS_2026', 
+      signOptions: { expiresIn: '7d' }, 
     }),
   ],
   providers: [
     AuthService,
     AuthResolver,
-    PrismaService, // Injetamos o Prisma para o AuthService conseguir bater no banco
+    PrismaService, 
     JwtStrategy,
   ],
-  exports: [AuthService], // Exportamos caso outro módulo precise verificar permissões futuramente
+  exports: [AuthService], 
 })
 export class AuthModule {}

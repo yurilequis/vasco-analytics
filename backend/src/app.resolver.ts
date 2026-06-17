@@ -22,7 +22,7 @@ export class AppResolver {
     return 'Partidas atualizadas com sucesso!';
   }
 
-  // NOVA MUTATION ADICIONADA AQUI, DENTRO DA CLASSE
+  
   @Mutation(() => String)
   dispararScrapingEstatisticas(): string {
     this.scrapingService.scrapeTodasEstatisticas();

@@ -2,7 +2,7 @@ import { Resolver, Mutation } from '@nestjs/graphql';
 import { ScrapingService } from './scraping.service';
 
 @Resolver()
-// @UseGuards(GqlAuthGuard)
+
 export class ScrapingResolver {
   constructor(private readonly scrapingService: ScrapingService) {}
 
@@ -19,14 +19,14 @@ export class ScrapingResolver {
   }
 
   @Mutation(() => Boolean)
-  // ✅ Removido o 'async'
+  
   dispararScrapingEstatisticas() {
     this.scrapingService.scrapeTodasEstatisticas();
     return true;
   }
 
   @Mutation(() => Boolean)
-  // ✅ Removido o 'async'
+  
   dispararScrapingDetalhes() {
     this.scrapingService.scrapeDetalhesPartidas();
     return true;

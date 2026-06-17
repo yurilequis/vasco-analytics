@@ -43,7 +43,7 @@ function renderBandeira(nac: string | null | undefined) {
   if (n === 'PORTUGAL') return '🇵🇹';
   if (n === 'ESPANHA') return '🇪🇸';
   if (n === 'ITALIA') return '🇮🇹';
-  // fallback to 3 letters
+  
   return nac.substring(0, 3).toUpperCase();
 }
 

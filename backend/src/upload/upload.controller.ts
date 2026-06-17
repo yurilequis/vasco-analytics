@@ -10,7 +10,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Request } from 'express';
 
-// Configuração reutilizável do Multer para organizar as pastas
+
 const multerConfig = (pasta: string, prefixo: string) => ({
   storage: diskStorage({
     destination: `./uploads/${pasta}`,
@@ -28,7 +28,7 @@ const multerConfig = (pasta: string, prefixo: string) => ({
 
 @Controller('api/v1/upload')
 export class UploadController {
-  // 1. Rota da Foto do Jogador
+  
   @Post('jogador-foto')
   @UseInterceptors(
     FileInterceptor('foto', multerConfig('jogadores', 'jogador')),
@@ -40,7 +40,7 @@ export class UploadController {
     };
   }
 
-  // 2. Rota do Escudo da Equipe
+  
   @Post('equipe-escudo')
   @UseInterceptors(FileInterceptor('escudo', multerConfig('escudos', 'escudo')))
   uploadEscudoEquipe(@UploadedFile() file: Express.Multer.File) {

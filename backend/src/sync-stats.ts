@@ -45,7 +45,7 @@ async function main() {
           const detalhes = await runPythonScraper('detalhes', jogo.event_id.toString());
           
           if (detalhes.estatisticas_equipes) {
-            // Buscar a partida no banco
+            
             const dataHoraObj = parsarData(jogo.data_partida);
             const partida = await prisma.partida.findFirst({
                 where: { eventId: jogo.event_id }
@@ -54,7 +54,7 @@ async function main() {
             if (partida) {
                 const { mandante, visitante } = detalhes.estatisticas_equipes;
                 
-                // Salvar stats mandante
+                
                 await prisma.estatisticaEquipe.upsert({
                     where: { partidaId_equipeId: { partidaId: partida.id, equipeId: partida.equipeCasaId } },
                     update: {
@@ -95,7 +95,7 @@ async function main() {
                     }
                 });
 
-                // Salvar stats visitante
+                
                 await prisma.estatisticaEquipe.upsert({
                     where: { partidaId_equipeId: { partidaId: partida.id, equipeId: partida.equipeVisitanteId } },
                     update: {

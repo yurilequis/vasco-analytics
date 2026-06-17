@@ -4,7 +4,7 @@ import React from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface PerfilFM {
-  // Tecnicos
+  
   finalizacao?: number | null;
   passe?: number | null;
   drible?: number | null;
@@ -12,14 +12,14 @@ interface PerfilFM {
   cruzamento?: number | null;
   marcacao?: number | null;
   desarme?: number | null;
-  // Físicos
+  
   aceleracao?: number | null;
   velocidade?: number | null;
   agilidade?: number | null;
   forca?: number | null;
   resistencia?: number | null;
   equilibrio?: number | null;
-  // Mentais
+  
   decisoes?: number | null;
   visaoJogo?: number | null;
   compostura?: number | null;
@@ -41,7 +41,7 @@ export default function PlayerRadar({ fm }: Props) {
     );
   }
 
-  // Aggregate attributes into core areas for the radar chart
+  
   const calculateAverage = (keys: (keyof PerfilFM)[]) => {
     let sum = 0;
     let count = 0;
@@ -51,7 +51,7 @@ export default function PlayerRadar({ fm }: Props) {
         count++;
       }
     });
-    return count > 0 ? sum / count : 10; // Default to 10 if missing
+    return count > 0 ? sum / count : 10; 
   };
 
   const data = [

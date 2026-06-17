@@ -9,7 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
 
-// ── TIPAGENS DE RESPOSTA DO GRAPHQL ────────────────────────
+
 @ObjectType()
 export class UsuarioSessao {
   @Field(() => Int) id!: number;
@@ -24,7 +24,7 @@ export class AuthPayload {
   @Field(() => UsuarioSessao) usuario!: UsuarioSessao;
 }
 
-// ── ROTAS (ENDPOINTS) ──────────────────────────────────────
+
 @Resolver()
 export class AuthResolver {
   constructor(
@@ -37,19 +37,19 @@ export class AuthResolver {
     @Args('email', { type: () => String }) email: string, 
     @Args('senha', { type: () => String }) senhaLimpa: string
   ) {
-    // Valida as credenciais e devolve o token JWT
+    
     const usuario = await this.authService.validarUsuario(email, senhaLimpa);
     return this.authService.gerarTokenLogin(usuario);
   }
 
-  // Mutação de Setup Inicial (Gatilho único)
+  
   @Mutation(() => Boolean)
   async criarPrimeiroAdmin(@Args('senha', { type: () => String }) senhaLimpa: string) {
-    // Trava de segurança rigorosa: se já existir 1 usuário, a função aborta.
+    
     const count = await this.prisma.usuario.count();
     if (count > 0) return false;
 
-    // Cria o seu perfil de administrador com a senha criptografada
+    
     const senhaHash = await this.authService.hashSenha(senhaLimpa);
     await this.prisma.usuario.create({
       data: {

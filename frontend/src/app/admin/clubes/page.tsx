@@ -39,7 +39,7 @@ async function fetchEquipes(token?: string) {
 }
 
 export default async function AdminClubesPage() {
-  // Verificação rigorosa de segurança da sessão
+  
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
 

@@ -49,9 +49,9 @@ interface Props {
   formacaoVisitante?: string | null;
 }
 
-// Slot positions: x = vertical (0=top/goleiro, 100=atacante), y = horizontal (0=left, 100=right)
-// For casa team: left is y, top is x
-// For visitante team: left = 100-y, top = 100-x (mirror)
+
+
+
 const FORMATIONS: Record<string, { x: number; y: number; tags: string[] }[]> = {
   "4-3-3": [
     { x: 8,  y: 50, tags: ['goleiro'] },
@@ -174,11 +174,7 @@ function gerarJogadoresMock(equipeId: number, isCasa: boolean): EstatisticaJogad
   }));
 }
 
-/**
- * Maps starters to field positions.
- * Priority: saved posicaoPartida index (slot) → tag match → remaining fill.
- * Guarantees every slot gets exactly one player (if enough players exist).
- */
+
 function getTacticalLayout(
   starters: EstatisticaJogador[],
   isCasa: boolean,
@@ -187,11 +183,11 @@ function getTacticalLayout(
   const slots = FORMATIONS[formation] || FORMATIONS["4-3-3"];
   const numSlots = slots.length;
 
-  // slotAssignment[slotIdx] = player
+  
   const slotAssignment: (EstatisticaJogador | null)[] = new Array(numSlots).fill(null);
   const assignedPlayerIds = new Set<number>();
 
-  // Pass 1: assign players that have a valid saved slot index
+  
   starters.forEach(p => {
     if (p.posicaoPartida && /^\d+$/.test(p.posicaoPartida)) {
       const idx = parseInt(p.posicaoPartida, 10);
@@ -202,7 +198,7 @@ function getTacticalLayout(
     }
   });
 
-  // Pass 2: assign remaining players to empty slots by position tag match
+  
   const remaining = starters.filter(p => !assignedPlayerIds.has(p.id));
 
   for (let slotIdx = 0; slotIdx < numSlots; slotIdx++) {
@@ -213,10 +209,10 @@ function getTacticalLayout(
     for (let i = 0; i < remaining.length; i++) {
       const pPos = (remaining[i].jogador.posicao || '').toLowerCase().trim();
       
-      // Match direto de tags especificas primeiro (se pPos for detalhado)
+      
       let matchesSlot = slot.tags.some(tag => pPos.includes(tag) || tag.includes(pPos));
       
-      // Se não deu match e o jogador tem posição genérica (ou o contrário)
+      
       if (!matchesSlot) {
         const isG = pPos === 'g' || pPos === 'gk' || pPos.includes('goleiro');
         const isD = pPos === 'd' || pPos.includes('zagueiro') || pPos.includes('lateral');
@@ -244,7 +240,7 @@ function getTacticalLayout(
     }
   }
 
-  // Build result list with coordinates
+  
   const result: (EstatisticaJogador & { left: number; top: number })[] = [];
 
   for (let slotIdx = 0; slotIdx < numSlots; slotIdx++) {
@@ -259,7 +255,7 @@ function getTacticalLayout(
     });
   }
 
-  // Any leftover (more than 11 starters) placed in center
+  
   remaining.forEach(p => result.push({ ...p, left: 50, top: 50 }));
 
   return result;
@@ -365,7 +361,7 @@ export default function CardFormacoes({
   const reservas = draftJogadores.filter(j => j.equipeId === idTime && !j.titular)
     .sort((a, b) => a.jogador.nomePopular.localeCompare(b.jogador.nomePopular));
 
-  // Swap slot positions between two players
+  
   const handleSwapPlayers = (dragId: number, dropId: number) => {
     const dragLayout = layout.find(l => l.id === dragId);
     const dropLayout = layout.find(l => l.id === dropId);
@@ -390,12 +386,12 @@ export default function CardFormacoes({
     setIsSaving(true);
     setSaveError(null);
     try {
-      // Build final slot assignments from current layout
+      
       const currentLayout = getTacticalLayout(startersToDisplay, timeSelecionado === 'casa', currentFormacao);
       const slotMap: Record<number, string> = {};
       currentLayout.forEach(l => { slotMap[l.id] = l.posicaoPartida || ''; });
 
-      // Apply updated posicaoPartida from draftJogadores (includes swaps)
+      
       const allJogadoresWithSlots = draftJogadores.map(dj => ({
         ...dj,
         posicaoPartida: dj.posicaoPartida ?? null,
@@ -449,7 +445,7 @@ export default function CardFormacoes({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 w-full items-stretch">
-      {/* FIELD */}
+      {}
       <div className="lg:col-span-8 bg-slate-900/40 border border-slate-800 rounded-[32px] p-4 shadow-inner relative min-h-[480px]">
         <div className="flex items-center justify-between mb-4 px-2">
           <div className="flex items-center bg-black/40 rounded-xl p-0.5 border border-slate-800">
@@ -482,9 +478,9 @@ export default function CardFormacoes({
           </div>
         </div>
 
-        {/* Pitch */}
+        {}
         <div className="relative h-[400px] w-full max-w-2xl mx-auto overflow-hidden rounded-[20px] border border-white/5 bg-gradient-to-br from-[#0c1410] to-black shadow-2xl">
-          {/* Field markings */}
+          {}
           <div className="absolute inset-4 border border-white/5 rounded-[12px] pointer-events-none" />
           <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/5 pointer-events-none" />
           <div className="absolute left-0 right-0 top-1/2 h-px bg-white/5 pointer-events-none" />
@@ -510,7 +506,7 @@ export default function CardFormacoes({
         )}
       </div>
 
-      {/* SIDEBAR */}
+      {}
       <div className="lg:col-span-4 flex flex-col bg-slate-950 border border-slate-900 rounded-[32px] p-5 shadow-2xl space-y-4">
         <div className="flex items-center justify-between border-b border-slate-900 pb-3">
           <div className="flex items-center gap-2">
@@ -563,7 +559,7 @@ export default function CardFormacoes({
               </p>
             </div>
 
-            {/* Titulares */}
+            {}
             <div className="space-y-1.5 flex-none">
               <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600 border-b border-slate-900/50 block pb-0.5">
                 Titulares ({realTitulares.length}/11)
@@ -606,7 +602,7 @@ export default function CardFormacoes({
               </div>
             </div>
 
-            {/* Reservas */}
+            {}
             {reservas.length > 0 && (
               <div className="space-y-1.5 flex-1 min-h-0 flex flex-col pt-2 border-t border-slate-900">
                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600 block">

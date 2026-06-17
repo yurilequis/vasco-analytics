@@ -46,11 +46,11 @@ export default function AdminElencoClient({
   const [filtroPosicao, setFiltroPosicao] = useState('todas');
   const [ordenacao, setOrdenacao] = useState<'nome_asc' | 'nome_desc' | 'idade_asc' | 'idade_desc'>('nome_asc');
 
-  // Quick Edit State
+  
   const [quickEditData, setQuickEditData] = useState<JogadorAdmin | null>(null);
   const [isSavingQuick, setIsSavingQuick] = useState(false);
 
-  // Mass Edit State
+  
   const [isMassEdit, setIsMassEdit] = useState(false);
   const [massEdits, setMassEdits] = useState<Record<number, Partial<JogadorAdmin>>>({});
   const [isSavingMass, setIsSavingMass] = useState(false);
@@ -164,13 +164,13 @@ export default function AdminElencoClient({
   };
 
   const jogadoresFiltrados = jogadores.filter(j => {
-    // Filtro por termo de busca
+    
     if (termoBusca && !j.nomePopular.toLowerCase().includes(termoBusca.toLowerCase())) return false;
     
-    // Filtro por categoria
+    
     if ((j.categoria || 'Profissional') !== filtroCategoria) return false;
 
-    // Filtro por Status
+    
     if (filtroStatus === 'plantel') {
       if (!(j.ativo === true && j.tipoContrato !== 'EMPRESTADO')) return false;
     } else if (filtroStatus === 'emprestados') {
@@ -179,7 +179,7 @@ export default function AdminElencoClient({
       if (j.ativo !== false) return false;
     }
     
-    // Filtro por Posição
+    
     if (filtroPosicao !== 'todas' && j.posicao !== filtroPosicao) return false;
     
     return true;
@@ -189,7 +189,7 @@ export default function AdminElencoClient({
     if (ordenacao === 'idade_asc' || ordenacao === 'idade_desc') {
        const timeA = a.dataNascimento ? new Date(a.dataNascimento).getTime() : 0;
        const timeB = b.dataNascimento ? new Date(b.dataNascimento).getTime() : 0;
-       // Maior timestamp = nasceu depois = mais novo
+       
        if (ordenacao === 'idade_asc') return timeB - timeA;
        return timeA - timeB;
     }
@@ -199,7 +199,7 @@ export default function AdminElencoClient({
   return (
     <div className="p-4 md:p-12 space-y-8 md:space-y-12">
       
-      {/* HEADER: DATA MANAGEMENT */}
+      {}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-900 pb-12">
         <div>
            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-slate-600 mb-2">Workspace / Elenco</p>
@@ -219,7 +219,7 @@ export default function AdminElencoClient({
         </div>
       </header>
 
-      {/* TOOLBAR */}
+      {}
       <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
          <div className="relative w-full md:w-96">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-700" />
@@ -233,7 +233,7 @@ export default function AdminElencoClient({
          </div>
 
          <div className="flex flex-col sm:flex-row gap-4">
-            {/* TABS DE STATUS */}
+            {}
             <div className="flex bg-zinc-950 border border-zinc-800 p-1 rounded-xl">
                <button 
                  onClick={() => setFiltroStatus('plantel')}
@@ -285,7 +285,7 @@ export default function AdminElencoClient({
          </div>
       </div>
 
-      {/* DATA GRID (TERMINAL STYLE) */}
+      {}
       <div className="bg-black border border-slate-900 rounded-[24px] md:rounded-[40px] overflow-x-auto shadow-2xl relative">
          {isMassEdit && Object.keys(massEdits).length > 0 && (
            <div className="absolute top-4 right-4 z-10 flex gap-2">
@@ -440,7 +440,7 @@ export default function AdminElencoClient({
          <span>Page 01 of 01</span>
       </footer>
 
-      {/* QUICK EDIT MODAL */}
+      {}
       {quickEditData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-slate-950 border border-slate-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl">

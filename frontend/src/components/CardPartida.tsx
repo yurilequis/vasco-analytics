@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getLogoPath } from '@/utils/logoHelper';
 
-// 1. Tipagem exata do que o card vai receber
+
 export interface PartidaResumo {
   id: number;
   dataHora: string;
@@ -35,7 +35,7 @@ export default function CardPartida({ partida }: { partida: PartidaResumo }) {
         </div>
 
         <div className="flex items-center justify-between px-6 py-8">
-          {/* Time Casa */}
+          {}
           <div className="flex flex-1 flex-col items-center gap-3">
             <Image 
               src={getLogoPath(partida.equipeCasa.nome)} 
@@ -47,7 +47,7 @@ export default function CardPartida({ partida }: { partida: PartidaResumo }) {
             <span className="text-center text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">{partida.equipeCasa.nome}</span>
           </div>
 
-          {/* Placar */}
+          {}
           <div className="mx-4 flex w-32 flex-col items-center justify-center sm:mx-8">
             {isEncerrada ? (
               <div className="flex items-center gap-3 text-3xl font-black text-zinc-900 dark:text-zinc-50">
@@ -67,7 +67,7 @@ export default function CardPartida({ partida }: { partida: PartidaResumo }) {
             </span>
           </div>
 
-          {/* Time Visitante */}
+          {}
           <div className="flex flex-1 flex-col items-center gap-3">
             <Image 
               src={getLogoPath(partida.equipeVisitante.nome)} 

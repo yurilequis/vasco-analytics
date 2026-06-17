@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { Calendar, Users, MapPin, PlayCircle, Cloud } from 'lucide-react';
 
 
-export const revalidate = 60; // ISR: revalida a cada 60s
+export const revalidate = 60; 
 
-// ── Tipos ─────────────────────────────────────────────────────────────
+
 
 interface EquipeSimples {
   id: number;
@@ -190,17 +190,17 @@ export default async function PartidaDetalhesPage({ params, searchParams }: { pa
   const isEncerrada = partida.status.toLowerCase() === 'encerrado' || partida.status.toLowerCase() === 'ft';
   const dataLocal = new Date(partida.dataHora).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
 
-  // Pegar estatísticas dos dois times
+  
   const estEquipeCasa = partida.estatisticasEquipes?.find(e => e.equipeId === partida.equipeCasa.id);
   const estEquipeVisitante = partida.estatisticasEquipes?.find(e => e.equipeId === partida.equipeVisitante.id);
   
-  // Separar e ordenar eventos
+  
   const eventos = [...(partida.eventos || [])].sort((a, b) => a.minuto - b.minuto);
 
   return (
     <div className="min-h-screen bg-background font-sans">
       
-      {/* HEADER BANNER FOTMOB STYLE */}
+      {}
       <div className="bg-[#151515] text-white">
          <header className="max-w-4xl mx-auto pt-8">
             <div className="flex flex-col gap-6">
@@ -232,7 +232,7 @@ export default async function PartidaDetalhesPage({ params, searchParams }: { pa
                   </div>
                </div>
 
-               {/* Nav Tabs */}
+               {}
                <div className="flex items-center gap-8 px-6 pt-4 text-sm font-semibold border-b border-border/50">
                   <Link href="?tab=facts" scroll={false} className={`pb-4 border-b-2 transition-colors ${tab === 'facts' ? 'border-accent text-accent' : 'border-transparent text-muted hover:text-white'}`}>Resumo</Link>
                   <Link href="?tab=lineup" scroll={false} className={`pb-4 border-b-2 transition-colors ${tab === 'lineup' ? 'border-accent text-accent' : 'border-transparent text-muted hover:text-white'}`}>Escalação</Link>
@@ -249,7 +249,7 @@ export default async function PartidaDetalhesPage({ params, searchParams }: { pa
            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               
               <div className="lg:col-span-8 space-y-6">
-                 {/* STATS HIGHLIGHTS */}
+                 {}
                  <section className="bg-card border border-border rounded-2xl p-6">
                     <h3 className="text-sm font-bold text-foreground mb-6 text-center">Estatísticas Principais</h3>
                     <div className="space-y-6 max-w-2xl mx-auto">
@@ -291,7 +291,7 @@ export default async function PartidaDetalhesPage({ params, searchParams }: { pa
                     </div>
                  </section>
 
-                 {/* EVENTS TIMELINE */}
+                 {}
                  <section className="bg-card border border-border rounded-2xl p-6">
                     <h3 className="text-sm font-bold text-foreground mb-8 text-center border-b border-border/50 pb-4">Eventos</h3>
                     <div className="relative space-y-6 max-w-xl mx-auto">

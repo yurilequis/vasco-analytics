@@ -6,7 +6,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { ChevronRight } from 'lucide-react';
 
-// ── CONTRATOS ─────────────────────────────
+
 interface Partida {
   id: number;
   dataHora: string;
@@ -73,7 +73,7 @@ function resolverEscudo(url: string | null, nome: string) {
   return getLogoPath(nome);
 }
 
-// Helper to calculate Form
+
 function getFormBadge(p: Partida) {
   const isVascoCasa = p.equipeCasa.nome.includes('Vasco');
   const golsVasco = isVascoCasa ? p.golsCasa : p.golsVisitante;
@@ -82,10 +82,10 @@ function getFormBadge(p: Partida) {
   
   if (golsVasco == null || golsAdv == null) return null;
   
-  let type = 'D'; // Draw
-  let color = 'bg-[#3b3b3b]'; // Gray
-  if (golsVasco > golsAdv) { type = 'W'; color = 'bg-accent'; } // Green
-  else if (golsVasco < golsAdv) { type = 'L'; color = 'bg-[#e63946]'; } // Red
+  let type = 'D'; 
+  let color = 'bg-[#3b3b3b]'; 
+  if (golsVasco > golsAdv) { type = 'W'; color = 'bg-accent'; } 
+  else if (golsVasco < golsAdv) { type = 'L'; color = 'bg-[#e63946]'; } 
 
   return { result: `${golsVasco}-${golsAdv}`, type, color, advEscudo };
 }
@@ -103,14 +103,14 @@ export default async function Home() {
 
   const recentForm = encerradas.slice(0, 5).reverse().map(getFormBadge).filter(Boolean);
 
-  // Extrair classificação real da primeira partida que a possuir (geralmente Brasileirão)
+  
   const compComTabela = partidas.find(p => p.competicao?.classificacao && p.competicao.classificacao.length > 0)?.competicao;
   const tabelaReal = compComTabela?.classificacao || [];
 
   return (
     <div className="max-w-[1200px] mx-auto p-4 md:p-8 space-y-6">
       
-      {/* HEADER CARD */}
+      {}
       <div className="bg-card rounded-2xl border border-border overflow-hidden">
          <div className="p-8 flex items-center gap-6 pb-6">
             <div className="w-20 h-20 p-2">
@@ -128,7 +128,7 @@ export default async function Home() {
                )}
             </div>
          </div>
-         {/* TABS */}
+         {}
          <div className="px-8 flex gap-6 border-b border-border text-sm font-medium">
             <Link href="/" className="pb-3 border-b-2 border-accent text-foreground">Visão Geral</Link>
          </div>
@@ -136,11 +136,11 @@ export default async function Home() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* LEFT COLUMN */}
+        {}
         <div className="lg:col-span-7 xl:col-span-8 space-y-6">
            
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* TEAM FORM */}
+              {}
               <div className="bg-card rounded-2xl border border-border p-6 flex flex-col">
                  <h2 className="text-sm font-bold text-foreground mb-4">Desempenho</h2>
                  <div className="flex gap-3 mt-auto">
@@ -157,7 +157,7 @@ export default async function Home() {
                  </div>
               </div>
 
-              {/* NEXT MATCH */}
+              {}
               <div className="bg-card rounded-2xl border border-border p-6 flex flex-col relative group cursor-pointer hover:bg-white/[0.02] transition-colors">
                  <div className="flex justify-between items-center mb-6">
                     <h2 className="text-sm font-bold text-foreground">Próxima partida</h2>
@@ -188,7 +188,7 @@ export default async function Home() {
               </div>
            </div>
 
-           {/* TABLE MOCKUP */}
+           {}
            <div className="bg-card rounded-2xl border border-border p-4">
               <div className="flex items-center gap-2 mb-4 px-2">
                  <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center shrink-0">
@@ -255,7 +255,7 @@ export default async function Home() {
            </div>
         </div>
 
-         {/* RIGHT COLUMN */}
+         {}
         <div className="lg:col-span-5 xl:col-span-4">
            <div className="bg-card rounded-2xl border border-border p-6 flex flex-col h-fit">
               <div className="flex justify-between items-center mb-6">
@@ -328,7 +328,7 @@ export default async function Home() {
   );
 }
 
-// Icon for Serie A mock
+
 function Trophy({ className }: { className?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>

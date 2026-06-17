@@ -8,7 +8,7 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // O setTimeout de 0ms tira a execução síncrona do useEffect e resolve o erro do linter
+    
     const timer = setTimeout(() => setMounted(true), 0);
     return () => clearTimeout(timer);
   }, []);

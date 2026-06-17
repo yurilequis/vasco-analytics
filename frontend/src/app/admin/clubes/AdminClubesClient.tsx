@@ -62,7 +62,7 @@ export default function AdminClubesClient({
     }
   };
 
-  // Pegar todos os estados únicos para o filtro
+  
   const estadosDisponiveis = Array.from(new Set(equipes.map(e => e.estado).filter(Boolean))) as string[];
 
   const equipesFiltradas = equipes

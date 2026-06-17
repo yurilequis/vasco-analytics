@@ -14,7 +14,7 @@ async function main() {
   console.log("\nCom nacionalidade BR:");
   console.log(comBR);
   
-  // Update BR to Brasil
+  
   const res = await prisma.jogador.updateMany({
     where: { nacionalidade: 'BR' },
     data: { nacionalidade: 'Brasil' }

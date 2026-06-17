@@ -24,7 +24,7 @@ export class PartidasResolver {
     return this.partidasService.findAll();
   }
 
-  // O decorador deve ficar logo acima da função
+  
   @ResolveField('estatisticasEquipes', () => [Object], { nullable: true })
   async estatisticasEquipes(@Parent() partida: Partida) {
     const { id } = partida;

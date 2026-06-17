@@ -10,7 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express'; // Importamos o Request nativo
+import { Request } from 'express'; 
 
 @Controller('api/v1/upload')
 export class UploadController {
@@ -26,7 +26,7 @@ export class UploadController {
           'public',
           'fotos-jogadores',
         ),
-        // Tipagem explícita adicionada aqui:
+        
         filename: (
           _req: Request,
           file: Express.Multer.File,
@@ -38,7 +38,7 @@ export class UploadController {
           callback(null, `jogador-${sufixoUnico}${extensao}`);
         },
       }),
-      // Tipagem explícita adicionada aqui:
+      
       fileFilter: (
         _req: Request,
         file: Express.Multer.File,

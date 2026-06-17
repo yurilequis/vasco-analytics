@@ -25,7 +25,7 @@ export default function Navbar() {
         
         <div className="flex items-center gap-6 md:gap-12 w-full relative z-10">
           
-          {/* MOBILE TOGGLE (LEFT) */}
+          {}
           <button 
             className="md:hidden p-2 -ml-2 text-muted hover:text-white transition-colors"
             onClick={() => setMenuAberto(true)}
@@ -33,7 +33,7 @@ export default function Navbar() {
             <Menu className="w-6 h-6" />
           </button>
 
-          {/* LOGO */}
+          {}
           <Link href="/" className="flex items-center gap-3 group shrink-0">
             <img src="/logos/vasco.png" alt="Vasco" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform" />
             <span className="hidden sm:inline text-sm font-black tracking-tighter text-white uppercase">
@@ -41,7 +41,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* NAVEGAÇÃO PRINCIPAL */}
+          {}
           <nav className="hidden md:flex items-center gap-2">
             {links.map((link) => {
               const isActive = pathname === link.rota;
@@ -63,7 +63,7 @@ export default function Navbar() {
 
           <div className="flex-1" />
 
-          {/* BOTÕES DE AÇÃO / PERFIL */}
+          {}
           <div className="flex items-center gap-4">
             {status === 'loading' ? (
               <div className="h-8 w-24 animate-pulse rounded-xl bg-slate-900"></div>
@@ -104,7 +104,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* MOBILE DRAWER */}
+      {}
       {menuAberto && (
         <div className="fixed inset-0 z-[100] flex justify-start">
            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMenuAberto(false)} />

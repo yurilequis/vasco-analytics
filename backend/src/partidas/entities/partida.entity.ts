@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
 
-// ── Entidades Auxiliares ──────────────────────────────────────────────────
+
 
 @ObjectType()
 export class EquipeSimples {
@@ -104,14 +104,14 @@ export class JogadorSimples {
   numeroCamisa?: number;
 }
 
-// ── Entidade Principal ────────────────────────────────────────────────────
+
 
 @ObjectType()
 export class Partida {
   @Field(() => Int)
   id!: number;
 
-  // 🎯 CORRIGIDO: Retornado para Date para bater com o DateTime do Prisma
+  
   @Field(() => Date)
   dataHora!: Date;
 
@@ -202,7 +202,7 @@ export class EstatisticaJogador {
   @Field(() => Int, { nullable: true })
   numeroCamisa?: number;
 
-  // 🎯 CORRIGIDO: Modificado de Number para Float
+  
   @Field(() => Float, { nullable: true })
   notaDesempenho?: number;
 
@@ -221,7 +221,7 @@ export class EstatisticaJogador {
   @Field(() => Int)
   desarmes!: number;
 
-  // 🎯 CORRIGIDO: Modificado de Number para Float
+  
   @Field(() => Float, { nullable: true })
   posicaoMediaX?: number;
 
@@ -249,7 +249,7 @@ export class EstatisticaEquipe {
   @Field(() => Int)
   equipeId!: number;
 
-  // 🎯 CORRIGIDO: Modificado de Number para Float
+  
   @Field(() => Float, { nullable: true })
   posseBola?: number;
 

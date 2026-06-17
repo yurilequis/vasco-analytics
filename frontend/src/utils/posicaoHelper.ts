@@ -3,7 +3,7 @@ export function traduzirPosicao(posicaoBanco: string) {
   
   const pos = posicaoBanco.trim();
 
-  // O nome é exatamente o que veio do banco. Só mapeamos o setor e o peso para o campinho!
+  
   if (pos === 'Goleiro') return { nome: pos, peso: 1, setor: 'Goleiros' };
   if (pos === 'Zagueiro') return { nome: pos, peso: 2, setor: 'Defenses' };
   if (pos === 'Lateral Direito') return { nome: pos, peso: 3, setor: 'Defensores' };

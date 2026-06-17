@@ -9,7 +9,7 @@ interface Jogador {
   nacionalidade: string | null;
 }
 
-// 1. Atualizamos a query para aceitar variáveis e chamar o endpoint correto
+
 const GET_ELENCO = `
   query ObterElencoPorClube($clube: String!) {
     jogadoresPorClube(clube: $clube) {
@@ -34,7 +34,7 @@ async function fetchElenco(): Promise<Jogador[]> {
     headers: {
       'Content-Type': 'application/json',
     },
-    // 2. Injetamos o objeto "variables" definindo a busca pelo Vasco
+    
     body: JSON.stringify({ 
       query: GET_ELENCO,
       variables: {
@@ -56,11 +56,11 @@ async function fetchElenco(): Promise<Jogador[]> {
     return [];
   }
 
-  // 3. Retornamos a propriedade correta da nossa nova query
+  
   return resultado.data.jogadoresPorClube;
 }
 
-// O ecrã no lado do servidor vai apenas buscar os dados e enviá-los para o Cliente
+
 export default async function ElencoPage() {
   const jogadores = await fetchElenco();
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as fs from 'fs';
 import * as path from 'path';
-// Interface estrita para garantir que nenhum 'any' seja utilizado
+
 export interface AtualizarEquipeDados {
   nome?: string;
   nomeCurto?: string;
@@ -10,7 +10,7 @@ export interface AtualizarEquipeDados {
   cidade?: string;
   estado?: string;
   pais?: string;
-  fundacao?: string | Date; // Pode vir como string do frontend e ser convertido para Date
+  fundacao?: string | Date; 
   escudoUrl?: string;
 }
 
@@ -30,11 +30,11 @@ export class EquipesService {
     });
   }
 
-  // Função blindada e tipada
+  
   async atualizarEquipe(id: number, dados: AtualizarEquipeDados) {
     let dataFundacao = dados.fundacao;
 
-    // Se o frontend enviar a fundação como string de data, convertemos para objeto Date
+    
     if (typeof dataFundacao === 'string') {
       dataFundacao = new Date(dataFundacao);
     }
@@ -64,20 +64,20 @@ export class EquipesService {
 
     for (const equipe of equipes) {
       const nomeNorm = normalizeName(equipe.nome);
-      // Gera um slug do nome (ex: "São Paulo" -> "sao-paulo", "Vasco da Gama" -> "vasco-da-gama")
+      
       const eSlug = nomeNorm.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const eSlugCurto = equipe.nomeCurto ? normalizeName(equipe.nomeCurto).replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : null;
       const primeiroNome = eSlug.split('-')[0];
 
       const matchedFile = files.find(f => {
-        const fSlug = f.split('.')[0].toLowerCase(); // ex: sao-paulo.football-logos.cc -> sao-paulo
-        // Tentativas de match seguro:
-        if (fSlug === eSlug) return true; // Match exato (sao-paulo === sao-paulo)
-        if (f.startsWith(`${eSlug}.`)) return true; // sao-paulo.png
-        if (eSlugCurto && fSlug === eSlugCurto) return true; // FLA, FLU, VAS
+        const fSlug = f.split('.')[0].toLowerCase(); 
         
-        // Match relaxado seguro para times com "da", "do", "de" (ex: vasco-da-gama -> vasco)
-        // Só aceitamos o primeiro nome se ele tiver mais de 4 letras para evitar falsos positivos
+        if (fSlug === eSlug) return true; 
+        if (f.startsWith(`${eSlug}.`)) return true; 
+        if (eSlugCurto && fSlug === eSlugCurto) return true; 
+        
+        
+        
         if (primeiroNome.length > 4 && f.startsWith(`${primeiroNome}.`)) return true;
 
         return false;

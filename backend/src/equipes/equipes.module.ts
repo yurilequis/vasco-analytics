@@ -5,6 +5,6 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
   providers: [EquipesService, EquipesResolver, PrismaService],
-  exports: [EquipesService], // Exportamos para caso outros módulos precisem dele no futuro
+  exports: [EquipesService], 
 })
 export class EquipesModule {}

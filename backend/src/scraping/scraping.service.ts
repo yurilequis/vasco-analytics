@@ -7,7 +7,7 @@ import {
   DetalhesPartidaIngestao,
 } from '../partidas/partidas.service';
 
-// ── CONTRATOS (INTERFACES DA API PYTHON) ──────────────
+
 
 interface PartidaAPI {
   event_id: number;
@@ -45,7 +45,7 @@ const execAsync = promisify(exec);
 @Injectable()
 export class ScrapingService {
   private readonly logger = new Logger(ScrapingService.name);
-  // private readonly API_VASCO_URL = 'http://127.0.0.1:8000/api/v1/vasco';
+  
 
   constructor(
     private readonly prisma: PrismaService,
@@ -53,7 +53,7 @@ export class ScrapingService {
   ) {}
 
   private async runPythonScraper(command: string, arg?: string): Promise<any> {
-    // Aponta para o interpretador local do NestJS e o script sofascore.py
+    
     const venvPath = path.join(process.cwd(), 'python_venv', 'Scripts', 'python.exe');
     const scriptPath = path.join(process.cwd(), 'src', 'scraping', 'python_scripts', 'sofascore.py');
     
@@ -119,7 +119,7 @@ export class ScrapingService {
     }
   }
 
-  // Métodos que apenas logam (não precisam ser async/await)
+  
   scrapeTodasEstatisticas(): void {
     this.logger.log(
       'Sincronização de estatísticas delegada para scrapePartidas.',
@@ -141,7 +141,7 @@ export class ScrapingService {
   async rasparClassificacao(competicaoId: number): Promise<void> {
     try {
       this.logger.log(`Buscando classificação para competicaoId=${competicaoId}`);
-      // Torneio 325 (Brasileirão), Temporada 87678 (2026)
+      
       const res = await this.runPythonScraper('classificacao 325 87678');
       if (!res || !res.dados) {
         this.logger.error('Nenhum dado de classificação retornado.');

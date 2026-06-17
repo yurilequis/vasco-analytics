@@ -5,7 +5,7 @@ export class AtualizarPerfilFMInput {
   @Field(() => Int, { nullable: true })
   jogadorId?: number;
 
-  // Técnicos
+  
   @Field(() => Int, { nullable: true }) cabeceamento?: number;
   @Field(() => Int, { nullable: true }) chutesLonge?: number;
   @Field(() => Int, { nullable: true }) cobrancaFalta?: number;
@@ -21,7 +21,7 @@ export class AtualizarPerfilFMInput {
   @Field(() => Int, { nullable: true }) primeiroToque?: number;
   @Field(() => Int, { nullable: true }) tecnica?: number;
 
-  // Mentais
+  
   @Field(() => Int, { nullable: true }) agressividade?: number;
   @Field(() => Int, { nullable: true }) antecipacao?: number;
   @Field(() => Int, { nullable: true }) bravura?: number;
@@ -37,7 +37,7 @@ export class AtualizarPerfilFMInput {
   @Field(() => Int, { nullable: true }) trabalhoEquipe?: number;
   @Field(() => Int, { nullable: true }) visaoJogo?: number;
 
-  // Físicos
+  
   @Field(() => Int, { nullable: true }) aceleracao?: number;
   @Field(() => Int, { nullable: true }) agilidade?: number;
   @Field(() => Int, { nullable: true }) aptidaoNatural?: number;
@@ -47,7 +47,7 @@ export class AtualizarPerfilFMInput {
   @Field(() => Int, { nullable: true }) resistencia?: number;
   @Field(() => Int, { nullable: true }) velocidade?: number;
 
-  // Goleiro
+  
   @Field(() => Int, { nullable: true }) alcanceAereo?: number;
   @Field(() => Int, { nullable: true }) comandoArea?: number;
   @Field(() => Int, { nullable: true }) comunicacao?: number;

@@ -27,5 +27,5 @@ export class AtualizarJogadorInput {
   fotoUrl?: string;
 
   @Field(() => Int, { nullable: true })
-  equipeId?: number; // Alterar esse ID fará a transferência de clube instantaneamente!
+  equipeId?: number; 
 }

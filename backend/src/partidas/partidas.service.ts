@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { AtualizarEscalacaoInput } from './dto/atualizar-escalacao.input';
 
-// ── TIPAGENS PARA A INGESTÃO DE DADOS ──
+
 export interface PartidaIngestao {
   event_id: number;
   campeonato: string;
@@ -54,8 +54,8 @@ export interface DetalhesPartidaIngestao {
     acrescimo: number;
     tipo: string;
     descricao: string;
-    jogador_principal_id: number | null; // ID do Sofascore de quem fez o evento
-    jogador_secundario_id: number | null; // Assistência ou quem saiu
+    jogador_principal_id: number | null; 
+    jogador_secundario_id: number | null; 
   }[];
   estatisticas_equipes?: {
     mandante: Record<string, any>;
@@ -91,12 +91,12 @@ export class PartidasService {
         '',
       )
       .replace(/\s+(sc|fc|mg|rj|sp|rs|pr|ba|pa|sc)$/g, '')
-      .replace(/-/g, ' ') // replace dashes with spaces to normalize "atletico-mg" to "atletico mg"
+      .replace(/-/g, ' ') 
       .replace(/\s+/g, ' ')
       .trim();
     
-    // Reverse lookup or direct lookup from ALIAS
-    // First, check if the original name or basic normalized name matches an alias
+    
+    
     const basicNorm = n;
     if (this.ALIAS_EQUIPES[basicNorm]) {
        n = this.ALIAS_EQUIPES[basicNorm].replace(/-/g, ' ');
@@ -120,24 +120,24 @@ export class PartidasService {
     const bPop = limpar(jogadorBanco.nomePopular);
     const bFull = limpar(jogadorBanco.nomeCompleto);
 
-    // Hardcoded Aliases (Traduções Específicas Sofascore -> Banco de Dados)
+    
     if ((sName === 'j. silva' || sName === 'joao vitor silva') && bPop === 'mutano') {
       return true;
     }
 
-    // 1. Match Exato ou Contém
+    
     if (sName === bPop || sName === bFull || bFull.includes(sName)) {
       return true;
     }
 
-    // 2. Lógica de Abreviação (ex: "L. Freitas" vs "Lucas Freitas")
+    
     if (sName.includes('.')) {
       const partesSofa = sName.split(/\s+/);
       if (partesSofa.length >= 2) {
         const sobrenomeSofa = partesSofa[partesSofa.length - 1];
         const inicialSofa = partesSofa[0].replace('.', '');
 
-        // Tenta match com nome popular
+        
         const partesPop = bPop.split(/\s+/);
         const sobrenomePop = partesPop[partesPop.length - 1];
         const inicialPop = partesPop[0][0];
@@ -146,7 +146,7 @@ export class PartidasService {
           return true;
         }
 
-        // Tenta match com nome completo
+        
         const partesFull = bFull.split(/\s+/);
         const sobrenomeFull = partesFull[partesFull.length - 1];
         const inicialFull = partesFull[0][0];
@@ -157,7 +157,7 @@ export class PartidasService {
       }
     }
 
-    // 3. Match de sobrenome único se for muito específico
+    
     if (
       !sName.includes(' ') &&
       (bPop.startsWith(sName) || bFull.startsWith(sName))
@@ -238,7 +238,7 @@ export class PartidasService {
     });
   }
 
-  // --- O MOTOR DE INGESTÃO COM CRUZAMENTO DE DADOS ---
+  
 
   async sincronizarPartidaCompleta(
     jogoBasico: PartidaIngestao,
@@ -257,7 +257,7 @@ export class PartidasService {
         create: { nome: jogoBasico.campeonato, temporada: '2026' },
       });
 
-      // 🔥 LÓGICA DE UPSERT INTELIGENTE PARA EQUIPES
+      
       const buscarOuCriarEquipe = async (nomeOriginal: string) => {
         const nomeNorm = this.normalizarNomeTime(nomeOriginal);
         const todasEquipes = await tx.equipe.findMany();
@@ -281,11 +281,11 @@ export class PartidasService {
       let estadioId = null;
       if (detalhes?.estadio) {
         const nomeEstadio = detalhes.estadio;
-        // 1. Pergunta se existe
+        
         let estadio = await tx.estadio.findFirst({
           where: { nome: nomeEstadio },
         });
-        // 2. Se não existir, cria com segurança
+        
         if (!estadio) {
           estadio = await tx.estadio.create({
             data: { nome: nomeEstadio, cidade: 'Desconhecida' },
@@ -297,11 +297,11 @@ export class PartidasService {
       let arbitroId = null;
       if (detalhes?.arbitro) {
         const nomeArbitro = detalhes.arbitro;
-        // 1. Pergunta se existe
+        
         let arbitro = await tx.arbitro.findFirst({
           where: { nomePopular: nomeArbitro },
         });
-        // 2. Se não existir, cria com segurança
+        
         if (!arbitro) {
           arbitro = await tx.arbitro.create({
             data: { nomeCompleto: nomeArbitro, nomePopular: nomeArbitro },
@@ -341,7 +341,7 @@ export class PartidasService {
         },
       });
 
-      // Dicionário em memória: Sofascore ID -> Nosso Banco ID
+      
       const mapaSofascoreDb = new Map<number, number>();
 
       if (detalhes?.escalacoes) {
@@ -371,7 +371,7 @@ export class PartidasService {
             ? equipeCasa.id
             : equipeVisitante.id;
 
-          // Agora os gols e cartões estarão linkados aos jogadores no banco!
+          
           const jogadorIdDb = ev.jogador_principal_id
             ? mapaSofascoreDb.get(ev.jogador_principal_id) || null
             : null;
@@ -394,7 +394,7 @@ export class PartidasService {
         }
       }
 
-      // 🔥 LÓGICA DE ESTATÍSTICAS DE EQUIPE
+      
       if (detalhes?.estatisticas_equipes) {
         const { mandante, visitante } = detalhes.estatisticas_equipes;
 
@@ -465,7 +465,7 @@ export class PartidasService {
   ) {
     if (!escalacao || escalacao.length === 0) return;
 
-    // 🔥 BUSCA JOGADORES NA EQUIPE ATUAL E TODOS PARA FALLBACK
+    
     const jogadoresExistentes = await tx.jogador.findMany({
       where: { equipeId: equipeId },
     });
@@ -480,8 +480,8 @@ export class PartidasService {
         }),
       );
 
-      // Fallback forte: se não achar no time atual, busca em todos os times apenas se o nome COMPLETO for exato.
-      // Isso evita duplicar jogadores que estão emprestados (ex: G. Estrella jogando por outro time)
+      
+      
       if (!jogadorLocal && j.nome_completo) {
          jogadorLocal = todosJogadores.find(dbPlayer => 
             dbPlayer.nomeCompleto.toLowerCase().trim() === j.nome_completo.toLowerCase().trim()
@@ -566,7 +566,7 @@ export class PartidasService {
           posicaoMediaX: j.posicao_media?.x || null,
           posicaoMediaY: j.posicao_media?.y || null,
           heatmapUrl: j.heatmap_url,
-          // posicaoPartida is NOT reset on resync — only admin edits should change it
+          
         },
         create: {
           partidaId: partidaId,
@@ -592,7 +592,7 @@ export class PartidasService {
           posicaoMediaX: j.posicao_media?.x || null,
           posicaoMediaY: j.posicao_media?.y || null,
           heatmapUrl: j.heatmap_url,
-          posicaoPartida: null, // will be set by admin when editing lineup
+          posicaoPartida: null, 
         },
       });
     }

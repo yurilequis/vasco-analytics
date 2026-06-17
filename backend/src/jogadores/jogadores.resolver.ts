@@ -7,7 +7,7 @@ import {
   Int,
   Mutation,
 } from '@nestjs/graphql';
-import { JogadoresService, AtualizarJogadorInput } from './jogadores.service'; // <-- Importação da interface estrita adicionada
+import { JogadoresService, AtualizarJogadorInput } from './jogadores.service'; 
 import { Jogador } from './entities/jogador.entity';
 import { AtualizarPerfilFMInput } from './dto/perfil-fm.input';
 import { UseGuards } from '@nestjs/common';
@@ -139,21 +139,21 @@ export class JogadoresResolver {
     equipeId?: number | null,
     @Args('biografia', { type: () => String, nullable: true })
     biografia?: string,
-    // 👇 Adicionados os argumentos que estavam faltando para o GraphQL receber a Altura e Data
+    
     @Args('alturaCm', { type: () => Int, nullable: true }) alturaCm?: number,
     @Args('dataNascimento', { type: () => String, nullable: true })
     dataNascimento?: string,
   ) {
-    // Substituímos o Record<string, any> pelo tipo estrito
+    
     const dadosParaAtualizar: AtualizarJogadorInput = {};
 
-    // Construtor seguro: Campos obrigatórios (ignora null vindo do GraphQL para não quebrar o banco)
+    
     if (nomePopular) dadosParaAtualizar.nomePopular = nomePopular;
     if (nomeCompleto) dadosParaAtualizar.nomeCompleto = nomeCompleto;
     if (posicao) dadosParaAtualizar.posicao = posicao;
     if (categoria) dadosParaAtualizar.categoria = categoria;
 
-    // Construtor seguro: Campos opcionais (permite enviar null para apagar o dado)
+    
     if (numeroCamisa !== undefined)
       dadosParaAtualizar.numeroCamisa = numeroCamisa;
     if (posicaoSecundaria !== undefined)
@@ -171,7 +171,7 @@ export class JogadoresResolver {
     if (dataNascimento !== undefined)
       dadosParaAtualizar.dataNascimento = dataNascimento;
 
-    // Lógica relacional segura (Disconnect e Connect de Equipe)
+    
     if (equipeId !== undefined) {
       if (equipeId === null) {
         const jogadorAtual = await this.jogadoresService.findOne(id);

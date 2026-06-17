@@ -2,7 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
-// ── CONTRATOS (INTERFACES) ─────────────────────────────
+
 export interface JwtPayload {
   sub: number;
   email: string;
@@ -21,11 +21,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'CHAVE_SECRETA_VASCO_ANALYTICS_2026', // Idêntica à do auth.module
+      secretOrKey: 'CHAVE_SECRETA_VASCO_ANALYTICS_2026', 
     });
   }
 
-  // Sem 'async' e 100% tipado na entrada (payload) e na saída (UsuarioValidado)
+  
   validate(payload: JwtPayload): UsuarioValidado {
     return {
       id: payload.sub,

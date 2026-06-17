@@ -87,12 +87,12 @@ export default function Dashboard() {
 
   if (loading) return <div className="p-20 text-center text-slate-300 font-black uppercase tracking-[0.5em] text-xs">Carregando Inteligência...</div>;
 
-  // Process data based on season
+  
   const jogadoresFiltrados = jogadores.filter(j => j != null).map(j => {
     const stats = (j.estatisticas || []).filter(e => {
       if (!e) return false;
       if (temporada === 'geral') return true;
-      if (!e.partida?.dataHora) return true; // fallback
+      if (!e.partida?.dataHora) return true; 
       return e.partida.dataHora.startsWith(temporada);
     });
 
@@ -145,7 +145,7 @@ export default function Dashboard() {
   const garcons = [...jogadoresFiltrados].sort((a, b) => (b?.totalAssists || 0) - (a?.totalAssists || 0)).slice(0, 3);
   const melhoresNotas = [...jogadoresFiltrados].filter(p => p?.notaMedia !== null && (p?.partidas || 0) >= 3).sort((a, b) => (b?.notaMedia || 0) - (a?.notaMedia || 0)).slice(0, 3);
 
-  // Classificação atual (do último jogo da competição principal, e.g. Brasileirão)
+  
   let classificacaoVasco = null;
   let zona = { texto: '-', cor: 'text-slate-500', bg: 'bg-slate-900' };
   
@@ -185,7 +185,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         
-        {/* TOP SCORERS */}
+        {}
         <section className="bg-card p-6 md:p-8 rounded-xl border border-border">
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-accent flex items-center gap-2 mb-6">
             <Target className="w-4 h-4" /> Artilheiros
@@ -206,7 +206,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* TOP ASSISTS */}
+        {}
         <section className="bg-card p-6 md:p-8 rounded-xl border border-border">
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-accent flex items-center gap-2 mb-6">
             <Users className="w-4 h-4" /> Assistências
@@ -227,7 +227,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* BEST RATINGS */}
+        {}
         <section className="bg-card p-6 md:p-8 rounded-xl border border-border">
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-accent flex items-center gap-2 mb-6">
             <TrendingUp className="w-4 h-4" /> Maiores Notas
@@ -249,7 +249,7 @@ export default function Dashboard() {
         </section>
       </div>
 
-      {/* VASCO PERFORMANCE */}
+      {}
       <section className="bg-card p-6 md:p-10 rounded-xl border border-border relative overflow-hidden">
          <div className="absolute top-0 right-0 w-96 h-96 bg-accent opacity-5 blur-[120px] rounded-full pointer-events-none" />
          <div className="flex flex-col md:flex-row justify-between items-start gap-8 relative z-10 mb-10">

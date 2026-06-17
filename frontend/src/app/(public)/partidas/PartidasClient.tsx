@@ -75,13 +75,13 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
     >
       <div className="absolute inset-y-0 left-0 w-1 bg-transparent group-hover:bg-accent transition-colors" />
       
-      {/* DATA ANALYTIC */}
+      {}
       <div className="w-full md:w-24 shrink-0 flex justify-between md:block border-b md:border-b-0 border-border pb-2 md:pb-0 mb-2 md:mb-0">
         <p className="text-[9px] font-black uppercase text-muted tracking-widest">{date.toLocaleDateString('pt-BR', { month: 'short' })}</p>
         <p className="text-xl md:text-2xl font-black text-foreground mt-0 md:mt-1 italic font-mono">{date.getDate()}</p>
       </div>
 
-      {/* CONFRONTO (DARK PRO) */}
+      {}
       <div className="flex-1 flex items-center justify-between w-full max-w-2xl px-2 md:px-12 md:border-x border-border">
         <div className="flex flex-col-reverse md:flex-row items-center gap-2 md:gap-5 w-5/12 justify-center md:justify-end text-center md:text-right">
            <span className="text-xs font-black text-muted uppercase tracking-tight group-hover:text-foreground transition-colors hidden sm:block">{partida.equipeCasa.nome}</span>
@@ -112,7 +112,7 @@ function MatchRow({ partida, compact = false }: { partida: Partida, compact?: bo
         </div>
       </div>
 
-      {/* COMPETIÇÃO */}
+      {}
       <div className="hidden lg:flex flex-1 flex-col gap-1 items-start pl-12">
          <div className="flex items-center gap-3">
             <Trophy className="w-3.5 h-3.5 text-accent" />
@@ -139,7 +139,7 @@ export default function PartidasClient({ todas }: { todas: Partida[] }) {
   const [mando, setMando] = useState<'todos' | 'mandante' | 'visitante'>('todos');
 
   const filtradas = todas.filter(p => {
-    // Texto
+    
     const searchMatch = 
       p.equipeCasa.nome.toLowerCase().includes(termoBusca.toLowerCase()) || 
       p.equipeVisitante.nome.toLowerCase().includes(termoBusca.toLowerCase()) ||
@@ -147,7 +147,7 @@ export default function PartidasClient({ todas }: { todas: Partida[] }) {
     
     if (!searchMatch) return false;
 
-    // Mando
+    
     if (mando !== 'todos') {
       const isVascoCasa = p.equipeCasa.nome.toUpperCase().includes('VASCO');
       if (mando === 'mandante' && !isVascoCasa) return false;
@@ -166,16 +166,16 @@ export default function PartidasClient({ todas }: { todas: Partida[] }) {
 
   const agendadas = filtradas
     .filter(p => p.status.toLowerCase() !== 'encerrada')
-    .sort((a,b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()); // Próximos jogos sempre cronológicos? 
-    // Ou usar a ordenação selecionada também para os próximos? 
-    // Usually upcoming are chronological ASC naturally. Let's keep it ASC always for upcoming, or apply it if the user wants.
-    // Let's apply it:
-    // .sort((a,b) => ordemData === 'desc' 
-    //  ? new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime()
-    //  : new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()
-    // );
-    // Actually, "agendadas" usually you want to see the NEXT one first (ASC). If they choose 'desc', they see the furthest one first.
-    // I will keep agendadas chronological (ASC) normally, but respect 'desc' if they change it.
+    .sort((a,b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime()); 
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
   if (ordemData === 'desc') {
     agendadas.sort((a,b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime());
@@ -229,7 +229,7 @@ export default function PartidasClient({ todas }: { todas: Partida[] }) {
       </header>
 
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-        {/* RESULTADOS */}
+        {}
         <div className="flex-1 w-full space-y-6">
           <section className="space-y-6">
             <h2 className="text-[9px] font-black uppercase tracking-[0.4em] text-muted flex items-center gap-6">
@@ -241,7 +241,7 @@ export default function PartidasClient({ todas }: { todas: Partida[] }) {
           </section>
         </div>
 
-        {/* PRÓXIMOS JOGOS */}
+        {}
         {agendadas.length > 0 && (
           <div className="w-full lg:w-[350px] shrink-0 space-y-6">
             <section className="space-y-6">

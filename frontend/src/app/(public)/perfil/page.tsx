@@ -26,7 +26,7 @@ export default function PerfilPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
         
-        {/* CARD PRINCIPAL */}
+        {}
         <div className="md:col-span-8 space-y-8">
           <div className="bg-slate-900/30 border border-slate-900 p-10 rounded-[48px] relative overflow-hidden group">
             <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -75,7 +75,7 @@ export default function PerfilPage() {
           </div>
         </div>
 
-        {/* SIDE ACTIONS */}
+        {}
         <div className="md:col-span-4 space-y-6">
            <button 
              onClick={() => signOut({ callbackUrl: '/' })}

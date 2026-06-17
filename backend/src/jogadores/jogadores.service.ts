@@ -51,12 +51,12 @@ export interface AtributosJogadorFM {
   umContraUm?: number;
 }
 
-// Interface estrita para blindar as atualizações e eliminar o 'any'
+
 export interface AtualizarJogadorInput {
-  nomeCompleto?: string; // <-- Removido o | null
+  nomeCompleto?: string; 
   numeroCamisa?: number | null;
   alturaCm?: number | null;
-  posicao?: string; // <-- Removido o | null
+  posicao?: string; 
   posicaoSecundaria?: string | null;
   funcoes?: string | null;
   peDominante?: string | null;
@@ -65,24 +65,24 @@ export interface AtualizarJogadorInput {
   tipoContrato?: string;
   clubeEmprestimo?: string | null;
   ativo?: boolean;
-  nomePopular?: string; // <-- Removido o | null
+  nomePopular?: string; 
   fotoUrl?: string | null;
   biografia?: string | null;
   equipe?: { connect?: { id: number }; disconnect?: boolean };
   dataNascimento?: string | Date | null;
 }
 
-// Motor de higienização de posições do Football Manager
+
 function normalizarPosicaoFM(posicaoBruta: string): string {
   if (!posicaoBruta) return 'Desconhecida';
   const pos = posicaoBruta.toUpperCase().trim();
 
-  // 1. Goleiros e Zagueiros
+  
   if (pos.includes('GR') || pos === 'GOLEIRO') return 'Goleiro';
   if (pos.includes('D (C)') || pos.includes('DC') || pos === 'ZAGUEIRO')
     return 'Zagueiro';
 
-  // 2. Laterais (Com os "monstrinhos" de versatilidade incluídos)
+  
   if (
     pos.includes('D (D)') ||
     pos.includes('DA (D)') ||
@@ -104,15 +104,15 @@ function normalizarPosicaoFM(posicaoBruta: string): string {
   )
     return 'Lateral Esquerdo';
 
-  // 3. Volantes e Meias Centrais
-  // ✅ O "MD" isolado garante que o Volante seja detectado corretamente sem conflitar com alas.
+  
+  
   if (pos.includes('MDC') || pos === 'MD' || pos === 'VOLANTE')
     return 'Volante';
   if (pos.includes('M (C)') || pos.includes('MC') || pos === 'MEIA CENTRAL')
     return 'Meia Central';
 
-  // 4. Meias Ofensivos e Extremos
-  // ⚠️ A ordem dos IFs é vital aqui. As siglas compostas (MO) devem vir antes das simples.
+  
+  
   if (
     pos.includes('MO (DEC)') ||
     pos.includes('MO (DE)') ||
@@ -129,13 +129,13 @@ function normalizarPosicaoFM(posicaoBruta: string): string {
   )
     return 'Meia Direita';
 
-  // 5. Pontas e Atacantes
+  
   if (pos.includes('ED') || pos === 'PONTA DIREITA') return 'Ponta Direita';
   if (pos.includes('EE') || pos === 'PONTA ESQUERDA') return 'Ponta Esquerda';
   if (pos.includes('PL') || pos.includes('A (C)') || pos === 'CENTROAVANTE')
     return 'Centroavante';
 
-  return posicaoBruta; // Fallback: se o FM inventar uma sigla nova, ela passa reta para você ver no painel e nos avisar
+  return posicaoBruta; 
 }
 
 @Injectable()
@@ -165,7 +165,7 @@ export class JogadoresService {
   }
 
   findPorClube(nomeClube: string) {
-    // Separamos o return do método findMany e removemos o .db
+    
     return this.prisma.jogador.findMany({
       where: {
         ativo: true,
@@ -242,7 +242,7 @@ export class JogadoresService {
           alturaCm,
           peDominante,
           dataNascimento: dataNascObj,
-          fotoUrl, // <-- ADICIONADO: Agora a foto também salva em jogadores novos
+          fotoUrl, 
         },
       });
     }
@@ -264,10 +264,10 @@ export class JogadoresService {
   }
 
   async atualizarJogadorAdmin(id: number, dados: AtualizarJogadorInput) {
-    // Separa a data de nascimento do resto dos dados
+    
     const { dataNascimento, ...restoDosDados } = dados;
 
-    // Motor de conversão estrito e à prova de falhas
+    
     let dataNascimentoProcessada: Date | null | undefined = undefined;
 
     if (dataNascimento === null || dataNascimento === '') {
@@ -275,11 +275,11 @@ export class JogadoresService {
     } else if (dataNascimento !== undefined) {
       const dataConvertida = new Date(dataNascimento);
 
-      // Verifica matematicamente se a data gerada é válida
+      
       if (!isNaN(dataConvertida.getTime())) {
         dataNascimentoProcessada = dataConvertida;
       } else {
-        dataNascimentoProcessada = null; // Protege o Prisma de "Invalid Date"
+        dataNascimentoProcessada = null; 
       }
     }
 

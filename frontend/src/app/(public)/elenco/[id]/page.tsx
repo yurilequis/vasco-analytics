@@ -175,7 +175,7 @@ export default function PlayerProfilePage() {
     <div className="min-h-screen bg-background text-foreground">
       <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8 md:space-y-12">
         
-        {/* HEADER: CLINICAL PROFILE */}
+        {}
         <header className="flex flex-col lg:flex-row items-center gap-6 md:gap-12 border-b border-border pb-8 md:pb-12">
           <div className="relative shrink-0">
               <div className="w-48 h-48 rounded-xl bg-card border border-border overflow-hidden shadow-xl">
@@ -225,11 +225,11 @@ export default function PlayerProfilePage() {
           </div>
         </header>
 
-        {/* CONTENT GRID */}
+        {}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            {/* RADAR & FM STATS */}
-            {/* RADAR & FM STATS */}
+            {}
+            {}
             <section className="lg:col-span-5 bg-card rounded-xl border border-border p-6 shadow-sm relative overflow-hidden flex flex-col items-center">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[100px] rounded-full pointer-events-none" />
                 <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-foreground self-start mb-6 flex items-center gap-4">
@@ -250,7 +250,7 @@ export default function PlayerProfilePage() {
             </section>
         </div>
 
-        {/* ESTATÍSTICAS DE CARREIRA E TEMPORADA */}
+        {}
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
            <div className="bg-card p-6 rounded-xl border border-border text-center flex flex-col justify-center shadow-sm hover:border-muted transition-colors">
              <p className="text-[9px] font-black uppercase tracking-widest text-muted mb-2">Jogos (Total)</p>
@@ -278,7 +278,7 @@ export default function PlayerProfilePage() {
            </div>
         </div>
 
-        {/* HISTÓRICO DE PARTIDAS */}
+        {}
         <div className="lg:col-span-12">
             <section className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
                 <div className="p-8 pb-6 border-b border-border flex items-center justify-between">

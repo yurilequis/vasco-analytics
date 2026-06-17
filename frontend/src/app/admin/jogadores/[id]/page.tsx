@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Calendar, Flag, Ruler, Shirt, Edit2, Check, X, ArrowLeft, Target } from 'lucide-react';
-// 👇 1. Trocamos useSession por getSession
+
 import { getSession } from 'next-auth/react'; 
 import { traduzirPosicao, POSICOES_DISPONIVEIS, FUNCOES_POR_POSICAO } from '@/utils/posicaoHelper';
 
@@ -68,7 +68,7 @@ export default function PerfilJogadorAdminPage() {
   const router = useRouter();
   const jogadorId = Number(params?.id);
 
-  // 👇 2. O token agora vive em um estado
+  
   const [tokenJwt, setTokenJwt] = useState<string | null>(null);
 
   const [jogador, setJogador] = useState<JogadorDetalhado | null>(null);
@@ -85,12 +85,12 @@ export default function PerfilJogadorAdminPage() {
 
     const inicializarDados = async () => {
       try {
-        // 👇 3. Buscamos a sessão dinamicamente sem precisar do SessionProvider!
+        
         const session = await getSession();
         const token = (session as CustomSession)?.user?.access_token || (session as CustomSession)?.access_token;
         if (token) setTokenJwt(token);
 
-        // Busca o jogador
+        
         const query = `
           query GetJogadorDetalhadoAdmin($id: Int!) {
             jogador(id: $id) {
@@ -270,7 +270,7 @@ export default function PerfilJogadorAdminPage() {
   return (
     <div className="min-h-screen bg-[#0b0c10] text-slate-200 p-6 font-sans">
       
-      {/* BARRA DE NAVEGAÇÃO SUPERIOR */}
+      {}
       <div className="max-w-7xl mx-auto mb-6 flex items-center justify-between bg-[#13151a] p-4 rounded-2xl border border-slate-800/50 shadow-sm">
         <button 
           onClick={() => router.push('/admin/elenco')}
@@ -308,7 +308,7 @@ export default function PerfilJogadorAdminPage() {
         </div>
       </div>
 
-      {/* HEADER DO JOGADOR */}
+      {}
       <div className="flex flex-col md:flex-row items-center md:items-end gap-8 bg-[#13151a] border border-slate-800/50 p-8 rounded-[32px] mb-8 max-w-7xl mx-auto shadow-sm">
         <div className="w-36 h-36 bg-[#0b0c10] rounded-2xl overflow-hidden border border-slate-800 shrink-0 flex items-center justify-center shadow-xl">
           {jogador.fotoUrl ? (
@@ -379,7 +379,7 @@ export default function PerfilJogadorAdminPage() {
         </div>
       </div>
 
-      {/* CORPO / PAINEL PRINCIPAL */}
+      {}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
         
         <div className="col-span-1 space-y-6">
@@ -403,7 +403,7 @@ export default function PerfilJogadorAdminPage() {
                 )}
               </div>
 
-              {/* ATIVO E EMPRESTADO */}
+              {}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-slate-500 text-xs font-medium mb-1">Status no Clube</p>
@@ -444,7 +444,7 @@ export default function PerfilJogadorAdminPage() {
                 </div>
               </div>
 
-              {/* CLUBE DE EMPRÉSTIMO */}
+              {}
               {(editando ? (formData.tipoContrato === 'EMPRESTIMO' || formData.tipoContrato === 'EMPRESTADO') : (jogador.tipoContrato === 'EMPRESTIMO' || jogador.tipoContrato === 'EMPRESTADO')) && (
                 <div>
                   <p className="text-slate-500 text-xs font-medium mb-1">Clube de Empréstimo</p>
@@ -492,7 +492,7 @@ export default function PerfilJogadorAdminPage() {
                   <select 
                     value={formData.posicao || ''} 
                     onChange={e => {
-                      // Ao trocar a posição principal, limpamos as funções se elas não pertencerem mais à nova posição (opcional, aqui decidimos apenas resetar)
+                      
                       setFormData({...formData, posicao: e.target.value, funcoes: null});
                     }}
                     className="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-slate-200 outline-none focus:border-zinc-700"
@@ -540,7 +540,7 @@ export default function PerfilJogadorAdminPage() {
                 )}
               </div>
 
-              {/* FUNÇÕES */}
+              {}
               {(editando && formData.posicao && FUNCOES_POR_POSICAO[formData.posicao]) || (!editando && jogador.funcoes) ? (
                 <div>
                   <p className="text-slate-500 text-xs font-medium mb-0.5">
