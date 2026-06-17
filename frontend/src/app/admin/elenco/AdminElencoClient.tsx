@@ -358,7 +358,8 @@ export default function AdminElencoClient({
                         <td className="px-8 py-6">
                           <select value={current.categoria || 'Profissional'} onChange={e => handleMassEditChange(j.id, 'categoria', e.target.value)} className="bg-black border border-slate-800 rounded px-2 py-1 text-xs text-white outline-none focus:border-accent">
                             <option value="Profissional">Profissional</option>
-                            <option value="Base">Base</option>
+                            <option value="Sub-20">Sub-20</option>
+                            <option value="Sub-17">Sub-17</option>
                           </select>
                         </td>
                       )}
@@ -492,7 +493,8 @@ export default function AdminElencoClient({
                     className="w-full bg-black border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-accent outline-none"
                   >
                     <option value="Profissional">Profissional</option>
-                    <option value="Base">Base</option>
+                    <option value="Sub-20">Sub-20</option>
+                    <option value="Sub-17">Sub-17</option>
                   </select>
                 </div>
               </div>
