@@ -3,8 +3,8 @@ import math
 import requests
 import json
 import os
-import unicodedata # NOVO: Para remover acentos
-import re          # NOVO: Para formatar o texto (Regex)
+import unicodedata 
+import re          
 
 MAPA_CSV_PARA_BANCO = {
     'Técnica': 'tecnica', 'Desarme': 'desarme', 'Marcação de Penáltis': 'penaltis',
@@ -49,7 +49,7 @@ def processar_nota(valor):
 
 FOTOS_USADAS = set()
 
-#"Caçador" de Fotos
+
 def descobrir_foto_jogador(nome_jogador, nome_completo, pasta_base_script):
     if not nome_jogador: return None
     
@@ -64,12 +64,12 @@ def descobrir_foto_jogador(nome_jogador, nome_completo, pasta_base_script):
 
     possibilidades = []
     
-    # Adiciona as opções do nome completo primeiro (mais exclusivas)
+    
     if nome_completo:
         sc, _, _ = gerar_variacoes(nome_completo)
         possibilidades.append(f"{sc}.png")
         
-    # Adiciona as opções do nome popular
+    
     sp_c, sp_p, sp_u = gerar_variacoes(nome_jogador)
     possibilidades.extend([
         f"{sp_c}.png",
@@ -77,12 +77,12 @@ def descobrir_foto_jogador(nome_jogador, nome_completo, pasta_base_script):
         f"{sp_p}.png"
     ])
     
-    # 4. Navega até a pasta do Frontend
+    
     caminho_frontend = os.path.abspath(os.path.join(pasta_base_script, '..', '..', '..', '..', 'frontend', 'public', 'fotos-jogadores'))
     
-    # 5. Testa cada possibilidade fisicamente no seu SSD
+    
     for nome_arquivo in possibilidades:
-        # Pula se a foto já foi usada por outro jogador nessa execução
+        
         if nome_arquivo in FOTOS_USADAS:
             continue
             
@@ -112,9 +112,9 @@ def processar_csv(caminho_arquivo):
             
             if not nome: continue
             
-            # 🔥 O Script agora procura a foto sozinho antes de enviar pro banco
-            # Se a base CSV tiver nome completo futuramente, podemos passar. 
-            # Por hora passamos o 'nome' do CSV e se tivermos nome completo de outro lugar
+            
+            
+            
             foto_url = descobrir_foto_jogador(nome, nome, pasta_atual)
             
             atributos_fm = {"jogadorId": 0}
@@ -133,15 +133,15 @@ def processar_csv(caminho_arquivo):
             data_nasc = linha.get('Data Nasc.', None)
             pe_dominante = linha.get('Pé Preferido', None)
             
-            # Adicionamos a variável $fotoUrl na Mutation do GraphQL
+            
             query_graphql = """
             mutation ImportarMassa($nome: String!, $clube: String!, $posicao: String!, $dadosFM: AtualizarPerfilFMInput!, $alturaCm: Int, $dataNascimento: String, $peDominante: String, $fotoUrl: String) {
               importarMassaFM(nome: $nome, clube: $clube, posicao: $posicao, dadosFM: $dadosFM, alturaCm: $alturaCm, dataNascimento: $dataNascimento, peDominante: $peDominante, fotoUrl: $fotoUrl)
             }
             """
             
-            # O seu backend NestJS, na rota 'importarMassaFM', deve garantir que 
-            # o jogador seja criado ou atualizado com { ativo: true }
+            
+            
             payload = {
                 "query": query_graphql,
                 "variables": {
@@ -159,7 +159,7 @@ def processar_csv(caminho_arquivo):
             try:
                 resposta = requests.post("http://localhost:3001/graphql", json=payload)
                 if resposta.status_code == 200 and "errors" not in resposta.json():
-                    # Aviso visual amigável se achou ou não a foto
+                    
                     status_foto = "📸" if foto_url else "👤"
                     print(f"✅ Injetado: {nome} ({clube}) {status_foto}")
                     sucessos += 1

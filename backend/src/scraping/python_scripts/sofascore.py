@@ -6,7 +6,7 @@ import tls_requests as requests
 class SofascoreScraper:
     def __init__(self):
         self.base_url = "https://api.sofascore.com/api/v1"
-        self.team_id = "1974" # Vasco da Gama
+        self.team_id = "1974" 
         self.headers = {
             "Accept": "*/*",
             "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8",
@@ -175,11 +175,11 @@ def comando_detalhes(event_id):
                     "heatmap_url": f"https://api.sofascore.app/api/v1/event/{event_id}/player/{player_id}/heatmap"
                 })
 
-    # Adicionar estatísticas de equipe
+    
     estatisticas_equipes = {"mandante": {}, "visitante": {}}
     stats_brutas = scraper._fazer_requisicao(f"/event/{event_id}/statistics")
     if stats_brutas and "statistics" in stats_brutas:
-        # Geralmente a primeira seção (index 0) é "All" ou "Full Time"
+        
         for section in stats_brutas["statistics"]:
             if section.get("period") == "ALL":
                 for item in section.get("groups", []):
@@ -208,7 +208,7 @@ def comando_classificacao(tournament_id, season_id):
         print(json.dumps({"erro": "Falha ao buscar classificação"}))
         return
 
-    # Sofascore pode retornar várias tabelas (ex: grupos). Pegamos a primeira (total).
+    
     tabela_bruta = resposta["standings"][0].get("rows", [])
     tabela_limpa = []
     
