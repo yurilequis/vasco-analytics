@@ -312,7 +312,6 @@ export default async function Home() {
                                  <div key={j.id} className="flex items-center gap-3">
                                    <span className="w-5 text-right font-mono font-bold text-accent text-xs">{j.numeroCamisa || j.jogador.numeroCamisa || '-'}</span>
                                    <span className="font-medium">{j.jogador.nomePopular || j.jogador.nome}</span>
-                                   <span className="text-[10px] text-muted uppercase tracking-wider ml-auto bg-white/5 px-2 py-0.5 rounded">{j.jogador.posicao}</span>
                                  </div>
                                ))}
                              </div>
