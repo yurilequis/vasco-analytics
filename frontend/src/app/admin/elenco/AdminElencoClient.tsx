@@ -48,6 +48,70 @@ export default function AdminElencoClient({
   const [quickEditData, setQuickEditData] = useState<JogadorAdmin | null>(null);
   const [isSavingQuick, setIsSavingQuick] = useState(false);
 
+  // Mass Edit State
+  const [isMassEdit, setIsMassEdit] = useState(false);
+  const [massEdits, setMassEdits] = useState<Record<number, Partial<JogadorAdmin>>>({});
+  const [isSavingMass, setIsSavingMass] = useState(false);
+
+  const handleSaveMassEdits = async () => {
+    if (!tokenJwt) return;
+    setIsSavingMass(true);
+    try {
+      const mut = `
+        mutation AtualizarQuick($id: Int!, $nomePopular: String, $numeroCamisa: Int, $ativo: Boolean, $emprestado: Boolean, $tipoContrato: String, $clubeEmprestimo: String, $categoria: String, $posicao: String) {
+          atualizarJogadorAdmin(id: $id, nomePopular: $nomePopular, numeroCamisa: $numeroCamisa, ativo: $ativo, emprestado: $emprestado, tipoContrato: $tipoContrato, clubeEmprestimo: $clubeEmprestimo, categoria: $categoria, posicao: $posicao) {
+            id, nomePopular, numeroCamisa, ativo, emprestado, tipoContrato, clubeEmprestimo, categoria, posicao
+          }
+        }
+      `;
+      const chaves = Object.keys(massEdits).map(Number);
+      for (const id of chaves) {
+        const edits = massEdits[id];
+        const j = jogadores.find(x => x.id === id);
+        if (!j) continue;
+        const finalData = { ...j, ...edits };
+        const res = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3001/graphql', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${tokenJwt}` },
+          body: JSON.stringify({
+            query: mut,
+            variables: {
+              id: finalData.id,
+              nomePopular: finalData.nomePopular,
+              numeroCamisa: finalData.numeroCamisa ? Number(finalData.numeroCamisa) : null,
+              ativo: finalData.ativo,
+              emprestado: finalData.emprestado,
+              tipoContrato: finalData.tipoContrato || 'DEFINITIVO',
+              clubeEmprestimo: (finalData.tipoContrato === 'EMPRESTADO' || finalData.tipoContrato === 'EMPRESTIMO') ? finalData.clubeEmprestimo : null,
+              categoria: finalData.categoria || 'Profissional',
+              posicao: finalData.posicao
+            }
+          })
+        });
+        const json = await res.json();
+        if (json.errors) throw new Error(json.errors[0].message);
+        const att = json.data.atualizarJogadorAdmin;
+        setJogadores(prev => prev.map(p => p.id === att.id ? { ...p, ...att } : p));
+      }
+      setMassEdits({});
+      setIsMassEdit(false);
+    } catch (e) {
+      alert('Erro ao salvar edições em massa: ' + (e instanceof Error ? e.message : ''));
+    } finally {
+      setIsSavingMass(false);
+    }
+  };
+
+  const handleMassEditChange = (id: number, field: keyof JogadorAdmin, value: any) => {
+    setMassEdits(prev => ({
+      ...prev,
+      [id]: {
+        ...(prev[id] || {}),
+        [field]: value
+      }
+    }));
+  };
+
   const equipesPorEstado = equipesDisponiveis.reduce((acc, eq) => {
     const uf = eq.estado || 'Outros / Exterior';
     if (!acc[uf]) acc[uf] = [];
@@ -178,6 +242,11 @@ export default function AdminElencoClient({
             <button className="flex items-center gap-2 px-6 py-3 bg-slate-900 border border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-300 hover:bg-slate-800 transition-all">
                <Filter className="w-4 h-4" /> Filtros
             </button>
+            <button 
+               onClick={() => setIsMassEdit(!isMassEdit)}
+               className={`flex items-center gap-2 px-6 py-3 border rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl ${isMassEdit ? 'bg-amber-500 text-black border-amber-400' : 'bg-slate-900 border-slate-800 text-amber-500 hover:bg-slate-800'}`}>
+               <Zap className="w-4 h-4" /> {isMassEdit ? 'Sair da Edição' : 'Edição em Massa'}
+            </button>
             <button className="flex items-center gap-2 px-6 py-3 bg-white text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all shadow-xl">
                <UserPlus className="w-4 h-4" /> Novo Atleta
             </button>
@@ -185,12 +254,30 @@ export default function AdminElencoClient({
       </div>
 
       {/* DATA GRID (TERMINAL STYLE) */}
-      <div className="bg-black border border-slate-900 rounded-[24px] md:rounded-[40px] overflow-x-auto shadow-2xl">
+      <div className="bg-black border border-slate-900 rounded-[24px] md:rounded-[40px] overflow-x-auto shadow-2xl relative">
+         {isMassEdit && Object.keys(massEdits).length > 0 && (
+           <div className="absolute top-4 right-4 z-10 flex gap-2">
+             <button 
+               onClick={() => setMassEdits({})}
+               className="px-4 py-2 bg-slate-900 text-slate-400 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:text-white transition-all"
+             >
+               Descartar
+             </button>
+             <button 
+               onClick={handleSaveMassEdits}
+               disabled={isSavingMass}
+               className="px-4 py-2 bg-emerald-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-400 transition-all flex items-center gap-2"
+             >
+               {isSavingMass ? 'Salvando...' : <><Check className="w-3 h-3" /> Salvar {Object.keys(massEdits).length}</>}
+             </button>
+           </div>
+         )}
          <table className="w-full text-left whitespace-nowrap">
             <thead>
                <tr className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-600 border-b border-slate-900 bg-slate-900/20">
                   <th className="px-8 py-6">ID</th>
                   <th className="px-8 py-6">Jogador</th>
+                  {isMassEdit && <th className="px-8 py-6">Categoria</th>}
                   <th className="px-8 py-6">Status</th>
                   <th className="px-8 py-6 text-center">Nº</th>
                   <th className="px-8 py-6 text-right">Ações</th>
@@ -204,7 +291,10 @@ export default function AdminElencoClient({
                     </td>
                  </tr>
                ) : (
-                 jogadoresFiltrados.map(j => (
+                 jogadoresFiltrados.map(j => {
+                   const draft = massEdits[j.id] || {};
+                   const current = { ...j, ...draft };
+                   return (
                    <tr key={j.id} className="hover:bg-slate-900/30 transition-all group">
                       <td className="px-8 py-6">
                          <span className="text-[10px] font-bold text-slate-700 font-mono italic">#{j.id}</span>
@@ -214,14 +304,46 @@ export default function AdminElencoClient({
                             <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden transition-all group-hover:border-accent">
                                {j.fotoUrl ? <img src={j.fotoUrl} className="w-full h-full object-cover" /> : <Database className="w-4 h-4 text-slate-700" />}
                             </div>
-                            <div>
-                               <p className="text-sm font-black text-white uppercase tracking-tight">{j.nomePopular}</p>
-                               <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{traduzirPosicao(j.posicao).nome}</p>
-                            </div>
+                            {isMassEdit ? (
+                              <div className="flex flex-col gap-1 w-48">
+                                <input value={current.nomePopular || ''} onChange={e => handleMassEditChange(j.id, 'nomePopular', e.target.value)} className="bg-black border border-slate-800 rounded px-2 py-1 text-xs text-white outline-none focus:border-accent" />
+                                <input value={current.posicao || ''} onChange={e => handleMassEditChange(j.id, 'posicao', e.target.value)} className="bg-black border border-slate-800 rounded px-2 py-1 text-[9px] uppercase font-bold text-slate-400 outline-none focus:border-accent" />
+                              </div>
+                            ) : (
+                              <div>
+                                 <p className="text-sm font-black text-white uppercase tracking-tight">{j.nomePopular}</p>
+                                 <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{traduzirPosicao(j.posicao).nome}</p>
+                              </div>
+                            )}
                          </div>
                       </td>
+                      {isMassEdit && (
+                        <td className="px-8 py-6">
+                          <select value={current.categoria || 'Profissional'} onChange={e => handleMassEditChange(j.id, 'categoria', e.target.value)} className="bg-black border border-slate-800 rounded px-2 py-1 text-xs text-white outline-none focus:border-accent">
+                            <option value="Profissional">Profissional</option>
+                            <option value="Base">Base</option>
+                          </select>
+                        </td>
+                      )}
                       <td className="px-8 py-6">
-                         {j.ativo === false ? (
+                        {isMassEdit ? (
+                          <select 
+                            value={!current.ativo ? 'inativo' : (current.tipoContrato || 'DEFINITIVO')}
+                            onChange={e => {
+                              const v = e.target.value;
+                              if (v === 'inativo') { handleMassEditChange(j.id, 'ativo', false); handleMassEditChange(j.id, 'tipoContrato', 'DEFINITIVO'); handleMassEditChange(j.id, 'emprestado', false); }
+                              else if (v === 'DEFINITIVO') { handleMassEditChange(j.id, 'ativo', true); handleMassEditChange(j.id, 'tipoContrato', 'DEFINITIVO'); handleMassEditChange(j.id, 'emprestado', false); }
+                              else if (v === 'EMPRESTIMO') { handleMassEditChange(j.id, 'ativo', true); handleMassEditChange(j.id, 'tipoContrato', 'EMPRESTIMO'); handleMassEditChange(j.id, 'emprestado', false); }
+                              else if (v === 'EMPRESTADO') { handleMassEditChange(j.id, 'ativo', true); handleMassEditChange(j.id, 'tipoContrato', 'EMPRESTADO'); handleMassEditChange(j.id, 'emprestado', true); }
+                            }}
+                            className="bg-black border border-slate-800 rounded px-2 py-1 text-xs text-white outline-none focus:border-accent w-32"
+                          >
+                            <option value="DEFINITIVO">Definitivo</option>
+                            <option value="EMPRESTIMO">Empréstimo</option>
+                            <option value="EMPRESTADO">Emprestado</option>
+                            <option value="inativo">Inativo</option>
+                          </select>
+                        ) : j.ativo === false ? (
                             <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-950/30 border border-red-900/50 rounded-lg">
                                <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
                                <span className="text-[9px] font-black uppercase text-red-400">Sem Clube / Ex-jogador</span>
@@ -247,7 +369,11 @@ export default function AdminElencoClient({
                          )}
                       </td>
                       <td className="px-8 py-6 text-center">
-                         <span className="text-sm font-black text-slate-300 font-mono group-hover:text-accent transition-colors">{j.numeroCamisa || '--'}</span>
+                         {isMassEdit ? (
+                          <input type="number" value={current.numeroCamisa || ''} onChange={e => handleMassEditChange(j.id, 'numeroCamisa', e.target.value ? Number(e.target.value) : null)} className="w-12 bg-black border border-slate-800 rounded px-2 py-1 text-sm font-mono text-center text-white outline-none focus:border-accent" />
+                         ) : (
+                           <span className="text-sm font-black text-slate-300 font-mono group-hover:text-accent transition-colors">{j.numeroCamisa || '--'}</span>
+                         )}
                       </td>
                       <td className="px-8 py-6">
                          <div className="flex justify-end gap-3 opacity-30 group-hover:opacity-100 transition-opacity">
@@ -261,10 +387,11 @@ export default function AdminElencoClient({
                              <Link href={`/admin/jogadores/${j.id}`} className="p-2.5 bg-black border border-slate-800 rounded-xl text-slate-400 hover:text-white hover:border-white transition-all" title="Perfil Completo">
                                 <ChevronRight className="w-4 h-4" />
                              </Link>
-                          </div>
+                           </div>
                       </td>
                    </tr>
-                 ))
+                   );
+                 })
                )}
             </tbody>
          </table>
