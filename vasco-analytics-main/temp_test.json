@@ -1,0 +1,251 @@
+{
+  "data": {
+    "jogadoresPorClube": [
+      {
+        "nomePopular": "Adson",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Alan Saldivia",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "André",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Andrés Gómez",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Andrey Fernandes",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Brenner",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Breno Vereza",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Bruno André",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Bruno Lopes",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Carlos Cuesta",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Cauan Barros",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Claudio Spinelli",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Cuiabano",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Daniel Fuzato",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Davi Gomes",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "David",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Diego Minete",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Emanuel",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Euder",
+        "estatisticas": [
+          {
+            "gols": 0,
+            "assistencias": 0,
+            "notaDesempenho": null,
+            "partida": {
+              "dataHora": "2025-10-01T22:00:00.000Z"
+            }
+          },
+          {
+            "gols": 0,
+            "assistencias": 0,
+            "notaDesempenho": null,
+            "partida": {
+              "dataHora": "2025-09-24T22:30:00.000Z"
+            }
+          },
+          {
+            "gols": 0,
+            "assistencias": 0,
+            "notaDesempenho": null,
+            "partida": {
+              "dataHora": "2025-09-21T20:30:00.000Z"
+            }
+          }
+        ]
+      },
+      {
+        "nomePopular": "Guima",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Gustavo",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Hugo Moura",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Ítalo Silva",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Jair",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Johan Rojas",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "JP",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Juninho",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Léo Felix",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Léo Jardim",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lócio",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lorenzzo",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lucas de Andrade",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lucas Eduardo",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lucas Freitas",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lucas Melim",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lucas Piton",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Luís Felipe",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Lukas Zuccarello",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Marcão",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Marino Hinestroza",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Mateus Carvalho",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Medina",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Mutano",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Nuno Moreira",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Paulo Henrique",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Phillipe Gabriel",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Puma Rodríguez",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Ramon Rique",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Riquelme Avellar",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Robert Renan",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Tchê Tchê",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Thiago Mendes",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Victor Alemão",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Walace Falcão",
+        "estatisticas": []
+      },
+      {
+        "nomePopular": "Wanyson",
+        "estatisticas": []
+      }
+    ]
+  }
+}

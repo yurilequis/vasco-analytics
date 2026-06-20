@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── CONFIGURAÇÃO DE TEMA UNIFICADO (DARK PRO) ── */
+:root {
+  --background: #121212; /* Requested dark gray */
+  --foreground: #ffffff; /* White text */
+  
+  --card: #1e1e1e; /* Requested card background */
+  --card-foreground: #ffffff;
+  
+  --border: #2a2a2a; /* Soft borders */
+  --muted: #b3b3b3; /* Requested subtitle color */
+  --accent: #FFD700; /* Requested Gold accent */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+  overflow: hidden; 
+}
+
+/* Utilitários para Layout Fixo (SaaS) */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  width: 100vw;
+}
+
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

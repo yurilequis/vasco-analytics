@@ -1,0 +1,365 @@
+
+
+
+
+type Arbitro {
+  ativo: Boolean!
+  estado: String
+  fotoUrl: String
+  id: Int!
+  nacionalidade: String
+  nomeCompleto: String!
+  nomePopular: String!
+}
+
+type ArbitroSimples {
+  nomePopular: String!
+}
+
+input AtualizarEscalacaoInput {
+  formacaoCasa: String
+  formacaoVisitante: String
+  jogadores: [AtualizarEscalacaoJogadorInput!]!
+  partidaId: Int!
+}
+
+input AtualizarEscalacaoJogadorInput {
+  estatisticaId: Int!
+  numeroCamisa: Int
+  posicaoPartida: String
+  titular: Boolean!
+}
+
+input AtualizarPerfilFMInput {
+  aceleracao: Int
+  agilidade: Int
+  agressividade: Int
+  alcanceAereo: Int
+  antecipacao: Int
+  aptidaoNatural: Int
+  bravura: Int
+  cabeceamento: Int
+  chutesLonge: Int
+  cobrancaFalta: Int
+  comandoArea: Int
+  compostura: Int
+  comunicacao: Int
+  concentracao: Int
+  cruzamento: Int
+  decisoes: Int
+  desarme: Int
+  determinacao: Int
+  drible: Int
+  equilibrio: Int
+  escanteios: Int
+  excentricidade: Int
+  finalizacao: Int
+  forca: Int
+  imprevisibilidade: Int
+  impulsao: Int
+  indiceTrabalho: Int
+  jogadorId: Int
+  jogoMaos: Int
+  lancamentos: Int
+  laterais: Int
+  lideranca: Int
+  marcacao: Int
+  passe: Int
+  penaltis: Int
+  posicionamento: Int
+  primeiroToque: Int
+  reflexos: Int
+  reposicao: Int
+  resistencia: Int
+  saidaGol: Int
+  semBola: Int
+  socos: Int
+  tecnica: Int
+  trabalhoEquipe: Int
+  umContraUm: Int
+  velocidade: Int
+  visaoJogo: Int
+}
+
+type AuthPayload {
+  access_token: String!
+  usuario: UsuarioSessao!
+}
+
+type ClassificacaoEquipe {
+  derrotas: Int!
+  empates: Int!
+  equipe: EquipeSimples!
+  golsContra: Int!
+  golsPro: Int!
+  jogos: Int!
+  pontos: Int!
+  posicao: Int!
+  saldoGols: Int!
+  vitorias: Int!
+}
+
+type CompeticaoSimples {
+  classificacao: [ClassificacaoEquipe!]
+  id: Int!
+  nome: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Equipe {
+  cidade: String
+  criadoEm: DateTime!
+  escudoUrl: String
+  estado: String
+  fundacao: DateTime
+  id: Int!
+  nome: String!
+  nomeCurto: String!
+  pais: String
+  sigla: String
+}
+
+type EquipeSimples {
+  escudoUrl: String
+  id: Int!
+  nome: String!
+}
+
+type Estadio {
+  capacidade: Int
+  cidade: String!
+  estado: String
+  fotoUrl: String
+  grama: String
+  id: Int!
+  nome: String!
+  nomePopular: String
+  pais: String!
+  proprietario: String
+}
+
+type EstadioSimples {
+  nome: String!
+}
+
+type EstatisticaEquipe {
+  cartoesAmarelos: Int
+  cartoesVermelhos: Int
+  chutes: Int
+  chutesFora: Int
+  chutesGol: Int
+  chutesNaTrave: Int
+  defesasGoleiro: Int
+  equipeId: Int!
+  escanteios: Int
+  faltas: Int
+  formacao: String
+  grandesChances: Int
+  impedimentos: Int
+  passesCompletos: Int
+  passesTentados: Int
+  posseBola: Float
+  xG: Float
+}
+
+type EstatisticaJogador {
+  assistencias: Int!
+  cartoesAmarelos: Int!
+  cartoesVermelhos: Int!
+  desarmes: Int!
+  equipeId: Int!
+  gols: Int!
+  heatmapUrl: String
+  id: Int!
+  jogador: JogadorSimples!
+  minutosJogados: Int!
+  notaDesempenho: Float
+  numeroCamisa: Int
+  partida: Partida
+  passesCompletos: Int!
+  posicaoMediaX: Float
+  posicaoMediaY: Float
+  posicaoPartida: String
+  titular: Boolean!
+}
+
+type EventoPartida {
+  descricao: String
+  equipeId: Int!
+  id: Int!
+  jogador: JogadorSimples
+  minuto: Int!
+  minutoAcrescimo: Int!
+  tipoEvento: String!
+}
+
+type Jogador {
+  alturaCm: Int
+  ativo: Boolean!
+  atualizadoEm: DateTime!
+  biografia: String
+  categoria: String!
+  clubeEmprestimo: String
+  criadoEm: DateTime!
+  dataNascimento: DateTime
+  emprestado: Boolean!
+  equipe: Equipe
+  equipeId: Int!
+  estatisticas(take: Int): [EstatisticaJogador!]
+  fotoUrl: String
+  funcoes: String
+  id: Int!
+  nacionalidade: String
+  nomeCompleto: String!
+  nomeOriginal: String
+  nomePopular: String!
+  numeroCamisa: Int
+  peDominante: String
+  perfilFM: PerfilFM
+  pesoKg: Float
+  posicao: String
+  posicaoSecundaria: String
+  tipoContrato: String!
+}
+
+type JogadorSimples {
+  fotoUrl: String
+  funcoes: String
+  id: Int!
+  nomePopular: String!
+  numeroCamisa: Int
+  peDominante: String
+  posicao: String
+  posicaoSecundaria: String
+}
+
+type MediaArbitro {
+  mediaAmarelos: Float!
+  mediaBola: Float!
+  mediaFaltas: Float!
+  mediaVermelhos: Float!
+  partidasApitadas: Int!
+}
+
+type Mutation {
+  atualizarEquipe(cidade: String, escudoUrl: String, estado: String, fundacao: String, id: Int!, nome: String, nomeCurto: String, pais: String, sigla: String): Equipe!
+  atualizarEscalacaoPartida(input: AtualizarEscalacaoInput!): Boolean!
+  atualizarJogadorAdmin(alturaCm: Int, ativo: Boolean, biografia: String, categoria: String, clubeEmprestimo: String, dataNascimento: String, emprestado: Boolean, equipeId: Int, fotoUrl: String, funcoes: String, id: Int!, nomeCompleto: String, nomePopular: String, numeroCamisa: Int, peDominante: String, posicao: String, posicaoSecundaria: String, tipoContrato: String): Jogador!
+  criarPrimeiroAdmin(senha: String!): Boolean!
+  dispararScraping: String!
+  dispararScrapingDetalhes: Boolean!
+  dispararScrapingElenco: Boolean!
+  dispararScrapingEstatisticas: Boolean!
+  dispararScrapingPartidas: Boolean!
+  importarMassaFM(alturaCm: Int, clube: String!, dadosFM: AtualizarPerfilFMInput!, dataNascimento: String, fotoUrl: String, nome: String!, peDominante: String, posicao: String!): Boolean!
+  login(email: String!, senha: String!): AuthPayload!
+  loginComGoogle(email: String!, googleId: String!, nome: String!): AuthPayload!
+  registrar(email: String!, nome: String!, senha: String!): AuthPayload!
+  sincronizarEscudosLocais: Int!
+}
+
+type Partida {
+  arbitro: ArbitroSimples
+  competicao: CompeticaoSimples!
+  dataHora: DateTime!
+  equipeCasa: EquipeSimples!
+  equipeVisitante: EquipeSimples!
+  estadio: EstadioSimples
+  estatisticasEquipes: [EstatisticaEquipe!]
+  estatisticasJogadores: [EstatisticaJogador!]
+  eventos: [EventoPartida!]
+  golsCasa: Int
+  golsPenaltisCasa: Int
+  golsPenaltisVisitante: Int
+  golsVisitante: Int
+  id: Int!
+  status: String!
+  treinadorCasa: TreinadorSimples
+  treinadorVisitante: TreinadorSimples
+}
+
+type PerfilFM {
+  aceleracao: Int
+  agilidade: Int
+  agressividade: Int
+  alcanceAereo: Int
+  antecipacao: Int
+  aptidaoNatural: Int
+  atualizadoEm: DateTime
+  bravura: Int
+  cabeceamento: Int
+  chutesLonge: Int
+  cobrancaFalta: Int
+  comandoArea: Int
+  compostura: Int
+  comunicacao: Int
+  concentracao: Int
+  cruzamento: Int
+  decisoes: Int
+  desarme: Int
+  determinacao: Int
+  drible: Int
+  equilibrio: Int
+  escanteios: Int
+  excentricidade: Int
+  finalizacao: Int
+  forca: Int
+  id: Int
+  imprevisibilidade: Int
+  impulsao: Int
+  indiceTrabalho: Int
+  jogadorId: Int
+  jogoMaos: Int
+  lancamentos: Int
+  laterais: Int
+  lideranca: Int
+  marcacao: Int
+  passe: Int
+  penaltis: Int
+  posicionamento: Int
+  primeiroToque: Int
+  reflexos: Int
+  reposicao: Int
+  resistencia: Int
+  saidaGol: Int
+  semBola: Int
+  socos: Int
+  tecnica: Int
+  trabalhoEquipe: Int
+  umContraUm: Int
+  velocidade: Int
+  visaoJogo: Int
+}
+
+type Query {
+  arbitro(id: Int!): Arbitro
+  arbitros: [Arbitro!]!
+  arbitrosAtivos: [Arbitro!]!
+  equipe(id: Int!): Equipe
+  equipes: [Equipe!]!
+  estadio(id: Int!): Estadio
+  estadios: [Estadio!]!
+  hello: String!
+  jogador(id: Int!): Jogador
+  jogadores: [Jogador!]!
+  jogadoresAtivos: [Jogador!]!
+  jogadoresPorClube(clube: String!): [Jogador!]!
+  mediaArbitro(id: Int!): MediaArbitro
+  partida(id: Int!): Partida
+  partidas: [Partida!]!
+}
+
+type TreinadorSimples {
+  nome: String!
+}
+
+type UsuarioSessao {
+  email: String!
+  id: Int!
+  nome: String!
+  role: String!
+}
