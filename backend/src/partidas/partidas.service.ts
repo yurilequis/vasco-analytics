@@ -262,7 +262,7 @@ export class PartidasService {
         const nomeNorm = this.normalizarNomeTime(nomeOriginal);
         const todasEquipes = await tx.equipe.findMany();
         const existe = todasEquipes.find(
-          (e) => this.normalizarNomeTime(e.nome) === nomeNorm,
+          (e: any) => this.normalizarNomeTime(e.nome) === nomeNorm,
         );
 
         if (existe) return existe;
@@ -473,7 +473,7 @@ export class PartidasService {
     const todosJogadores = await tx.jogador.findMany();
 
     for (const j of escalacao) {
-      let jogadorLocal = jogadoresExistentes.find((dbPlayer) =>
+      let jogadorLocal = jogadoresExistentes.find((dbPlayer: any) =>
         this.compararNomesInteligente(j.nome_popular, {
           nomePopular: dbPlayer.nomePopular,
           nomeCompleto: dbPlayer.nomeCompleto,
@@ -483,7 +483,7 @@ export class PartidasService {
       
       
       if (!jogadorLocal && j.nome_completo) {
-         jogadorLocal = todosJogadores.find(dbPlayer => 
+         jogadorLocal = todosJogadores.find((dbPlayer: any) =>
             dbPlayer.nomeCompleto.toLowerCase().trim() === j.nome_completo.toLowerCase().trim()
          );
          if (jogadorLocal) {
